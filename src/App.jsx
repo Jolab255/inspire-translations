@@ -17,8 +17,8 @@ const BlogPage = React.lazy(() => import('./pages/blog/BlogPage'));
 const BlogPostPage = React.lazy(() => import('./pages/blog/BlogPostPage'));
 const ContactPage = React.lazy(() => import('./pages/contact/ContactPage'));
 const QuotePage = React.lazy(() => import('./pages/quote/QuotePage'));
-const PrivacyPage = React.lazy(() => import('./pages/legal/PrivacyPage'));
-const TermsPage = React.lazy(() => import('./pages/legal/TermsPage'));
+const PrivacyPage = React.lazy(() => import('./pages/legal/LegalPages').then(m => ({ default: m.PrivacyPage })));
+const TermsPage = React.lazy(() => import('./pages/legal/LegalPages').then(m => ({ default: m.TermsPage })));
 const NotFoundPage = React.lazy(() => import('./pages/errors/NotFoundPage'));
 
 const App = () => (
