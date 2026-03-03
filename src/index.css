@@ -1,0 +1,129 @@
+/* =========================================
+   INSPIRE TRANSLATIONS — Global Styles
+   ========================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Outfit', sans-serif;
+  background-color: #ffffff;
+  color: #1A1A2E;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f3f4; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #F7A11A, #1A5C2A);
+  border-radius: 3px;
+}
+
+/* Section spacing */
+.section-padding {
+  padding: 96px 0;
+}
+@media (max-width: 768px) {
+  .section-padding { padding: 64px 0; }
+}
+
+/* Animated underline decoration */
+.section-title-accent {
+  position: relative;
+  display: inline-block;
+}
+.section-title-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #F7A11A, #1A5C2A);
+  border-radius: 2px;
+  animation: expandLine 0.8s ease forwards;
+}
+@keyframes expandLine {
+  from { width: 0; }
+  to { width: 60px; }
+}
+
+/* Hero light streak animation */
+@keyframes streakMove {
+  0% { transform: translateX(-100%) translateY(100%) rotate(-45deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(200%) translateY(-200%) rotate(-45deg); opacity: 0; }
+}
+
+/* Floating animation for hero elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Pulse glow for CTA buttons */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(247, 161, 26, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(247, 161, 26, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(247, 161, 26, 0); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #F7A11A 0%, #F9B84A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-green {
+  background: linear-gradient(135deg, #1A5C2A 0%, #2A7A3B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.skeleton-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 1000px 100%;
+}
+
+/* Page transition */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+/* Image lazy load blur-up */
+.lazy-image {
+  filter: blur(0px);
+  transition: filter 0.4s ease;
+}
+.lazy-image.loading {
+  filter: blur(8px);
+}
