@@ -97,9 +97,9 @@ const Logo = ({ height = 56, white = false }) => (
 // ── Services mega‑dropdown ──────────────────────────────────────────
 const ServicesDropdown = ({ onClose }) => (
     <motion.div
-        initial={{ opacity: 0, y: -10, scale: 0.97 }}
+        initial={{ opacity: 0, y: -10, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -10, scale: 0.97 }}
+        exit={{ opacity: 0, y: -10, scale: 0.98 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
         style={{
             position: 'absolute',
@@ -107,101 +107,144 @@ const ServicesDropdown = ({ onClose }) => (
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1200,
-            background: '#fff',
-            borderRadius: 16,
-            boxShadow: '0 24px 64px rgba(0,0,0,0.14)',
-            minWidth: 540,
-            padding: '16px',
+            background: '#ffffff',
+            borderRadius: 20,
+            boxShadow: '0 32px 80px rgba(0,0,0,0.12)',
+            minWidth: 800, // wider for the two-column layout
+            padding: 0,
             border: '1px solid rgba(247,161,26,0.15)',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 8,
+            display: 'flex',
+            overflow: 'hidden',
         }}
     >
-        {/* Header */}
-        <Box sx={{ gridColumn: '1/-1', px: 1, pb: 1, borderBottom: '1px solid rgba(0,0,0,0.06)', mb: 0.5 }}>
-            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 700, color: '#9E9E9E', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Our Language Services
-            </Typography>
-        </Box>
-        {serviceItems.map((item) => (
-            <Box
-                key={item.label}
-                component={RouterLink}
-                to={item.path}
-                onClick={onClose}
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    px: 1.5,
-                    py: 1.25,
-                    borderRadius: 2,
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                        bgcolor: item.color === '#F7A11A' ? 'rgba(247,161,26,0.08)' : 'rgba(26,92,42,0.08)',
-                        '& .service-label': { color: item.color },
-                        '& .service-icon-box': { bgcolor: item.color, '& svg': { color: '#fff !important' } },
-                    },
-                }}
-            >
-                <Box
-                    className="service-icon-box"
-                    sx={{
-                        width: 34,
-                        height: 34,
-                        borderRadius: '10px',
-                        bgcolor: item.color === '#F7A11A' ? 'rgba(247,161,26,0.12)' : 'rgba(26,92,42,0.12)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        transition: 'all 0.25s ease',
-                        '& svg': { color: item.color },
-                    }}
-                >
-                    {item.icon}
-                </Box>
-                <Box>
-                    <Typography
-                        className="service-label"
-                        sx={{ fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.875rem', color: '#1A1A2E', transition: 'color 0.2s', lineHeight: 1.2 }}
-                    >
-                        {item.label}
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.72rem', color: '#9E9E9E', fontFamily: 'Inter', lineHeight: 1 }}>
-                        Professional · Tanzania
-                    </Typography>
-                </Box>
-                <ArrowForwardIosIcon sx={{ ml: 'auto', fontSize: 12, color: '#E0E0E0', flexShrink: 0 }} />
+        {/* Left Side: Services List */}
+        <Box sx={{ flex: 1, p: 3, display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ mb: 2, pb: 1.5, borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 300, color: '#A0A0A0', fontSize: '0.85rem', letterSpacing: '0.05em' }}>
+                    Our Language Services
+                </Typography>
             </Box>
-        ))}
-        {/* Footer CTA inside dropdown */}
+
+            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+                {serviceItems.map((item) => (
+                    <Box
+                        key={item.label}
+                        component={RouterLink}
+                        to={item.path}
+                        onClick={onClose}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 2,
+                            p: 1.5,
+                            borderRadius: 3,
+                            textDecoration: 'none',
+                            transition: 'all 0.25s ease',
+                            '&:hover': {
+                                bgcolor: 'rgba(247,161,26,0.06)',
+                                transform: 'translateX(4px)',
+                                '& .service-icon-box': { bgcolor: '#F7A11A', '& svg': { color: '#fff !important' } },
+                            },
+                        }}
+                    >
+                        <Box
+                            className="service-icon-box"
+                            sx={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: '12px',
+                                bgcolor: 'rgba(247,161,26,0.1)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                transition: 'all 0.3s ease',
+                                '& svg': { color: '#F7A11A', fontSize: 22 },
+                            }}
+                        >
+                            {item.icon}
+                        </Box>
+                        <Box>
+                            <Typography
+                                className="service-label"
+                                sx={{ fontFamily: 'Outfit', fontWeight: 400, fontSize: '0.95rem', color: '#1A1A2E', transition: 'color 0.2s', lineHeight: 1.2, mb: 0.5 }}
+                            >
+                                {item.label}
+                            </Typography>
+                            <Typography sx={{ fontSize: '0.75rem', color: '#888', fontFamily: 'Outfit', fontWeight: 300, lineHeight: 1 }}>
+                                Professional · Tanzania
+                            </Typography>
+                        </Box>
+                    </Box>
+                ))}
+            </Box>
+        </Box>
+
+        {/* Right Side: Image & CTA Block */}
         <Box
             sx={{
-                gridColumn: '1/-1',
-                mt: 0.5,
-                pt: 1.5,
-                borderTop: '1px solid rgba(0,0,0,0.06)',
+                width: 320,
+                position: 'relative',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                px: 1,
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                p: 4,
+                bgcolor: '#1A1A2E',
+                overflow: 'hidden',
             }}
         >
-            <Typography sx={{ color: '#4A4A6A', fontSize: '0.8rem', fontFamily: 'Inter' }}>
-                Need help choosing the right service?
-            </Typography>
-            <Button
-                component={RouterLink}
-                to="/contact"
-                size="small"
-                onClick={onClose}
-                sx={{ fontFamily: 'Outfit', fontWeight: 600, color: '#F7A11A', fontSize: '0.8rem', p: 0.5, '&:hover': { bgcolor: 'rgba(247,161,26,0.08)', boxShadow: 'none', transform: 'none' }, boxShadow: 'none', background: 'transparent' }}
-            >
-                Ask an Expert →
-            </Button>
+            {/* Background Image */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundImage: 'url("https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=800&auto=format&fit=crop")',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    opacity: 0.4,
+                    transition: 'transform 0.5s ease',
+                    '&:hover': { transform: 'scale(1.05)' }
+                }}
+            />
+            {/* Gradient Overlay */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    background: 'linear-gradient(to top, rgba(26,26,46,0.95) 0%, rgba(26,26,46,0.2) 100%)',
+                }}
+            />
+
+            {/* Content atop image */}
+            <Box sx={{ position: 'relative', zIndex: 1 }}>
+                <Typography sx={{ color: '#F7A11A', fontFamily: 'Outfit', fontWeight: 300, fontSize: '0.85rem', letterSpacing: '0.1em', mb: 1, textTransform: 'uppercase' }}>
+                    Global Reach
+                </Typography>
+                <Typography sx={{ color: '#FFFFFF', fontFamily: 'Outfit', fontWeight: 400, fontSize: '1.4rem', mb: 2, lineHeight: 1.2 }}>
+                    Inspiring global communication through expert translations.
+                </Typography>
+                <Button
+                    component={RouterLink}
+                    to="/contact"
+                    onClick={onClose}
+                    endIcon={<ArrowForwardIosIcon sx={{ fontSize: '12px !important' }} />}
+                    sx={{
+                        color: '#1A1A2E',
+                        bgcolor: '#F7A11A',
+                        fontFamily: 'Outfit',
+                        fontWeight: 500,
+                        fontSize: '0.85rem',
+                        px: 3,
+                        py: 1.2,
+                        borderRadius: 50,
+                        textTransform: 'none',
+                        '&:hover': { bgcolor: '#fff' },
+                        transition: 'all 0.3s ease',
+                    }}
+                >
+                    Get Inspired
+                </Button>
+            </Box>
         </Box>
     </motion.div>
 );
@@ -338,19 +381,24 @@ const Navbar = () => {
                                                 color: '#F7A11A',
                                                 bgcolor: 'rgba(247,161,26,0.06)',
                                                 transform: isActive(item.path) ? 'none' : 'translateY(-1px)',
+                                                // Trigger underline animation on hover as well!
+                                                '&::after': {
+                                                    transform: 'scaleX(1)',
+                                                }
                                             },
-                                            // Modern animated active indicator
+                                            // Modern animated active indicator (and hover indicator)
                                             '&::after': {
                                                 content: '""',
                                                 position: 'absolute',
                                                 bottom: 0,
                                                 left: '50%',
-                                                transform: 'translateX(-50%)',
-                                                width: isActive(item.path) ? '80%' : '0%',
+                                                transform: isActive(item.path) ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
+                                                width: '80%',
                                                 height: 3,
                                                 background: 'linear-gradient(90deg, #F7A11A 0%, #D4880E 100%)',
                                                 borderRadius: '3px 3px 0 0',
-                                                transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                transformOrigin: 'center',
                                             },
                                         }}
                                     >
