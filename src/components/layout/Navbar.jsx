@@ -103,14 +103,14 @@ const ServicesDropdown = ({ onClose }) => (
         transition={{ duration: 0.2, ease: 'easeOut' }}
         style={{
             position: 'absolute',
-            top: '110%',
+            top: 'calc(100% + 4px)', // Just below the button
             left: '50%',
-            transform: 'translateX(-50%)',
+            transform: 'translateX(-35%)', // Centered more relative to the button
             zIndex: 1200,
             background: '#ffffff',
             borderRadius: 20,
             boxShadow: '0 32px 80px rgba(0,0,0,0.12)',
-            minWidth: 800, // wider for the two-column layout
+            width: 760, // Fixed width
             padding: 0,
             border: '1px solid rgba(247,161,26,0.15)',
             display: 'flex',
@@ -120,7 +120,7 @@ const ServicesDropdown = ({ onClose }) => (
         {/* Left Side: Services List */}
         <Box sx={{ flex: 1, p: 3, display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ mb: 2, pb: 1.5, borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 300, color: '#A0A0A0', fontSize: '0.85rem', letterSpacing: '0.05em' }}>
+                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, color: '#6A6A8A', fontSize: '0.9rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                     Our Language Services
                 </Typography>
             </Box>
@@ -167,11 +167,11 @@ const ServicesDropdown = ({ onClose }) => (
                         <Box>
                             <Typography
                                 className="service-label"
-                                sx={{ fontFamily: 'Outfit', fontWeight: 400, fontSize: '0.95rem', color: '#1A1A2E', transition: 'color 0.2s', lineHeight: 1.2, mb: 0.5 }}
+                                sx={{ fontFamily: 'Outfit', fontWeight: 500, fontSize: '0.95rem', color: '#1A1A2E', transition: 'color 0.2s', lineHeight: 1.2, mb: 0.5 }}
                             >
                                 {item.label}
                             </Typography>
-                            <Typography sx={{ fontSize: '0.75rem', color: '#888', fontFamily: 'Outfit', fontWeight: 300, lineHeight: 1 }}>
+                            <Typography sx={{ fontSize: '0.75rem', color: '#666', fontFamily: 'Outfit', fontWeight: 400, lineHeight: 1 }}>
                                 Professional · Tanzania
                             </Typography>
                         </Box>
@@ -390,13 +390,13 @@ const Navbar = () => {
                                             '&::after': {
                                                 content: '""',
                                                 position: 'absolute',
-                                                bottom: 0,
+                                                bottom: 2, // Move it up closer to the text (was 0)
                                                 left: '50%',
                                                 transform: isActive(item.path) ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
-                                                width: '80%',
+                                                width: '70%', // Slightly narrower than the full button
                                                 height: 3,
                                                 background: 'linear-gradient(90deg, #F7A11A 0%, #D4880E 100%)',
-                                                borderRadius: '3px 3px 0 0',
+                                                borderRadius: '3px',
                                                 transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                                 transformOrigin: 'center',
                                             },
