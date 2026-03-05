@@ -8,263 +8,525 @@ import IconButton from '@mui/material/IconButton';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
+import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
+import Badge from '@mui/material/Badge';
+
+// MUI Icons for nav items
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import HomeIcon from '@mui/icons-material/Home';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import CollectionsIcon from '@mui/icons-material/Collections';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import ContactMailOutlinedIcon from '@mui/icons-material/ContactMailOutlined';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PhoneIcon from '@mui/icons-material/Phone';
-import { motion, AnimatePresence } from 'framer-motion';
-import { navLinks } from '../../data/siteData';
+import EmailIcon from '@mui/icons-material/Email';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TranslateIcon from '@mui/icons-material/Translate';
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
+import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
+import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
+import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Nav service sub-items with individual icons
+const serviceItems = [
+    { label: 'Written Translation', path: '/services/written-translation', icon: <TranslateIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
+    { label: 'On-Site Interpretation', path: '/services/onsite-interpretation', icon: <RecordVoiceOverIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
+    { label: 'Remote Interpretation', path: '/services/remote-interpretation', icon: <VideocamOutlinedIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
+    { label: 'Language Classes', path: '/services/language-classes', icon: <SchoolOutlinedIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
+    { label: 'Conference Logistics', path: '/services/conference-logistics', icon: <EventOutlinedIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
+    { label: 'Equipment Rental', path: '/services/equipment-rental', icon: <HeadsetMicOutlinedIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
+];
+
+// Main nav items with icons
+const mainNavItems = [
+    { label: 'Home', path: '/', icon: <HomeIcon sx={{ fontSize: 18 }} /> },
+    { label: 'Services', path: '/services', icon: <MiscellaneousServicesIcon sx={{ fontSize: 18 }} />, children: serviceItems },
+    { label: 'About Us', path: '/about', icon: <InfoOutlinedIcon sx={{ fontSize: 18 }} /> },
+    { label: 'Projects', path: '/projects', icon: <WorkOutlineIcon sx={{ fontSize: 18 }} /> },
+    { label: 'Gallery', path: '/gallery', icon: <CollectionsIcon sx={{ fontSize: 18 }} /> },
+    { label: 'Blog', path: '/blog', icon: <ArticleOutlinedIcon sx={{ fontSize: 18 }} /> },
+    { label: 'Contact', path: '/contact', icon: <ContactMailOutlinedIcon sx={{ fontSize: 18 }} /> },
+];
+
+// ── Logo mark component ──────────────────────────────────────────────
+const LogoMark = ({ size = 40 }) => (
+    <Box sx={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+        {/* Outer ring */}
+        <Box sx={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid #1A5C2A', animation: 'pulseGlow 3s infinite' }} />
+        {/* Inner filled circle */}
+        <Box sx={{ position: 'absolute', inset: 3, borderRadius: '50%', background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(247,161,26,0.45)' }}>
+            <Typography sx={{ color: '#fff', fontWeight: 900, fontSize: size * 0.3, fontFamily: 'Outfit', lineHeight: 1 }}>IT</Typography>
+        </Box>
+    </Box>
+);
+
+// ── Services mega‑dropdown ──────────────────────────────────────────
+const ServicesDropdown = ({ onClose }) => (
+    <motion.div
+        initial={{ opacity: 0, y: -10, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -10, scale: 0.97 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        style={{
+            position: 'absolute',
+            top: '110%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1200,
+            background: '#fff',
+            borderRadius: 16,
+            boxShadow: '0 24px 64px rgba(0,0,0,0.14)',
+            minWidth: 540,
+            padding: '16px',
+            border: '1px solid rgba(247,161,26,0.15)',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 8,
+        }}
+    >
+        {/* Header */}
+        <Box sx={{ gridColumn: '1/-1', px: 1, pb: 1, borderBottom: '1px solid rgba(0,0,0,0.06)', mb: 0.5 }}>
+            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 700, color: '#9E9E9E', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                Our Language Services
+            </Typography>
+        </Box>
+        {serviceItems.map((item) => (
+            <Box
+                key={item.label}
+                component={RouterLink}
+                to={item.path}
+                onClick={onClose}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    px: 1.5,
+                    py: 1.25,
+                    borderRadius: 2,
+                    textDecoration: 'none',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                        bgcolor: item.color === '#F7A11A' ? 'rgba(247,161,26,0.08)' : 'rgba(26,92,42,0.08)',
+                        '& .service-label': { color: item.color },
+                        '& .service-icon-box': { bgcolor: item.color, '& svg': { color: '#fff !important' } },
+                    },
+                }}
+            >
+                <Box
+                    className="service-icon-box"
+                    sx={{
+                        width: 34,
+                        height: 34,
+                        borderRadius: '10px',
+                        bgcolor: item.color === '#F7A11A' ? 'rgba(247,161,26,0.12)' : 'rgba(26,92,42,0.12)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        transition: 'all 0.25s ease',
+                        '& svg': { color: item.color },
+                    }}
+                >
+                    {item.icon}
+                </Box>
+                <Box>
+                    <Typography
+                        className="service-label"
+                        sx={{ fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.875rem', color: '#1A1A2E', transition: 'color 0.2s', lineHeight: 1.2 }}
+                    >
+                        {item.label}
+                    </Typography>
+                    <Typography sx={{ fontSize: '0.72rem', color: '#9E9E9E', fontFamily: 'Inter', lineHeight: 1 }}>
+                        Professional · Tanzania
+                    </Typography>
+                </Box>
+                <KeyboardArrowRightIcon sx={{ ml: 'auto', fontSize: 16, color: '#E0E0E0', flexShrink: 0 }} />
+            </Box>
+        ))}
+        {/* Footer CTA inside dropdown */}
+        <Box
+            sx={{
+                gridColumn: '1/-1',
+                mt: 0.5,
+                pt: 1.5,
+                borderTop: '1px solid rgba(0,0,0,0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                px: 1,
+            }}
+        >
+            <Typography sx={{ color: '#4A4A6A', fontSize: '0.8rem', fontFamily: 'Inter' }}>
+                Need help choosing the right service?
+            </Typography>
+            <Button
+                component={RouterLink}
+                to="/contact"
+                size="small"
+                onClick={onClose}
+                sx={{ fontFamily: 'Outfit', fontWeight: 600, color: '#F7A11A', fontSize: '0.8rem', p: 0.5, '&:hover': { bgcolor: 'rgba(247,161,26,0.08)', boxShadow: 'none', transform: 'none' }, boxShadow: 'none', background: 'transparent' }}
+            >
+                Ask an Expert →
+            </Button>
+        </Box>
+    </motion.div>
+);
+
+// ── Main Navbar component ─────────────────────────────────────────────
 const Navbar = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [servicesOpen, setServicesOpen] = useState(false);
+    const [servicesDropOpen, setServicesDropOpen] = useState(false);
+    const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
 
-    const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 80 });
-
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 80);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        const onScroll = () => setScrolled(window.scrollY > 70);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
     useEffect(() => {
         setDrawerOpen(false);
+        setServicesDropOpen(false);
     }, [location]);
 
-    const isActive = (path) => location.pathname === path;
+    const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
 
     return (
         <>
-            {/* Top bar */}
+            {/* ── Top bar ───────────────────────────────────────────── */}
             <Box
                 sx={{
-                    bgcolor: '#1A5C2A',
+                    background: 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)',
                     color: '#fff',
-                    py: 0.5,
-                    display: { xs: 'none', md: 'flex' },
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    px: 4,
-                    fontSize: '0.8rem',
+                    py: 0.6,
+                    display: { xs: 'none', md: 'block' },
                 }}
             >
-                <PhoneIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                <Typography variant="caption" sx={{ mr: 3 }}>+255 000 000 000</Typography>
-                <Typography variant="caption">info@inspiretranslations.co.tz</Typography>
+                <Box sx={{ maxWidth: 1280, mx: 'auto', px: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                            <WhatsAppIcon sx={{ fontSize: 14, color: '#4ADE80' }} />
+                            <Typography sx={{ fontSize: '0.78rem', fontFamily: 'Inter' }}>+255 000 000 000</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                            <EmailIcon sx={{ fontSize: 14, color: '#F7A11A' }} />
+                            <Typography sx={{ fontSize: '0.78rem', fontFamily: 'Inter' }}>info@inspiretranslations.co.tz</Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter' }}>
+                            Mon–Fri 8AM–5PM EAT
+                        </Typography>
+                        <Box sx={{ width: 1, height: 14, bgcolor: 'rgba(255,255,255,0.2)', mx: 1 }} />
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                            <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
+                            <Typography sx={{ fontSize: '0.75rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80' }}>Available</Typography>
+                        </Box>
+                    </Box>
+                </Box>
             </Box>
 
-            {/* Main Navbar */}
+            {/* ── Main AppBar ───────────────────────────────────────── */}
             <AppBar
                 position="sticky"
+                elevation={0}
                 sx={{
                     bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : '#FFFFFF',
-                    backdropFilter: scrolled ? 'blur(20px)' : 'none',
+                    backdropFilter: scrolled ? 'blur(24px)' : 'none',
+                    borderBottom: scrolled ? 'none' : '1px solid rgba(0,0,0,0.06)',
+                    boxShadow: scrolled ? '0 4px 32px rgba(0,0,0,0.10)' : 'none',
+                    transition: 'all 0.35s ease',
                     color: '#1A1A2E',
-                    boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.1)' : '0 1px 4px rgba(0,0,0,0.05)',
-                    transition: 'all 0.3s ease',
                     top: 0,
                 }}
             >
-                <Toolbar sx={{ maxWidth: 1280, width: '100%', mx: 'auto', px: { xs: 2, md: 4 }, py: 1 }}>
-                    {/* Logo */}
-                    <Box
-                        component={RouterLink}
-                        to="/"
-                        sx={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexGrow: 1 }}
-                    >
-                        <Box
-                            sx={{
-                                width: 42,
-                                height: 42,
-                                borderRadius: '50%',
-                                background: 'linear-gradient(135deg, #F7A11A, #D4880E)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                mr: 1.5,
-                                boxShadow: '0 4px 12px rgba(247,161,26,0.3)',
-                            }}
-                        >
-                            <Typography sx={{ color: '#fff', fontWeight: 800, fontSize: '1.1rem', fontFamily: 'Outfit' }}>IT</Typography>
-                        </Box>
+                <Toolbar
+                    disableGutters
+                    sx={{
+                        maxWidth: 1280,
+                        width: '100%',
+                        mx: 'auto',
+                        px: { xs: 2, md: 4 },
+                        py: 1.2,
+                        minHeight: { xs: 64, md: 72 },
+                    }}
+                >
+                    {/* ── Logo ── */}
+                    <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', mr: 4 }}>
+                        <LogoMark size={44} />
                         <Box>
-                            <Typography
-                                sx={{
-                                    fontFamily: 'Outfit',
-                                    fontWeight: 800,
-                                    fontSize: '1.1rem',
-                                    color: '#1A1A2E',
-                                    lineHeight: 1.1,
-                                }}
-                            >
+                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '1.15rem', color: '#1A1A2E', lineHeight: 1, letterSpacing: '-0.01em' }}>
                                 INSPIRE
                             </Typography>
-                            <Typography
-                                sx={{
-                                    fontFamily: 'Outfit',
-                                    fontWeight: 500,
-                                    fontSize: '0.7rem',
-                                    color: '#F7A11A',
-                                    letterSpacing: '0.15em',
-                                    textTransform: 'uppercase',
-                                }}
-                            >
+                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, fontSize: '0.62rem', color: '#F7A11A', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
                                 TRANSLATIONS
                             </Typography>
                         </Box>
                     </Box>
 
-                    {/* Desktop Nav */}
-                    <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0.5 }}>
-                        {navLinks.map((link) => (
-                            <Box key={link.label} sx={{ position: 'relative' }}>
+                    {/* ── Desktop Nav Items ── */}
+                    <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0.5, flexGrow: 1 }}>
+                        {mainNavItems.map((item) => (
+                            <Box
+                                key={item.label}
+                                sx={{ position: 'relative' }}
+                                onMouseEnter={() => item.children && setServicesDropOpen(true)}
+                                onMouseLeave={() => item.children && setServicesDropOpen(false)}
+                            >
                                 <Button
-                                    component={link.children ? 'button' : RouterLink}
-                                    to={link.children ? undefined : link.path}
-                                    onClick={link.children ? () => setServicesOpen(!servicesOpen) : undefined}
+                                    component={item.children ? 'button' : RouterLink}
+                                    to={item.children ? undefined : item.path}
+                                    startIcon={
+                                        <Box sx={{
+                                            color: isActive(item.path) ? '#F7A11A' : '#9E9E9E',
+                                            display: 'flex',
+                                            transition: 'color 0.2s',
+                                            '.MuiButton-root:hover &': { color: '#F7A11A' },
+                                        }}>
+                                            {item.icon}
+                                        </Box>
+                                    }
+                                    endIcon={item.children ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.6, transition: 'transform 0.2s', transform: servicesDropOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} /> : null}
                                     sx={{
-                                        color: isActive(link.path) ? '#F7A11A' : '#1A1A2E',
-                                        fontWeight: isActive(link.path) ? 700 : 500,
-                                        fontSize: '0.9rem',
+                                        color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
+                                        fontWeight: isActive(item.path) ? 700 : 500,
+                                        fontFamily: 'Outfit',
+                                        fontSize: '0.88rem',
                                         px: 1.5,
-                                        py: 1,
+                                        py: 0.9,
                                         borderRadius: 2,
-                                        '&:hover': { color: '#F7A11A', bgcolor: 'rgba(247,161,26,0.06)', transform: 'none' },
+                                        textTransform: 'none',
                                         boxShadow: 'none',
-                                        background: 'transparent',
-                                        transition: 'color 0.2s ease',
+                                        background: isActive(item.path) ? 'rgba(247,161,26,0.08)' : 'transparent',
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            color: '#F7A11A',
+                                            bgcolor: 'rgba(247,161,26,0.08)',
+                                            boxShadow: 'none',
+                                            transform: 'none',
+                                        },
+                                        // active underline
+                                        position: 'relative',
+                                        '&::after': isActive(item.path) ? {
+                                            content: '""',
+                                            position: 'absolute',
+                                            bottom: 4,
+                                            left: '50%',
+                                            transform: 'translateX(-50%)',
+                                            width: '60%',
+                                            height: 2,
+                                            borderRadius: 1,
+                                            bgcolor: '#F7A11A',
+                                        } : {},
                                     }}
-                                    endIcon={link.children ? <ExpandMoreIcon sx={{ fontSize: 16 }} /> : null}
                                 >
-                                    {link.label}
+                                    {item.label}
                                 </Button>
-                                {/* Dropdown for Services */}
-                                {link.children && servicesOpen && (
+
+                                {/* Services Dropdown */}
+                                {item.children && (
                                     <AnimatePresence>
-                                        <motion.div
-                                            initial={{ opacity: 0, y: -8 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -8 }}
-                                            transition={{ duration: 0.2 }}
-                                            style={{
-                                                position: 'absolute',
-                                                top: '110%',
-                                                left: 0,
-                                                zIndex: 1000,
-                                                background: '#fff',
-                                                borderRadius: 12,
-                                                boxShadow: '0 20px 60px rgba(0,0,0,0.12)',
-                                                minWidth: 240,
-                                                padding: '8px 0',
-                                                border: '1px solid rgba(247,161,26,0.15)',
-                                            }}
-                                        >
-                                            {link.children.map((child) => (
-                                                <Box
-                                                    key={child.label}
-                                                    component={RouterLink}
-                                                    to={child.path}
-                                                    onClick={() => setServicesOpen(false)}
-                                                    sx={{
-                                                        display: 'block',
-                                                        px: 2.5,
-                                                        py: 1,
-                                                        color: '#1A1A2E',
-                                                        textDecoration: 'none',
-                                                        fontSize: '0.875rem',
-                                                        fontFamily: 'Outfit',
-                                                        fontWeight: 500,
-                                                        transition: 'all 0.2s',
-                                                        '&:hover': { color: '#F7A11A', bgcolor: 'rgba(247,161,26,0.06)', pl: 3 },
-                                                    }}
-                                                >
-                                                    {child.label}
-                                                </Box>
-                                            ))}
-                                        </motion.div>
+                                        {servicesDropOpen && (
+                                            <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
+                                        )}
                                     </AnimatePresence>
                                 )}
                             </Box>
                         ))}
+                    </Box>
+
+                    {/* ── Desktop Right Actions ── */}
+                    <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 1.5, ml: 2 }}>
+                        <Tooltip title="Call Us" arrow>
+                            <IconButton
+                                href="tel:+255000000000"
+                                size="small"
+                                sx={{
+                                    bgcolor: 'rgba(247,161,26,0.08)',
+                                    color: '#F7A11A',
+                                    '&:hover': { bgcolor: '#F7A11A', color: '#fff', transform: 'scale(1.1)' },
+                                    transition: 'all 0.25s ease',
+                                }}
+                            >
+                                <PhoneIcon sx={{ fontSize: 18 }} />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="WhatsApp" arrow>
+                            <IconButton
+                                href="https://wa.me/255000000000"
+                                target="_blank"
+                                size="small"
+                                sx={{
+                                    bgcolor: 'rgba(37,211,102,0.1)',
+                                    color: '#25D366',
+                                    '&:hover': { bgcolor: '#25D366', color: '#fff', transform: 'scale(1.1)' },
+                                    transition: 'all 0.25s ease',
+                                }}
+                            >
+                                <WhatsAppIcon sx={{ fontSize: 18 }} />
+                            </IconButton>
+                        </Tooltip>
                         <Button
                             component={RouterLink}
                             to="/quote"
                             variant="contained"
-                            color="primary"
-                            sx={{ ml: 2, px: 3, py: 1, fontSize: '0.875rem' }}
+                            startIcon={<RequestQuoteOutlinedIcon sx={{ fontSize: '18px !important' }} />}
+                            sx={{
+                                background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
+                                color: '#fff',
+                                fontFamily: 'Outfit',
+                                fontWeight: 700,
+                                fontSize: '0.875rem',
+                                px: 2.5,
+                                py: 1,
+                                borderRadius: 50,
+                                boxShadow: '0 4px 16px rgba(247,161,26,0.35)',
+                                '&:hover': {
+                                    background: 'linear-gradient(135deg, #D4880E 0%, #F7A11A 100%)',
+                                    boxShadow: '0 8px 24px rgba(247,161,26,0.45)',
+                                    transform: 'translateY(-2px)',
+                                },
+                                transition: 'all 0.25s ease',
+                            }}
                         >
                             Get a Quote
                         </Button>
                     </Box>
 
-                    {/* Mobile hamburger */}
-                    <IconButton
-                        sx={{ display: { xs: 'flex', lg: 'none' }, color: '#1A1A2E' }}
-                        onClick={() => setDrawerOpen(true)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {/* ── Mobile hamburger ── */}
+                    <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: 1, ml: 'auto' }}>
+                        <Button
+                            component={RouterLink}
+                            to="/quote"
+                            size="small"
+                            variant="contained"
+                            sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: 'Outfit', fontWeight: 700, px: 2, fontSize: '0.8rem', borderRadius: 50 }}
+                        >
+                            Quote
+                        </Button>
+                        <IconButton
+                            onClick={() => setDrawerOpen(true)}
+                            sx={{ color: '#1A1A2E', bgcolor: 'rgba(0,0,0,0.04)', borderRadius: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    </Box>
                 </Toolbar>
             </AppBar>
 
-            {/* Mobile Drawer */}
+            {/* ── Mobile Drawer ───────────────────────────────────────── */}
             <Drawer
                 anchor="right"
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
-                PaperProps={{ sx: { width: 300, bgcolor: '#FFFFFF' } }}
+                PaperProps={{
+                    sx: {
+                        width: 310,
+                        bgcolor: '#FFFFFF',
+                        borderRadius: '16px 0 0 16px',
+                    },
+                }}
             >
-                <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-                    <Typography sx={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.1rem', color: '#F7A11A' }}>
-                        INSPIRE TRANSLATIONS
-                    </Typography>
-                    <IconButton onClick={() => setDrawerOpen(false)}>
+                {/* Drawer header */}
+                <Box
+                    sx={{
+                        background: 'linear-gradient(135deg, #0D1B2A 0%, #0F3A1A 100%)',
+                        p: 2.5,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <LogoMark size={36} />
+                        <Box>
+                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1rem', color: '#FFFFFF', lineHeight: 1 }}>INSPIRE</Typography>
+                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, fontSize: '0.6rem', color: '#F7A11A', letterSpacing: '0.15em', textTransform: 'uppercase' }}>TRANSLATIONS</Typography>
+                        </Box>
+                    </Box>
+                    <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#fff', bgcolor: 'rgba(255,255,255,0.1)' } }}>
                         <CloseIcon />
                     </IconButton>
                 </Box>
-                <List sx={{ px: 1, pt: 2 }}>
-                    {navLinks.map((link) => (
-                        <Box key={link.label}>
-                            <ListItem
-                                button
-                                component={link.children ? 'div' : RouterLink}
-                                to={link.children ? undefined : link.path}
-                                onClick={link.children ? () => setServicesOpen(!servicesOpen) : undefined}
-                                sx={{
-                                    borderRadius: 2,
-                                    mb: 0.5,
-                                    color: isActive(link.path) ? '#F7A11A' : '#1A1A2E',
-                                    '&:hover': { bgcolor: 'rgba(247,161,26,0.08)' },
-                                }}
-                            >
-                                <ListItemText
-                                    primary={link.label}
-                                    primaryTypographyProps={{ fontFamily: 'Outfit', fontWeight: isActive(link.path) ? 700 : 500 }}
-                                />
-                                {link.children && (servicesOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
+
+                {/* Mobile nav list */}
+                <List sx={{ px: 1.5, pt: 2 }}>
+                    {mainNavItems.map((item) => (
+                        <Box key={item.label}>
+                            <ListItem disablePadding sx={{ mb: 0.3 }}>
+                                <ListItemButton
+                                    component={item.children ? 'div' : RouterLink}
+                                    to={item.children ? undefined : item.path}
+                                    onClick={item.children ? () => setMobileServicesOpen(!mobileServicesOpen) : undefined}
+                                    sx={{
+                                        borderRadius: 2.5,
+                                        px: 2,
+                                        py: 1.1,
+                                        bgcolor: isActive(item.path) ? 'rgba(247,161,26,0.1)' : 'transparent',
+                                        '&:hover': { bgcolor: 'rgba(247,161,26,0.08)' },
+                                    }}
+                                >
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 36,
+                                            color: isActive(item.path) ? '#F7A11A' : '#9E9E9E',
+                                        }}
+                                    >
+                                        {item.icon}
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={item.label}
+                                        primaryTypographyProps={{
+                                            fontFamily: 'Outfit',
+                                            fontWeight: isActive(item.path) ? 700 : 500,
+                                            fontSize: '0.95rem',
+                                            color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
+                                        }}
+                                    />
+                                    {item.children && (mobileServicesOpen
+                                        ? <ExpandLessIcon sx={{ color: '#9E9E9E', fontSize: 18 }} />
+                                        : <ExpandMoreIcon sx={{ color: '#9E9E9E', fontSize: 18 }} />
+                                    )}
+                                </ListItemButton>
                             </ListItem>
-                            {link.children && (
-                                <Collapse in={servicesOpen}>
-                                    <List disablePadding sx={{ pl: 2 }}>
-                                        {link.children.map((child) => (
-                                            <ListItem
-                                                key={child.label}
-                                                button
-                                                component={RouterLink}
-                                                to={child.path}
-                                                sx={{ borderRadius: 2, '&:hover': { bgcolor: 'rgba(247,161,26,0.06)' } }}
-                                            >
-                                                <ListItemText
-                                                    primary={child.label}
-                                                    primaryTypographyProps={{ fontSize: '0.875rem', fontFamily: 'Outfit', color: '#4A4A6A' }}
-                                                />
+
+                            {/* Services sub-menu */}
+                            {item.children && (
+                                <Collapse in={mobileServicesOpen}>
+                                    <List disablePadding sx={{ pl: 1.5, mb: 1 }}>
+                                        {item.children.map((child) => (
+                                            <ListItem key={child.label} disablePadding>
+                                                <ListItemButton
+                                                    component={RouterLink}
+                                                    to={child.path}
+                                                    sx={{ borderRadius: 2, py: 0.8, px: 1.5, '&:hover': { bgcolor: 'rgba(247,161,26,0.06)' } }}
+                                                >
+                                                    <ListItemIcon sx={{ minWidth: 30, color: child.color }}>
+                                                        {child.icon}
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary={child.label}
+                                                        primaryTypographyProps={{ fontSize: '0.85rem', fontFamily: 'Outfit', fontWeight: 500, color: '#4A4A6A' }}
+                                                    />
+                                                </ListItemButton>
                                             </ListItem>
                                         ))}
                                     </List>
@@ -272,19 +534,49 @@ const Navbar = () => {
                             )}
                         </Box>
                     ))}
-                    <Box sx={{ px: 2, pt: 2 }}>
-                        <Button
-                            component={RouterLink}
-                            to="/quote"
-                            variant="contained"
-                            color="primary"
-                            fullWidth
-                            size="large"
-                        >
-                            Get a Quote
-                        </Button>
-                    </Box>
                 </List>
+
+                <Divider sx={{ mx: 2 }} />
+
+                {/* Drawer contact section */}
+                <Box sx={{ px: 2.5, py: 3 }}>
+                    <Typography sx={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '0.75rem', color: '#9E9E9E', textTransform: 'uppercase', letterSpacing: '0.1em', mb: 2 }}>
+                        Get in Touch
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Box sx={{ width: 34, height: 34, borderRadius: 2, bgcolor: 'rgba(247,161,26,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <PhoneIcon sx={{ fontSize: 16, color: '#F7A11A' }} />
+                            </Box>
+                            <Typography sx={{ fontFamily: 'Inter', fontSize: '0.875rem', color: '#1A1A2E' }}>+255 000 000 000</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Box sx={{ width: 34, height: 34, borderRadius: 2, bgcolor: 'rgba(37,211,102,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <WhatsAppIcon sx={{ fontSize: 16, color: '#25D366' }} />
+                            </Box>
+                            <Typography sx={{ fontFamily: 'Inter', fontSize: '0.875rem', color: '#1A1A2E' }}>WhatsApp Us</Typography>
+                        </Box>
+                    </Box>
+                    <Button
+                        component={RouterLink}
+                        to="/quote"
+                        variant="contained"
+                        fullWidth
+                        startIcon={<RequestQuoteOutlinedIcon />}
+                        sx={{
+                            mt: 3,
+                            background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
+                            color: '#fff',
+                            fontFamily: 'Outfit',
+                            fontWeight: 700,
+                            py: 1.3,
+                            borderRadius: 50,
+                            boxShadow: '0 4px 16px rgba(247,161,26,0.3)',
+                        }}
+                    >
+                        Request a Free Quote
+                    </Button>
+                </Box>
             </Drawer>
         </>
     );
