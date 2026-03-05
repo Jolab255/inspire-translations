@@ -102,17 +102,16 @@ const ServicesDropdown = ({ onClose }) => (
         exit={{ opacity: 0, y: -10, scale: 0.98 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
         style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)', // Just below the button
-            left: '50%',
-            transform: 'translateX(-35%)', // Centered more relative to the button
+            position: 'fixed', // Use fixed to position relative to viewport
+            top: '110px', // Below the navbar
+            left: '20%', // 20% gap on left
+            width: '60%', // 60% width
             zIndex: 1200,
             background: '#ffffff',
-            borderRadius: 20,
-            boxShadow: '0 32px 80px rgba(0,0,0,0.12)',
-            width: 760, // Fixed width
+            borderRadius: 24,
+            boxShadow: '0 40px 100px rgba(0,0,0,0.15)',
             padding: 0,
-            border: '1px solid rgba(247,161,26,0.15)',
+            border: '1px solid rgba(247,161,26,0.12)',
             display: 'flex',
             overflow: 'hidden',
         }}
@@ -120,7 +119,7 @@ const ServicesDropdown = ({ onClose }) => (
         {/* Left Side: Services List */}
         <Box sx={{ flex: 1, p: 3, display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ mb: 2, pb: 1.5, borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, color: '#6A6A8A', fontSize: '0.9rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 600, color: '#1A1A2E', fontSize: '0.9rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                     Our Language Services
                 </Typography>
             </Box>
@@ -167,11 +166,11 @@ const ServicesDropdown = ({ onClose }) => (
                         <Box>
                             <Typography
                                 className="service-label"
-                                sx={{ fontFamily: 'Outfit', fontWeight: 500, fontSize: '0.95rem', color: '#1A1A2E', transition: 'color 0.2s', lineHeight: 1.2, mb: 0.5 }}
+                                sx={{ fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.95rem', color: '#1A1A2E', transition: 'color 0.2s', lineHeight: 1.2, mb: 0.5 }}
                             >
                                 {item.label}
                             </Typography>
-                            <Typography sx={{ fontSize: '0.75rem', color: '#666', fontFamily: 'Outfit', fontWeight: 400, lineHeight: 1 }}>
+                            <Typography sx={{ fontSize: '0.75rem', color: '#6A6A8A', fontFamily: 'Outfit', fontWeight: 400, lineHeight: 1 }}>
                                 Professional · Tanzania
                             </Typography>
                         </Box>
@@ -343,68 +342,53 @@ const Navbar = () => {
                         {mainNavItems.map((item) => (
                             <Box
                                 key={item.label}
-                                sx={{ position: 'relative' }}
+                                sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}
                                 onMouseEnter={() => item.children && setServicesDropOpen(true)}
                                 onMouseLeave={() => item.children && setServicesDropOpen(false)}
                             >
-                                <Box sx={{ position: 'relative', overflow: 'visible', display: 'flex', alignItems: 'center' }}>
-                                    <Button
-                                        component={item.children ? 'button' : RouterLink}
-                                        to={item.children ? undefined : item.path}
-                                        startIcon={
-                                            isActive(item.path) ? (
-                                                <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
-                                                    {item.icon}
-                                                </Box>
-                                            ) : null
-                                        }
-                                        endIcon={
-                                            item.children
-                                                ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
-                                                : null
-                                        }
-                                        sx={{
-                                            color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                            fontWeight: isActive(item.path) ? 700 : 500,
-                                            fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                            fontSize: '0.85rem',
-                                            letterSpacing: '0.01em',
-                                            px: 2,
-                                            py: 1,
-                                            borderRadius: '8px',
-                                            textTransform: 'none',
-                                            position: 'relative',
-                                            zIndex: 2,
-                                            bgcolor: isActive(item.path) ? 'rgba(247,161,26,0.08)' : 'transparent',
-                                            transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
-                                            '&:hover': {
-                                                color: '#F7A11A',
-                                                bgcolor: 'rgba(247,161,26,0.06)',
-                                                transform: isActive(item.path) ? 'none' : 'translateY(-1px)',
-                                                // Trigger underline animation on hover as well!
-                                                '&::after': {
-                                                    transform: 'scaleX(1)',
-                                                }
-                                            },
-                                            // Modern animated active indicator (and hover indicator)
-                                            '&::after': {
-                                                content: '""',
-                                                position: 'absolute',
-                                                bottom: 2, // Move it up closer to the text (was 0)
-                                                left: '50%',
-                                                transform: isActive(item.path) ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
-                                                width: '70%', // Slightly narrower than the full button
-                                                height: 3,
-                                                background: 'linear-gradient(90deg, #F7A11A 0%, #D4880E 100%)',
-                                                borderRadius: '3px',
-                                                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                transformOrigin: 'center',
-                                            },
-                                        }}
-                                    >
-                                        {item.label}
-                                    </Button>
-                                </Box>
+                                <Button
+                                    component={item.children ? 'button' : RouterLink}
+                                    to={item.children ? undefined : item.path}
+                                    startIcon={
+                                        isActive(item.path) ? (
+                                            <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
+                                                {item.icon}
+                                            </Box>
+                                        ) : null
+                                    }
+                                    endIcon={
+                                        item.children
+                                            ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
+                                            : null
+                                    }
+                                    sx={{
+                                        color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
+                                        fontWeight: isActive(item.path) ? 700 : 500,
+                                        fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                        fontSize: '0.85rem',
+                                        letterSpacing: '0.01em',
+                                        px: 2.5, // slightly more padding for a "pill" look
+                                        py: 1,
+                                        borderRadius: '50px', // Pill shape
+                                        textTransform: 'none',
+                                        position: 'relative',
+                                        zIndex: 2,
+                                        bgcolor: 'transparent',
+                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                        '&:hover': {
+                                            color: '#F7A11A',
+                                            bgcolor: 'rgba(247,161,26,0.08)', // Subtle glass pill effect
+                                            transform: 'translateY(-1px)',
+                                        },
+                                        // Active state pill border/background
+                                        ...(isActive(item.path) && {
+                                            bgcolor: 'rgba(247,161,26,0.1)',
+                                            border: '1px solid rgba(247,161,26,0.2)',
+                                        }),
+                                    }}
+                                >
+                                    {item.label}
+                                </Button>
 
                                 {/* Services Dropdown */}
                                 {
