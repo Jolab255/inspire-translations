@@ -339,20 +339,19 @@ const Navbar = () => {
                                                 bgcolor: 'rgba(247,161,26,0.06)',
                                                 transform: isActive(item.path) ? 'none' : 'translateY(-1px)',
                                             },
-                                            // Trapezoid tab extending below navbar, overlapping hero
-                                            '&::after': isActive(item.path) ? {
+                                            // Modern animated active indicator
+                                            '&::after': {
                                                 content: '""',
                                                 position: 'absolute',
-                                                top: '100%',
+                                                bottom: 0,
                                                 left: '50%',
                                                 transform: 'translateX(-50%)',
-                                                width: '100%',
-                                                height: 28,
-                                                background: 'linear-gradient(180deg, #F7A11A 0%, #D4880E 100%)',
-                                                clipPath: 'polygon(0% 0%, 100% 0%, 82% 100%, 18% 100%)',
-                                                zIndex: 1200,
-                                                filter: 'drop-shadow(0 4px 8px rgba(247,161,26,0.35))',
-                                            } : {},
+                                                width: isActive(item.path) ? '80%' : '0%',
+                                                height: 3,
+                                                background: 'linear-gradient(90deg, #F7A11A 0%, #D4880E 100%)',
+                                                borderRadius: '3px 3px 0 0',
+                                                transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                            },
                                         }}
                                     >
                                         {item.label}
@@ -360,13 +359,15 @@ const Navbar = () => {
                                 </Box>
 
                                 {/* Services Dropdown */}
-                                {item.children && (
-                                    <AnimatePresence>
-                                        {servicesDropOpen && (
-                                            <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
-                                        )}
-                                    </AnimatePresence>
-                                )}
+                                {
+                                    item.children && (
+                                        <AnimatePresence>
+                                            {servicesDropOpen && (
+                                                <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
+                                            )}
+                                        </AnimatePresence>
+                                    )
+                                }
                             </Box>
                         ))}
                     </Box>
@@ -448,10 +449,10 @@ const Navbar = () => {
                         </IconButton>
                     </Box>
                 </Toolbar>
-            </AppBar>
+            </AppBar >
 
             {/* ── Mobile Drawer ───────────────────────────────────────── */}
-            <Drawer
+            < Drawer
                 anchor="right"
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
@@ -464,7 +465,7 @@ const Navbar = () => {
                 }}
             >
                 {/* Drawer header */}
-                <Box sx={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #0F3A1A 100%)', p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                < Box sx={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #0F3A1A 100%)', p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box
                         component="img"
                         src={logoImg}
@@ -474,76 +475,78 @@ const Navbar = () => {
                     <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#fff', bgcolor: 'rgba(255,255,255,0.1)' } }}>
                         <CloseIcon />
                     </IconButton>
-                </Box>
+                </Box >
 
                 {/* Mobile nav list */}
-                <List sx={{ px: 1.5, pt: 2 }}>
-                    {mainNavItems.map((item) => (
-                        <Box key={item.label}>
-                            <ListItem disablePadding sx={{ mb: 0.3 }}>
-                                <ListItemButton
-                                    component={item.children ? 'div' : RouterLink}
-                                    to={item.children ? undefined : item.path}
-                                    onClick={item.children ? () => setMobileServicesOpen(!mobileServicesOpen) : undefined}
-                                    sx={{
-                                        borderRadius: 2.5,
-                                        px: 2,
-                                        py: 1.1,
-                                        bgcolor: isActive(item.path) ? 'rgba(247,161,26,0.1)' : 'transparent',
-                                        '&:hover': { bgcolor: 'rgba(247,161,26,0.08)' },
-                                    }}
-                                >
-                                    <ListItemIcon
+                < List sx={{ px: 1.5, pt: 2 }}>
+                    {
+                        mainNavItems.map((item) => (
+                            <Box key={item.label}>
+                                <ListItem disablePadding sx={{ mb: 0.3 }}>
+                                    <ListItemButton
+                                        component={item.children ? 'div' : RouterLink}
+                                        to={item.children ? undefined : item.path}
+                                        onClick={item.children ? () => setMobileServicesOpen(!mobileServicesOpen) : undefined}
                                         sx={{
-                                            minWidth: 36,
-                                            color: isActive(item.path) ? '#F7A11A' : '#9E9E9E',
+                                            borderRadius: 2.5,
+                                            px: 2,
+                                            py: 1.1,
+                                            bgcolor: isActive(item.path) ? 'rgba(247,161,26,0.1)' : 'transparent',
+                                            '&:hover': { bgcolor: 'rgba(247,161,26,0.08)' },
                                         }}
                                     >
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={item.label}
-                                        primaryTypographyProps={{
-                                            fontFamily: 'Outfit',
-                                            fontWeight: isActive(item.path) ? 700 : 500,
-                                            fontSize: '0.95rem',
-                                            color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                        }}
-                                    />
-                                    {item.children && (mobileServicesOpen
-                                        ? <ExpandLessIcon sx={{ color: '#9E9E9E', fontSize: 18 }} />
-                                        : <ExpandMoreIcon sx={{ color: '#9E9E9E', fontSize: 18 }} />
-                                    )}
-                                </ListItemButton>
-                            </ListItem>
+                                        <ListItemIcon
+                                            sx={{
+                                                minWidth: 36,
+                                                color: isActive(item.path) ? '#F7A11A' : '#9E9E9E',
+                                            }}
+                                        >
+                                            {item.icon}
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={item.label}
+                                            primaryTypographyProps={{
+                                                fontFamily: 'Outfit',
+                                                fontWeight: isActive(item.path) ? 700 : 500,
+                                                fontSize: '0.95rem',
+                                                color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
+                                            }}
+                                        />
+                                        {item.children && (mobileServicesOpen
+                                            ? <ExpandLessIcon sx={{ color: '#9E9E9E', fontSize: 18 }} />
+                                            : <ExpandMoreIcon sx={{ color: '#9E9E9E', fontSize: 18 }} />
+                                        )}
+                                    </ListItemButton>
+                                </ListItem>
 
-                            {/* Services sub-menu */}
-                            {item.children && (
-                                <Collapse in={mobileServicesOpen}>
-                                    <List disablePadding sx={{ pl: 1.5, mb: 1 }}>
-                                        {item.children.map((child) => (
-                                            <ListItem key={child.label} disablePadding>
-                                                <ListItemButton
-                                                    component={RouterLink}
-                                                    to={child.path}
-                                                    sx={{ borderRadius: 2, py: 0.8, px: 1.5, '&:hover': { bgcolor: 'rgba(247,161,26,0.06)' } }}
-                                                >
-                                                    <ListItemIcon sx={{ minWidth: 30, color: child.color }}>
-                                                        {child.icon}
-                                                    </ListItemIcon>
-                                                    <ListItemText
-                                                        primary={child.label}
-                                                        primaryTypographyProps={{ fontSize: '0.85rem', fontFamily: 'Outfit', fontWeight: 500, color: '#4A4A6A' }}
-                                                    />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Collapse>
-                            )}
-                        </Box>
-                    ))}
-                </List>
+                                {/* Services sub-menu */}
+                                {item.children && (
+                                    <Collapse in={mobileServicesOpen}>
+                                        <List disablePadding sx={{ pl: 1.5, mb: 1 }}>
+                                            {item.children.map((child) => (
+                                                <ListItem key={child.label} disablePadding>
+                                                    <ListItemButton
+                                                        component={RouterLink}
+                                                        to={child.path}
+                                                        sx={{ borderRadius: 2, py: 0.8, px: 1.5, '&:hover': { bgcolor: 'rgba(247,161,26,0.06)' } }}
+                                                    >
+                                                        <ListItemIcon sx={{ minWidth: 30, color: child.color }}>
+                                                            {child.icon}
+                                                        </ListItemIcon>
+                                                        <ListItemText
+                                                            primary={child.label}
+                                                            primaryTypographyProps={{ fontSize: '0.85rem', fontFamily: 'Outfit', fontWeight: 500, color: '#4A4A6A' }}
+                                                        />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            ))}
+                                        </List>
+                                    </Collapse>
+                                )}
+                            </Box>
+                        ))
+                    }
+                </List >
 
                 <Divider sx={{ mx: 2 }} />
 
@@ -586,7 +589,7 @@ const Navbar = () => {
                         Request a Free Quote
                     </Button>
                 </Box>
-            </Drawer>
+            </Drawer >
         </>
     );
 };
