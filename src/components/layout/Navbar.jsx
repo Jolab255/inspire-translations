@@ -71,7 +71,7 @@ const mainNavItems = [
 ];
 
 // ── Logo using real PNG ───────────────────────────────────────────────
-const Logo = ({ height = 48, white = false }) => (
+const Logo = ({ height = 56, white = false }) => (
     <Box
         component={RouterLink}
         to="/"
@@ -83,6 +83,8 @@ const Logo = ({ height = 48, white = false }) => (
             alt="Inspire Translations"
             sx={{
                 height,
+                minWidth: 160,
+                maxWidth: 240,
                 width: 'auto',
                 objectFit: 'contain',
                 display: 'block',
@@ -172,7 +174,7 @@ const ServicesDropdown = ({ onClose }) => (
                         Professional · Tanzania
                     </Typography>
                 </Box>
-                <KeyboardArrowRightIcon sx={{ ml: 'auto', fontSize: 16, color: '#E0E0E0', flexShrink: 0 }} />
+                <ArrowForwardIosIcon sx={{ ml: 'auto', fontSize: 12, color: '#E0E0E0', flexShrink: 0 }} />
             </Box>
         ))}
         {/* Footer CTA inside dropdown */}
@@ -283,12 +285,12 @@ const Navbar = () => {
                         width: '100%',
                         mx: 'auto',
                         px: { xs: 2, md: 4 },
-                        py: 1.2,
-                        minHeight: { xs: 64, md: 72 },
+                        py: 0.5,
+                        minHeight: { xs: 70, md: 84 },
                     }}
                 >
                     {/* ── Logo ── */}
-                    <Logo height={60} />
+                    <Logo height={70} />
 
                     {/* ── Desktop Nav Items ── */}
                     <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0.5, flexGrow: 1 }}>
