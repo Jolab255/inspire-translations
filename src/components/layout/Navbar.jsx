@@ -377,8 +377,10 @@ const Navbar = () => {
                                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                         '&:hover': {
                                             color: '#F7A11A',
-                                            bgcolor: 'rgba(247,161,26,0.08)', // Subtle glass pill effect
-                                            transform: 'translateY(-1px)',
+                                            bgcolor: 'rgba(247,161,26,0.08)',
+                                            border: '1px solid rgba(247,161,26,0.15)',
+                                            transform: 'translateY(-2px) scale(1.02)',
+                                            boxShadow: '0 4px 12px rgba(247,161,26,0.1)',
                                         },
                                         // Active state pill border/background
                                         ...(isActive(item.path) && {
