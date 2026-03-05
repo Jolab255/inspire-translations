@@ -17,51 +17,54 @@ import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import Badge from '@mui/material/Badge';
 
-// MUI Icons for nav items
+// MUI Icons — filled style (Facebook-like: solid, recognisable)
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import HomeIcon from '@mui/icons-material/Home';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
-import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import CollectionsIcon from '@mui/icons-material/Collections';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import ContactMailOutlinedIcon from '@mui/icons-material/ContactMailOutlined';
+import HomeIcon from '@mui/icons-material/Home';          // filled
+import InfoIcon from '@mui/icons-material/Info';          // filled
+import BuildIcon from '@mui/icons-material/Build';         // filled — services
+import WorkIcon from '@mui/icons-material/Work';          // filled — projects
+import CollectionsIcon from '@mui/icons-material/Collections';   // filled
+import ArticleIcon from '@mui/icons-material/Article';       // filled
+import ContactMailIcon from '@mui/icons-material/ContactMail';   // filled
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';    // filled phone
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import TranslateIcon from '@mui/icons-material/Translate';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
-import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
-import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
-import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import VideocamIcon from '@mui/icons-material/Videocam';      // filled
+import SchoolIcon from '@mui/icons-material/School';        // filled
+import EventIcon from '@mui/icons-material/Event';         // filled
+import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';   // filled
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';  // filled
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Nav service sub-items with individual icons
+// Service dropdown items — filled icons
 const serviceItems = [
     { label: 'Written Translation', path: '/services/written-translation', icon: <TranslateIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
     { label: 'On-Site Interpretation', path: '/services/onsite-interpretation', icon: <RecordVoiceOverIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
-    { label: 'Remote Interpretation', path: '/services/remote-interpretation', icon: <VideocamOutlinedIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
-    { label: 'Language Classes', path: '/services/language-classes', icon: <SchoolOutlinedIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
-    { label: 'Conference Logistics', path: '/services/conference-logistics', icon: <EventOutlinedIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
-    { label: 'Equipment Rental', path: '/services/equipment-rental', icon: <HeadsetMicOutlinedIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
+    { label: 'Remote Interpretation', path: '/services/remote-interpretation', icon: <VideocamIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
+    { label: 'Language Classes', path: '/services/language-classes', icon: <SchoolIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
+    { label: 'Conference Logistics', path: '/services/conference-logistics', icon: <EventIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
+    { label: 'Equipment Rental', path: '/services/equipment-rental', icon: <HeadsetMicIcon sx={{ fontSize: 18 }} />, color: '#1A5C2A' },
 ];
 
-// Main nav items with icons
+// Main nav items — filled Facebook-style icons (only shown when active)
 const mainNavItems = [
-    { label: 'Home', path: '/', icon: <HomeIcon sx={{ fontSize: 18 }} /> },
-    { label: 'Services', path: '/services', icon: <MiscellaneousServicesIcon sx={{ fontSize: 18 }} />, children: serviceItems },
-    { label: 'About Us', path: '/about', icon: <InfoOutlinedIcon sx={{ fontSize: 18 }} /> },
-    { label: 'Projects', path: '/projects', icon: <WorkOutlineIcon sx={{ fontSize: 18 }} /> },
-    { label: 'Gallery', path: '/gallery', icon: <CollectionsIcon sx={{ fontSize: 18 }} /> },
-    { label: 'Blog', path: '/blog', icon: <ArticleOutlinedIcon sx={{ fontSize: 18 }} /> },
-    { label: 'Contact', path: '/contact', icon: <ContactMailOutlinedIcon sx={{ fontSize: 18 }} /> },
+    { label: 'Home', path: '/', icon: <HomeIcon sx={{ fontSize: 19 }} /> },
+    { label: 'Services', path: '/services', icon: <BuildIcon sx={{ fontSize: 19 }} />, children: serviceItems },
+    { label: 'About Us', path: '/about', icon: <InfoIcon sx={{ fontSize: 19 }} /> },
+    { label: 'Projects', path: '/projects', icon: <WorkIcon sx={{ fontSize: 19 }} /> },
+    { label: 'Gallery', path: '/gallery', icon: <CollectionsIcon sx={{ fontSize: 19 }} /> },
+    { label: 'Blog', path: '/blog', icon: <ArticleIcon sx={{ fontSize: 19 }} /> },
+    { label: 'Contact', path: '/contact', icon: <ContactMailIcon sx={{ fontSize: 19 }} /> },
 ];
 
 // ── Logo mark component ──────────────────────────────────────────────
@@ -212,35 +215,39 @@ const Navbar = () => {
     return (
         <>
             {/* ── Top bar ───────────────────────────────────────────── */}
-            <Box
-                sx={{
-                    background: 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)',
-                    color: '#fff',
-                    py: 0.6,
-                    display: { xs: 'none', md: 'block' },
-                }}
-            >
+            <Box sx={{ background: 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)', py: 0.65, display: { xs: 'none', md: 'block' } }}>
                 <Box sx={{ maxWidth: 1280, mx: 'auto', px: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                            <WhatsAppIcon sx={{ fontSize: 14, color: '#4ADE80' }} />
-                            <Typography sx={{ fontSize: '0.78rem', fontFamily: 'Inter' }}>+255 000 000 000</Typography>
+
+                    {/* Left: phone + email */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                        {[
+                            { icon: <LocalPhoneIcon sx={{ fontSize: 13, color: '#4ADE80' }} />, text: '+255 000 000 000' },
+                            { icon: <EmailIcon sx={{ fontSize: 13, color: '#F7A11A' }} />, text: 'info@inspiretranslations.co.tz' },
+                        ].map((item, i) => (
+                            <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 0.7, pr: 2.5, mr: i === 0 ? 2.5 : 0, borderRight: i === 0 ? '1px solid rgba(255,255,255,0.18)' : 'none' }}>
+                                {item.icon}
+                                <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.9)', letterSpacing: '0.01em' }}>
+                                    {item.text}
+                                </Typography>
+                            </Box>
+                        ))}
+                    </Box>
+
+                    {/* Right: hours + available dot */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
+                            <AccessTimeFilledIcon sx={{ fontSize: 13, color: 'rgba(255,255,255,0.55)' }} />
+                            <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.7)' }}>
+                                Mon – Fri &nbsp;·&nbsp; 8:00 AM – 5:00 PM EAT
+                            </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                            <EmailIcon sx={{ fontSize: 14, color: '#F7A11A' }} />
-                            <Typography sx={{ fontSize: '0.78rem', fontFamily: 'Inter' }}>info@inspiretranslations.co.tz</Typography>
+                        <Box sx={{ width: 1, height: 14, bgcolor: 'rgba(255,255,255,0.18)' }} />
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
+                            <FiberManualRecordIcon sx={{ fontSize: 9, color: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
+                            <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80', letterSpacing: '0.03em' }}>Available</Typography>
                         </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter' }}>
-                            Mon–Fri 8AM–5PM EAT
-                        </Typography>
-                        <Box sx={{ width: 1, height: 14, bgcolor: 'rgba(255,255,255,0.2)', mx: 1 }} />
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
-                            <Typography sx={{ fontSize: '0.75rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80' }}>Available</Typography>
-                        </Box>
-                    </Box>
+
                 </Box>
             </Box>
 
@@ -294,28 +301,30 @@ const Navbar = () => {
                                 <Button
                                     component={item.children ? 'button' : RouterLink}
                                     to={item.children ? undefined : item.path}
+                                    // Icon only shown when active (Facebook-style: icon appears on selected tab)
                                     startIcon={
-                                        <Box sx={{
-                                            color: isActive(item.path) ? '#F7A11A' : '#9E9E9E',
-                                            display: 'flex',
-                                            transition: 'color 0.2s',
-                                            '.MuiButton-root:hover &': { color: '#F7A11A' },
-                                        }}>
-                                            {item.icon}
-                                        </Box>
+                                        isActive(item.path) ? (
+                                            <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
+                                                {item.icon}
+                                            </Box>
+                                        ) : null
                                     }
-                                    endIcon={item.children ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.6, transition: 'transform 0.2s', transform: servicesDropOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} /> : null}
+                                    endIcon={
+                                        item.children
+                                            ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
+                                            : null
+                                    }
                                     sx={{
                                         color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
                                         fontWeight: isActive(item.path) ? 700 : 500,
                                         fontFamily: 'Outfit',
                                         fontSize: '0.88rem',
-                                        px: 1.5,
+                                        px: isActive(item.path) ? 1.8 : 1.5,
                                         py: 0.9,
-                                        borderRadius: 2,
+                                        borderRadius: 2.5,
                                         textTransform: 'none',
                                         boxShadow: 'none',
-                                        background: isActive(item.path) ? 'rgba(247,161,26,0.08)' : 'transparent',
+                                        bgcolor: isActive(item.path) ? 'rgba(247,161,26,0.1)' : 'transparent',
                                         transition: 'all 0.2s ease',
                                         '&:hover': {
                                             color: '#F7A11A',
@@ -323,17 +332,17 @@ const Navbar = () => {
                                             boxShadow: 'none',
                                             transform: 'none',
                                         },
-                                        // active underline
                                         position: 'relative',
+                                        // active orange underline
                                         '&::after': isActive(item.path) ? {
                                             content: '""',
                                             position: 'absolute',
-                                            bottom: 4,
+                                            bottom: 3,
                                             left: '50%',
                                             transform: 'translateX(-50%)',
-                                            width: '60%',
-                                            height: 2,
-                                            borderRadius: 1,
+                                            width: '55%',
+                                            height: 2.5,
+                                            borderRadius: 2,
                                             bgcolor: '#F7A11A',
                                         } : {},
                                     }}
@@ -388,7 +397,7 @@ const Navbar = () => {
                             component={RouterLink}
                             to="/quote"
                             variant="contained"
-                            startIcon={<RequestQuoteOutlinedIcon sx={{ fontSize: '18px !important' }} />}
+                            startIcon={<RequestQuoteIcon sx={{ fontSize: '18px !important' }} />}
                             sx={{
                                 background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
                                 color: '#fff',
@@ -562,7 +571,7 @@ const Navbar = () => {
                         to="/quote"
                         variant="contained"
                         fullWidth
-                        startIcon={<RequestQuoteOutlinedIcon />}
+                        startIcon={<RequestQuoteIcon />}
                         sx={{
                             mt: 3,
                             background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
