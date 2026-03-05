@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import Badge from '@mui/material/Badge';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 // MUI Icons — filled style (Facebook-like: solid, recognisable)
 import MenuIcon from '@mui/icons-material/Menu';
@@ -97,10 +98,10 @@ const Logo = ({ height = 56, white = false }) => (
 // ── Services mega‑dropdown ──────────────────────────────────────────
 const ServicesDropdown = ({ onClose }) => (
     <motion.div
-        initial={{ opacity: 0, y: -20, scale: 0.96, filter: 'blur(10px)' }}
-        animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-        exit={{ opacity: 0, y: -20, scale: 0.96, filter: 'blur(10px)' }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, y: 15, scale: 0.99 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 10, scale: 0.99 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
         style={{
             position: 'fixed', // Use fixed to position relative to viewport
             top: '110px', // Below the navbar
@@ -340,101 +341,101 @@ const Navbar = () => {
                     {/* ── Desktop Nav Items ── */}
                     <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'stretch', gap: 0.3, flexGrow: 1, overflow: 'visible' }}>
                         {mainNavItems.map((item) => (
-                            <Box
-                                key={item.label}
-                                sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}
-                                onMouseEnter={() => item.children && setServicesDropOpen(true)}
-                                onMouseLeave={() => item.children && setServicesDropOpen(false)}
-                            >
-                                <Button
-                                    component={item.children ? 'button' : RouterLink}
-                                    to={item.children ? undefined : item.path}
-                                    startIcon={
-                                        isActive(item.path) ? (
-                                            <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
-                                                {item.icon}
-                                            </Box>
-                                        ) : null
-                                    }
-                                    endIcon={
-                                        item.children
-                                            ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
-                                            : null
-                                    }
-                                    sx={{
-                                        color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                        fontWeight: isActive(item.path) ? 700 : 500,
-                                        fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                        fontSize: '0.85rem',
-                                        letterSpacing: '0.01em',
-                                        px: 2.5,
-                                        py: 1,
-                                        borderRadius: '50px',
-                                        textTransform: 'none',
-                                        position: 'relative',
-                                        zIndex: 2,
-                                        bgcolor: 'transparent',
-                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        '&:hover': {
-                                            color: '#F7A11A',
-                                            bgcolor: 'transparent',
-                                            '&::before': {
-                                                opacity: 1,
-                                                transform: 'translate(-50%, -50%) scale(1)',
-                                            },
-                                            '&::after': {
-                                                transform: 'translateX(-50%) scaleX(1)',
-                                            }
-                                        },
-                                        // The Glow Effect
-                                        '&::before': {
-                                            content: '""',
-                                            position: 'absolute',
-                                            top: '50%',
-                                            left: '50%',
-                                            width: '120%',
-                                            height: '120%',
-                                            background: 'radial-gradient(circle, rgba(247,161,26,0.12) 0%, rgba(247,161,26,0) 70%)',
-                                            transform: 'translate(-50%, -50%) scale(0.6)',
-                                            opacity: 0,
-                                            transition: 'all 0.4s ease',
-                                            pointerEvents: 'none',
-                                            zIndex: -1,
-                                        },
-                                        // The Refined Underline
-                                        '&::after': {
-                                            content: '""',
-                                            position: 'absolute',
-                                            bottom: 6,
-                                            left: '50%',
-                                            width: '60%',
-                                            height: 2.5,
-                                            background: '#F7A11A',
-                                            borderRadius: '2px',
-                                            transform: isActive(item.path) ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
-                                            transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                            transformOrigin: 'center',
-                                        },
-                                        // Active state background (very subtle)
-                                        ...(isActive(item.path) && {
-                                            bgcolor: 'rgba(247,161,26,0.04)',
-                                        }),
-                                    }}
+                            <ClickAwayListener key={item.label} onClickAway={() => item.children && setServicesDropOpen(false)}>
+                                <Box
+                                    sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}
                                 >
-                                    {item.label}
-                                </Button>
+                                    <Button
+                                        onClick={item.children ? () => setServicesDropOpen(!servicesDropOpen) : undefined}
+                                        component={item.children ? 'button' : RouterLink}
+                                        to={item.children ? undefined : item.path}
+                                        startIcon={
+                                            isActive(item.path) ? (
+                                                <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
+                                                    {item.icon}
+                                                </Box>
+                                            ) : null
+                                        }
+                                        endIcon={
+                                            item.children
+                                                ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
+                                                : null
+                                        }
+                                        sx={{
+                                            color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
+                                            fontWeight: isActive(item.path) ? 700 : 500,
+                                            fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                            fontSize: '0.85rem',
+                                            letterSpacing: '0.01em',
+                                            px: 2.5,
+                                            py: 1,
+                                            borderRadius: '50px',
+                                            textTransform: 'none',
+                                            position: 'relative',
+                                            zIndex: 2,
+                                            bgcolor: 'transparent',
+                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                            '&:hover': {
+                                                color: '#F7A11A',
+                                                bgcolor: 'rgba(247,161,26,0.04)',
+                                                '&::before': {
+                                                    opacity: 1,
+                                                    transform: 'translate(-50%, -50%) scale(1)',
+                                                },
+                                                '&::after': {
+                                                    transform: 'translateX(-50%) scaleX(1)',
+                                                }
+                                            },
+                                            // The Glow Effect
+                                            '&::before': {
+                                                content: '""',
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                width: '120%',
+                                                height: '120%',
+                                                background: 'radial-gradient(circle, rgba(247,161,26,0.12) 0%, rgba(247,161,26,0) 70%)',
+                                                transform: 'translate(-50%, -50%) scale(0.6)',
+                                                opacity: 0,
+                                                transition: 'all 0.4s ease',
+                                                pointerEvents: 'none',
+                                                zIndex: -1,
+                                            },
+                                            // The Refined Underline
+                                            '&::after': {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 6,
+                                                left: '50%',
+                                                width: '60%',
+                                                height: 2.5,
+                                                background: '#F7A11A',
+                                                borderRadius: '2px',
+                                                transform: isActive(item.path) ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
+                                                transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                transformOrigin: 'center',
+                                            },
+                                            // Active state background (very subtle)
+                                            ...(isActive(item.path) && {
+                                                bgcolor: 'rgba(247,161,26,0.04)',
+                                            }),
+                                        }}
+                                    >
+                                        {item.label}
+                                    </Button>
 
-                                {/* Services Dropdown */}
-                                {
-                                    item.children && (
-                                        <AnimatePresence>
-                                            {servicesDropOpen && (
-                                                <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
-                                            )}
-                                        </AnimatePresence>
-                                    )
-                                }
-                            </Box>
+                                    {/* Services Dropdown */}
+                                    {
+                                        item.children && (
+                                            <AnimatePresence>
+                                                {servicesDropOpen && (
+                                                    <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
+                                                )}
+                                            </AnimatePresence>
+                                        )
+                                    }
+                                </Box>
+                            </ClickAwayListener>
                         ))}
                     </Box>
 
