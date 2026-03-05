@@ -97,10 +97,10 @@ const Logo = ({ height = 56, white = false }) => (
 // ── Services mega‑dropdown ──────────────────────────────────────────
 const ServicesDropdown = ({ onClose }) => (
     <motion.div
-        initial={{ opacity: 0, y: -10, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -10, scale: 0.98 }}
-        transition={{ duration: 0.2, ease: 'easeOut' }}
+        initial={{ opacity: 0, y: -20, scale: 0.96, filter: 'blur(10px)' }}
+        animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+        exit={{ opacity: 0, y: -20, scale: 0.96, filter: 'blur(10px)' }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         style={{
             position: 'fixed', // Use fixed to position relative to viewport
             top: '110px', // Below the navbar
@@ -367,9 +367,9 @@ const Navbar = () => {
                                         fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                                         fontSize: '0.85rem',
                                         letterSpacing: '0.01em',
-                                        px: 2.5, // slightly more padding for a "pill" look
+                                        px: 2.5,
                                         py: 1,
-                                        borderRadius: '50px', // Pill shape
+                                        borderRadius: '50px',
                                         textTransform: 'none',
                                         position: 'relative',
                                         zIndex: 2,
@@ -377,15 +377,47 @@ const Navbar = () => {
                                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                         '&:hover': {
                                             color: '#F7A11A',
-                                            bgcolor: 'rgba(247,161,26,0.08)',
-                                            border: '1px solid rgba(247,161,26,0.15)',
-                                            transform: 'translateY(-2px) scale(1.02)',
-                                            boxShadow: '0 4px 12px rgba(247,161,26,0.1)',
+                                            bgcolor: 'transparent',
+                                            '&::before': {
+                                                opacity: 1,
+                                                transform: 'translate(-50%, -50%) scale(1)',
+                                            },
+                                            '&::after': {
+                                                transform: 'translateX(-50%) scaleX(1)',
+                                            }
                                         },
-                                        // Active state pill border/background
+                                        // The Glow Effect
+                                        '&::before': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            width: '120%',
+                                            height: '120%',
+                                            background: 'radial-gradient(circle, rgba(247,161,26,0.12) 0%, rgba(247,161,26,0) 70%)',
+                                            transform: 'translate(-50%, -50%) scale(0.6)',
+                                            opacity: 0,
+                                            transition: 'all 0.4s ease',
+                                            pointerEvents: 'none',
+                                            zIndex: -1,
+                                        },
+                                        // The Refined Underline
+                                        '&::after': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            bottom: 6,
+                                            left: '50%',
+                                            width: '60%',
+                                            height: 2.5,
+                                            background: '#F7A11A',
+                                            borderRadius: '2px',
+                                            transform: isActive(item.path) ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
+                                            transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                            transformOrigin: 'center',
+                                        },
+                                        // Active state background (very subtle)
                                         ...(isActive(item.path) && {
-                                            bgcolor: 'rgba(247,161,26,0.1)',
-                                            border: '1px solid rgba(247,161,26,0.2)',
+                                            bgcolor: 'rgba(247,161,26,0.04)',
                                         }),
                                     }}
                                 >
