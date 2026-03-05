@@ -276,6 +276,8 @@ const Navbar = () => {
                     transition: 'all 0.35s ease',
                     color: '#1A1A2E',
                     top: 0,
+                    overflow: 'visible',  // let tabs extend below
+                    zIndex: 1100,
                 }}
             >
                 <Toolbar
@@ -287,13 +289,14 @@ const Navbar = () => {
                         px: { xs: 2, md: 4 },
                         py: 0.5,
                         minHeight: { xs: 70, md: 84 },
+                        overflow: 'visible',
                     }}
                 >
                     {/* ── Logo ── */}
                     <Logo height={70} />
 
                     {/* ── Desktop Nav Items ── */}
-                    <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0.5, flexGrow: 1 }}>
+                    <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'stretch', gap: 0.3, flexGrow: 1, overflow: 'visible' }}>
                         {mainNavItems.map((item) => (
                             <Box
                                 key={item.label}
@@ -301,56 +304,73 @@ const Navbar = () => {
                                 onMouseEnter={() => item.children && setServicesDropOpen(true)}
                                 onMouseLeave={() => item.children && setServicesDropOpen(false)}
                             >
-                                <Button
-                                    component={item.children ? 'button' : RouterLink}
-                                    to={item.children ? undefined : item.path}
-                                    startIcon={
-                                        isActive(item.path) ? (
-                                            <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
-                                                {item.icon}
-                                            </Box>
-                                        ) : null
-                                    }
-                                    endIcon={
-                                        item.children
-                                            ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
-                                            : null
-                                    }
-                                    sx={{
-                                        color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                        fontWeight: isActive(item.path) ? 700 : 600,
-                                        fontFamily: '"Outfit", sans-serif',
-                                        fontSize: '0.94rem',
-                                        letterSpacing: '0.01em',
-                                        px: isActive(item.path) ? 2 : 1.6,
-                                        py: 1,
-                                        borderRadius: 2.5,
-                                        textTransform: 'none',
-                                        boxShadow: 'none',
-                                        bgcolor: isActive(item.path) ? 'rgba(247,161,26,0.1)' : 'transparent',
-                                        transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
-                                        '&:hover': {
-                                            color: '#F7A11A',
-                                            bgcolor: 'rgba(247,161,26,0.07)',
+                                <Box sx={{ position: 'relative', overflow: 'visible', display: 'flex', alignItems: 'center' }}>
+                                    <Button
+                                        component={item.children ? 'button' : RouterLink}
+                                        to={item.children ? undefined : item.path}
+                                        startIcon={
+                                            isActive(item.path) ? (
+                                                <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
+                                                    {item.icon}
+                                                </Box>
+                                            ) : null
+                                        }
+                                        endIcon={
+                                            item.children
+                                                ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
+                                                : null
+                                        }
+                                        sx={{
+                                            color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
+                                            fontWeight: isActive(item.path) ? 700 : 600,
+                                            fontFamily: '"Outfit", sans-serif',
+                                            fontSize: '0.94rem',
+                                            letterSpacing: '0.01em',
+                                            px: 2,
+                                            py: 1,
+                                            textTransform: 'none',
                                             boxShadow: 'none',
-                                            transform: 'translateY(-1px)',
-                                        },
-                                        position: 'relative',
-                                        '&::after': isActive(item.path) ? {
-                                            content: '""',
-                                            position: 'absolute',
-                                            bottom: 2,
-                                            left: '50%',
-                                            transform: 'translateX(-50%)',
-                                            width: '50%',
-                                            height: 2.5,
-                                            borderRadius: 2,
-                                            background: 'linear-gradient(90deg, #F7A11A, #D4880E)',
-                                        } : {},
-                                    }}
-                                >
-                                    {item.label}
-                                </Button>
+                                            position: 'relative',
+                                            zIndex: 2,
+                                            // Firefox-style tab for active
+                                            bgcolor: isActive(item.path) ? '#FFFFFF' : 'transparent',
+                                            borderRadius: isActive(item.path) ? '10px 10px 0 0' : '8px',
+                                            mb: isActive(item.path) ? '-6px' : 0,
+                                            pb: isActive(item.path) ? '14px' : 1,
+                                            boxShadow: isActive(item.path) ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+                                            borderTop: isActive(item.path) ? '3px solid #F7A11A' : '3px solid transparent',
+                                            transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
+                                            '&:hover': {
+                                                color: '#F7A11A',
+                                                bgcolor: isActive(item.path) ? '#FFFFFF' : 'rgba(247,161,26,0.06)',
+                                                boxShadow: isActive(item.path) ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+                                                transform: isActive(item.path) ? 'none' : 'translateY(-1px)',
+                                            },
+                                            // Left curve connector
+                                            '&::before': isActive(item.path) ? {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: -8,
+                                                width: 8,
+                                                height: 8,
+                                                background: 'radial-gradient(circle at 0 0, transparent 8px, #FFFFFF 8px)',
+                                            } : {},
+                                            // Right curve connector
+                                            '&::after': isActive(item.path) ? {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                right: -8,
+                                                width: 8,
+                                                height: 8,
+                                                background: 'radial-gradient(circle at 100% 0, transparent 8px, #FFFFFF 8px)',
+                                            } : {},
+                                        }}
+                                    >
+                                        {item.label}
+                                    </Button>
+                                </Box>
 
                                 {/* Services Dropdown */}
                                 {item.children && (
