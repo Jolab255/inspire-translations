@@ -46,6 +46,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Real logo
+import logoImg from '../../assets/logos/Inspire_Translations_Logo.png';
+
 // Service dropdown items — filled icons
 const serviceItems = [
     { label: 'Written Translation', path: '/services/written-translation', icon: <TranslateIcon sx={{ fontSize: 18 }} />, color: '#F7A11A' },
@@ -67,15 +70,25 @@ const mainNavItems = [
     { label: 'Contact', path: '/contact', icon: <ContactMailIcon sx={{ fontSize: 19 }} /> },
 ];
 
-// ── Logo mark component ──────────────────────────────────────────────
-const LogoMark = ({ size = 40 }) => (
-    <Box sx={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
-        {/* Outer ring */}
-        <Box sx={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid #1A5C2A', animation: 'pulseGlow 3s infinite' }} />
-        {/* Inner filled circle */}
-        <Box sx={{ position: 'absolute', inset: 3, borderRadius: '50%', background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(247,161,26,0.45)' }}>
-            <Typography sx={{ color: '#fff', fontWeight: 900, fontSize: size * 0.3, fontFamily: 'Outfit', lineHeight: 1 }}>IT</Typography>
-        </Box>
+// ── Logo using real PNG ───────────────────────────────────────────────
+const Logo = ({ height = 48, white = false }) => (
+    <Box
+        component={RouterLink}
+        to="/"
+        sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', mr: 4, flexShrink: 0 }}
+    >
+        <Box
+            component="img"
+            src={logoImg}
+            alt="Inspire Translations"
+            sx={{
+                height,
+                width: 'auto',
+                objectFit: 'contain',
+                display: 'block',
+                filter: white ? 'brightness(0) invert(1)' : 'none',
+            }}
+        />
     </Box>
 );
 
@@ -233,19 +246,17 @@ const Navbar = () => {
                         ))}
                     </Box>
 
-                    {/* Right: hours + available dot */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
-                            <AccessTimeFilledIcon sx={{ fontSize: 13, color: 'rgba(255,255,255,0.55)' }} />
-                            <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.7)' }}>
-                                Mon – Fri &nbsp;·&nbsp; 8:00 AM – 5:00 PM EAT
-                            </Typography>
-                        </Box>
-                        <Box sx={{ width: 1, height: 14, bgcolor: 'rgba(255,255,255,0.18)' }} />
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
-                            <FiberManualRecordIcon sx={{ fontSize: 9, color: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
-                            <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80', letterSpacing: '0.03em' }}>Available</Typography>
-                        </Box>
+                    {/* Right: ONE horizontal row — hours · separator · Available */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AccessTimeFilledIcon sx={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }} />
+                        <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.72)', whiteSpace: 'nowrap' }}>
+                            Mon – Fri &nbsp;·&nbsp; 8:00 AM – 5:00 PM EAT
+                        </Typography>
+                        <Box sx={{ width: 1, height: 12, bgcolor: 'rgba(255,255,255,0.22)', mx: 0.5 }} />
+                        <FiberManualRecordIcon sx={{ fontSize: 8, color: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
+                        <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80', whiteSpace: 'nowrap', letterSpacing: '0.04em' }}>
+                            Available
+                        </Typography>
                     </Box>
 
                 </Box>
@@ -277,17 +288,7 @@ const Navbar = () => {
                     }}
                 >
                     {/* ── Logo ── */}
-                    <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', mr: 4 }}>
-                        <LogoMark size={44} />
-                        <Box>
-                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '1.15rem', color: '#1A1A2E', lineHeight: 1, letterSpacing: '-0.01em' }}>
-                                INSPIRE
-                            </Typography>
-                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, fontSize: '0.62rem', color: '#F7A11A', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
-                                TRANSLATIONS
-                            </Typography>
-                        </Box>
-                    </Box>
+                    <Logo height={60} />
 
                     {/* ── Desktop Nav Items ── */}
                     <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0.5, flexGrow: 1 }}>
@@ -455,22 +456,13 @@ const Navbar = () => {
                 }}
             >
                 {/* Drawer header */}
-                <Box
-                    sx={{
-                        background: 'linear-gradient(135deg, #0D1B2A 0%, #0F3A1A 100%)',
-                        p: 2.5,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <LogoMark size={36} />
-                        <Box>
-                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1rem', color: '#FFFFFF', lineHeight: 1 }}>INSPIRE</Typography>
-                            <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, fontSize: '0.6rem', color: '#F7A11A', letterSpacing: '0.15em', textTransform: 'uppercase' }}>TRANSLATIONS</Typography>
-                        </Box>
-                    </Box>
+                <Box sx={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #0F3A1A 100%)', p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box
+                        component="img"
+                        src={logoImg}
+                        alt="Inspire Translations"
+                        sx={{ height: 40, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+                    />
                     <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#fff', bgcolor: 'rgba(255,255,255,0.1)' } }}>
                         <CloseIcon />
                     </IconButton>
