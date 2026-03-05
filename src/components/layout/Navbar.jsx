@@ -339,18 +339,19 @@ const Navbar = () => {
                                                 bgcolor: 'rgba(247,161,26,0.06)',
                                                 transform: isActive(item.path) ? 'none' : 'translateY(-1px)',
                                             },
-                                            // Trapezoid tab extending below navbar
+                                            // Trapezoid tab extending below navbar, overlapping hero
                                             '&::after': isActive(item.path) ? {
                                                 content: '""',
                                                 position: 'absolute',
-                                                bottom: -10,
+                                                top: '100%',
                                                 left: '50%',
                                                 transform: 'translateX(-50%)',
-                                                width: '80%',
-                                                height: 10,
+                                                width: '100%',
+                                                height: 28,
                                                 background: 'linear-gradient(180deg, #F7A11A 0%, #D4880E 100%)',
-                                                clipPath: 'polygon(8% 0%, 92% 0%, 78% 100%, 22% 100%)',
-                                                borderRadius: '0 0 4px 4px',
+                                                clipPath: 'polygon(0% 0%, 100% 0%, 82% 100%, 18% 100%)',
+                                                zIndex: 1200,
+                                                filter: 'drop-shadow(0 4px 8px rgba(247,161,26,0.35))',
                                             } : {},
                                         }}
                                     >
