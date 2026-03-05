@@ -322,9 +322,9 @@ const Navbar = () => {
                                         }
                                         sx={{
                                             color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                            fontWeight: isActive(item.path) ? 700 : 600,
-                                            fontFamily: '"Outfit", sans-serif',
-                                            fontSize: '0.94rem',
+                                            fontWeight: isActive(item.path) ? 700 : 500,
+                                            fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                            fontSize: '0.85rem',
                                             letterSpacing: '0.01em',
                                             px: 2,
                                             py: 1,
@@ -410,9 +410,9 @@ const Navbar = () => {
                             sx={{
                                 background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
                                 color: '#fff',
-                                fontFamily: 'Outfit',
+                                fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                                 fontWeight: 700,
-                                fontSize: '0.875rem',
+                                fontSize: '0.85rem',
                                 px: 2.5,
                                 py: 1,
                                 borderRadius: 50,
@@ -436,7 +436,7 @@ const Navbar = () => {
                             to="/quote"
                             size="small"
                             variant="contained"
-                            sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: 'Outfit', fontWeight: 700, px: 2, fontSize: '0.8rem', borderRadius: 50 }}
+                            sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', fontWeight: 700, px: 2, fontSize: '0.8rem', borderRadius: 50 }}
                         >
                             Quote
                         </Button>
