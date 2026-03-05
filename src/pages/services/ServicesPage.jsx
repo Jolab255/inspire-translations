@@ -74,7 +74,21 @@ const ServicesPage = () => (
                                             ))}
                                         </Box>
                                         <Button component={RouterLink} to={`/services/${service.id}`} size="small" endIcon={<ArrowForwardIcon />}
-                                            sx={{ color: service.color, fontFamily: 'Outfit', fontWeight: 600, p: 0, '&:hover': { bgcolor: 'transparent', gap: 1 }, boxShadow: 'none', background: 'transparent', transform: 'none', '&:hover': { transform: 'none', boxShadow: 'none' } }}>
+                                            sx={{
+                                                color: service.color,
+                                                fontFamily: 'Outfit',
+                                                fontWeight: 600,
+                                                p: 0,
+                                                boxShadow: 'none',
+                                                background: 'transparent',
+                                                transform: 'none',
+                                                '&:hover': {
+                                                    bgcolor: 'transparent',
+                                                    gap: 1,
+                                                    transform: 'none',
+                                                    boxShadow: 'none'
+                                                }
+                                            }}>
                                             Learn More
                                         </Button>
                                     </CardContent>

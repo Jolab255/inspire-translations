@@ -98,10 +98,10 @@ const Logo = ({ height = 56, white = false }) => (
 // ── Services mega‑dropdown ──────────────────────────────────────────
 const ServicesDropdown = ({ onClose }) => (
     <motion.div
-        initial={{ opacity: 0, y: 15, scale: 0.99 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 10, scale: 0.99 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
         style={{
             position: 'fixed', // Use fixed to position relative to viewport
             top: '110px', // Below the navbar
@@ -258,9 +258,12 @@ const Navbar = () => {
     const location = useLocation();
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 70);
-        window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 70);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     useEffect(() => {
@@ -272,251 +275,224 @@ const Navbar = () => {
 
     return (
         <>
-            {/* ── Top bar ───────────────────────────────────────────── */}
-            <Box sx={{ background: 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)', py: 0.65, display: { xs: 'none', md: 'block' } }}>
-                <Box sx={{ maxWidth: 1280, mx: 'auto', px: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-
-                    {/* Left: phone + email */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                        {[
-                            { icon: <LocalPhoneIcon sx={{ fontSize: 13, color: '#4ADE80' }} />, text: '+255 000 000 000' },
-                            { icon: <EmailIcon sx={{ fontSize: 13, color: '#F7A11A' }} />, text: 'info@inspiretranslations.co.tz' },
-                        ].map((item, i) => (
-                            <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 0.7, pr: 2.5, mr: i === 0 ? 2.5 : 0, borderRight: i === 0 ? '1px solid rgba(255,255,255,0.18)' : 'none' }}>
-                                {item.icon}
-                                <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.9)', letterSpacing: '0.01em' }}>
-                                    {item.text}
-                                </Typography>
-                            </Box>
-                        ))}
-                    </Box>
-
-                    {/* Right: ONE horizontal row — hours · separator · Available */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <AccessTimeFilledIcon sx={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }} />
-                        <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.72)', whiteSpace: 'nowrap' }}>
-                            Mon – Fri &nbsp;·&nbsp; 8:00 AM – 5:00 PM EAT
-                        </Typography>
-                        <Box sx={{ width: 1, height: 12, bgcolor: 'rgba(255,255,255,0.22)', mx: 0.5 }} />
-                        <FiberManualRecordIcon sx={{ fontSize: 8, color: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
-                        <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80', whiteSpace: 'nowrap', letterSpacing: '0.04em' }}>
-                            Available
-                        </Typography>
-                    </Box>
-
-                </Box>
-            </Box>
-
-            {/* ── Main AppBar ───────────────────────────────────────── */}
-            <AppBar
-                position="sticky"
-                elevation={0}
-                sx={{
-                    bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : '#FFFFFF',
-                    backdropFilter: scrolled ? 'blur(24px)' : 'none',
-                    borderBottom: scrolled ? 'none' : '1px solid rgba(0,0,0,0.06)',
-                    boxShadow: scrolled ? '0 4px 32px rgba(0,0,0,0.10)' : 'none',
-                    transition: 'all 0.35s ease',
-                    color: '#1A1A2E',
-                    top: 0,
-                    overflow: 'visible',  // let tabs extend below
-                    zIndex: 1100,
-                }}
-            >
-                <Toolbar
-                    disableGutters
+            <Box sx={{ position: 'sticky', top: 0, zIndex: 1100, width: '100%' }}>
+                {/* ── Top bar ───────────────────────────────────────────── */}
+                <Box
                     sx={{
-                        maxWidth: 1280,
-                        width: '100%',
-                        mx: 'auto',
-                        px: { xs: 2, md: 4 },
-                        py: 0.5,
-                        minHeight: { xs: 70, md: 84 },
-                        overflow: 'visible',
+                        background: 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)',
+                        py: 0.65,
+                        display: { xs: 'none', md: 'block' },
+                        position: 'relative',
+                        zIndex: 1101
                     }}
                 >
-                    {/* ── Logo ── */}
-                    <Logo height={70} />
+                    <Box sx={{ maxWidth: 1280, mx: 'auto', px: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
-                    {/* ── Desktop Nav Items ── */}
-                    <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'stretch', gap: 0.3, flexGrow: 1, overflow: 'visible' }}>
-                        {mainNavItems.map((item) => (
-                            <ClickAwayListener key={item.label} onClickAway={() => item.children && setServicesDropOpen(false)}>
-                                <Box
-                                    sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}
-                                >
-                                    <Button
-                                        onClick={item.children ? () => setServicesDropOpen(!servicesDropOpen) : undefined}
-                                        component={item.children ? 'button' : RouterLink}
-                                        to={item.children ? undefined : item.path}
-                                        startIcon={
-                                            isActive(item.path) ? (
-                                                <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
-                                                    {item.icon}
-                                                </Box>
-                                            ) : null
-                                        }
-                                        endIcon={
-                                            item.children
-                                                ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
-                                                : null
-                                        }
-                                        sx={{
-                                            color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                            fontWeight: isActive(item.path) ? 700 : 500,
-                                            fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                            fontSize: '0.85rem',
-                                            letterSpacing: '0.01em',
-                                            px: 2.5,
-                                            py: 1,
-                                            borderRadius: '50px',
-                                            textTransform: 'none',
-                                            position: 'relative',
-                                            zIndex: 2,
-                                            bgcolor: 'transparent',
-                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                            '&:hover': {
-                                                color: '#F7A11A',
-                                                bgcolor: 'rgba(247,161,26,0.04)',
-                                                '&::before': {
-                                                    opacity: 1,
-                                                    transform: 'translate(-50%, -50%) scale(1)',
-                                                },
-                                                '&::after': {
-                                                    transform: 'translateX(-50%) scaleX(1)',
-                                                }
-                                            },
-                                            // The Glow Effect
-                                            '&::before': {
-                                                content: '""',
-                                                position: 'absolute',
-                                                top: '50%',
-                                                left: '50%',
-                                                width: '120%',
-                                                height: '120%',
-                                                background: 'radial-gradient(circle, rgba(247,161,26,0.12) 0%, rgba(247,161,26,0) 70%)',
-                                                transform: 'translate(-50%, -50%) scale(0.6)',
-                                                opacity: 0,
-                                                transition: 'all 0.4s ease',
-                                                pointerEvents: 'none',
-                                                zIndex: -1,
-                                            },
-                                            // The Refined Underline
-                                            '&::after': {
-                                                content: '""',
-                                                position: 'absolute',
-                                                bottom: 6,
-                                                left: '50%',
-                                                width: '60%',
-                                                height: 2.5,
-                                                background: '#F7A11A',
-                                                borderRadius: '2px',
-                                                transform: isActive(item.path) ? 'translateX(-50%) scaleX(1)' : 'translateX(-50%) scaleX(0)',
-                                                transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                                transformOrigin: 'center',
-                                            },
-                                            // Active state background (very subtle)
-                                            ...(isActive(item.path) && {
-                                                bgcolor: 'rgba(247,161,26,0.04)',
-                                            }),
-                                        }}
-                                    >
-                                        {item.label}
-                                    </Button>
-
-                                    {/* Services Dropdown */}
-                                    {
-                                        item.children && (
-                                            <AnimatePresence>
-                                                {servicesDropOpen && (
-                                                    <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
-                                                )}
-                                            </AnimatePresence>
-                                        )
-                                    }
+                        {/* Left: phone + email */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                            {[
+                                { icon: <LocalPhoneIcon sx={{ fontSize: 13, color: '#4ADE80' }} />, text: '+255 000 000 000' },
+                                { icon: <EmailIcon sx={{ fontSize: 13, color: '#F7A11A' }} />, text: 'info@inspiretranslations.co.tz' },
+                            ].map((item, i) => (
+                                <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 0.7, pr: 2.5, mr: i === 0 ? 2.5 : 0, borderRight: i === 0 ? '1px solid rgba(255,255,255,0.18)' : 'none' }}>
+                                    {item.icon}
+                                    <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.9)', letterSpacing: '0.01em' }}>
+                                        {item.text}
+                                    </Typography>
                                 </Box>
-                            </ClickAwayListener>
-                        ))}
-                    </Box>
+                            ))}
+                        </Box>
 
-                    {/* ── Desktop Right Actions ── */}
-                    <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 1.5, ml: 2 }}>
-                        <Tooltip title="Call Us" arrow>
-                            <IconButton
-                                href="tel:+255000000000"
-                                size="small"
+                        {/* Right: ONE horizontal row — hours · separator · Available */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <AccessTimeFilledIcon sx={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }} />
+                            <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.72)', whiteSpace: 'nowrap' }}>
+                                Mon – Fri &nbsp;·&nbsp; 8:00 AM – 5:00 PM EAT
+                            </Typography>
+                            <Box sx={{ width: 1, height: 12, bgcolor: 'rgba(255,255,255,0.22)', mx: 0.5 }} />
+                            <FiberManualRecordIcon sx={{ fontSize: 8, color: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
+                            <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80', whiteSpace: 'nowrap', letterSpacing: '0.04em' }}>
+                                Available
+                            </Typography>
+                        </Box>
+
+                    </Box>
+                </Box>
+
+                {/* ── Main AppBar ───────────────────────────────────────── */}
+                <AppBar
+                    position="relative"
+                    elevation={0}
+                    sx={{
+                        bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : '#FFFFFF',
+                        backdropFilter: scrolled ? 'blur(24px)' : 'none',
+                        borderBottom: scrolled ? 'none' : '1px solid rgba(0,0,0,0.06)',
+                        boxShadow: scrolled ? '0 4px 32px rgba(0,0,0,0.10)' : 'none',
+                        transition: 'all 0.35s ease, y 0.35s ease, opacity 0.35s ease',
+                        color: '#1A1A2E',
+                        overflow: 'visible',  // let tabs extend below
+                    }}
+                >
+                    <Toolbar
+                        disableGutters
+                        sx={{
+                            maxWidth: 1280,
+                            width: '100%',
+                            mx: 'auto',
+                            px: { xs: 2, md: 4 },
+                            py: 0.5,
+                            minHeight: { xs: 70, md: 84 },
+                            overflow: 'visible',
+                        }}
+                    >
+                        {/* ── Logo ── */}
+                        <Logo height={70} />
+
+                        {/* ── Desktop Nav Items ── */}
+                        <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'stretch', gap: 0.3, flexGrow: 1, overflow: 'visible' }}>
+                            {mainNavItems.map((item) => (
+                                <ClickAwayListener key={item.label} onClickAway={() => item.children && setServicesDropOpen(false)}>
+                                    <Box
+                                        sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                                    >
+                                        <Button
+                                            onClick={item.children ? () => setServicesDropOpen(!servicesDropOpen) : undefined}
+                                            component={item.children ? 'button' : RouterLink}
+                                            to={item.children ? undefined : item.path}
+                                            startIcon={
+                                                isActive(item.path) ? (
+                                                    <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
+                                                        {item.icon}
+                                                    </Box>
+                                                ) : null
+                                            }
+                                            endIcon={
+                                                item.children
+                                                    ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
+                                                    : null
+                                            }
+                                            sx={{
+                                                color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
+                                                fontWeight: isActive(item.path) ? 700 : 500,
+                                                fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                                fontSize: '0.85rem',
+                                                letterSpacing: '0.01em',
+                                                px: 2.5,
+                                                py: 1,
+                                                borderRadius: '50px',
+                                                textTransform: 'none',
+                                                position: 'relative',
+                                                '&:hover': {
+                                                    color: '#F7A11A',
+                                                    bgcolor: 'rgba(247,161,26,0.06)',
+                                                    boxShadow: 'none',
+                                                    '&::after': {
+                                                        transform: 'translateX(-50%) scaleX(1)',
+                                                    }
+                                                },
+                                                // Active state background (very subtle)
+                                                ...(isActive(item.path) && {
+                                                    bgcolor: 'rgba(247,161,26,0.04)',
+                                                }),
+                                            }}
+                                        >
+                                            {item.label}
+                                        </Button>
+
+                                        {/* Services Dropdown */}
+                                        {
+                                            item.children && (
+                                                <AnimatePresence>
+                                                    {servicesDropOpen && (
+                                                        <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
+                                                    )}
+                                                </AnimatePresence>
+                                            )
+                                        }
+                                    </Box>
+                                </ClickAwayListener>
+                            ))}
+                        </Box>
+
+                        {/* ── Desktop Right Actions ── */}
+                        <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 1.5, ml: 2 }}>
+                            <Tooltip title="Call Us" arrow>
+                                <IconButton
+                                    href="tel:+255000000000"
+                                    size="small"
+                                    sx={{
+                                        bgcolor: 'rgba(247,161,26,0.08)',
+                                        color: '#F7A11A',
+                                        '&:hover': { bgcolor: '#F7A11A', color: '#fff', transform: 'scale(1.1)' },
+                                        transition: 'all 0.25s ease',
+                                    }}
+                                >
+                                    <PhoneIcon sx={{ fontSize: 18 }} />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="WhatsApp" arrow>
+                                <IconButton
+                                    href="https://wa.me/255000000000"
+                                    target="_blank"
+                                    size="small"
+                                    sx={{
+                                        bgcolor: 'rgba(37,211,102,0.1)',
+                                        color: '#25D366',
+                                        '&:hover': { bgcolor: '#25D366', color: '#fff', transform: 'scale(1.1)' },
+                                        transition: 'all 0.25s ease',
+                                    }}
+                                >
+                                    <WhatsAppIcon sx={{ fontSize: 18 }} />
+                                </IconButton>
+                            </Tooltip>
+                            <Button
+                                component={RouterLink}
+                                to="/quote"
+                                variant="contained"
+                                startIcon={<RequestQuoteIcon sx={{ fontSize: '18px !important' }} />}
                                 sx={{
-                                    bgcolor: 'rgba(247,161,26,0.08)',
-                                    color: '#F7A11A',
-                                    '&:hover': { bgcolor: '#F7A11A', color: '#fff', transform: 'scale(1.1)' },
+                                    background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
+                                    color: '#fff',
+                                    fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                    fontWeight: 700,
+                                    fontSize: '0.85rem',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 50,
+                                    boxShadow: '0 4px 16px rgba(247,161,26,0.35)',
+                                    '&:hover': {
+                                        background: 'linear-gradient(135deg, #D4880E 0%, #F7A11A 100%)',
+                                        boxShadow: 'none',
+                                        transform: 'translateY(-1px)',
+                                    },
                                     transition: 'all 0.25s ease',
                                 }}
                             >
-                                <PhoneIcon sx={{ fontSize: 18 }} />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="WhatsApp" arrow>
-                            <IconButton
-                                href="https://wa.me/255000000000"
-                                target="_blank"
-                                size="small"
-                                sx={{
-                                    bgcolor: 'rgba(37,211,102,0.1)',
-                                    color: '#25D366',
-                                    '&:hover': { bgcolor: '#25D366', color: '#fff', transform: 'scale(1.1)' },
-                                    transition: 'all 0.25s ease',
-                                }}
-                            >
-                                <WhatsAppIcon sx={{ fontSize: 18 }} />
-                            </IconButton>
-                        </Tooltip>
-                        <Button
-                            component={RouterLink}
-                            to="/quote"
-                            variant="contained"
-                            startIcon={<RequestQuoteIcon sx={{ fontSize: '18px !important' }} />}
-                            sx={{
-                                background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
-                                color: '#fff',
-                                fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                fontWeight: 700,
-                                fontSize: '0.85rem',
-                                px: 2.5,
-                                py: 1,
-                                borderRadius: 50,
-                                boxShadow: '0 4px 16px rgba(247,161,26,0.35)',
-                                '&:hover': {
-                                    background: 'linear-gradient(135deg, #D4880E 0%, #F7A11A 100%)',
-                                    boxShadow: '0 8px 24px rgba(247,161,26,0.45)',
-                                    transform: 'translateY(-2px)',
-                                },
-                                transition: 'all 0.25s ease',
-                            }}
-                        >
-                            Get a Quote
-                        </Button>
-                    </Box>
+                                Get a Quote
+                            </Button>
+                        </Box>
 
-                    {/* ── Mobile hamburger ── */}
-                    <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: 1, ml: 'auto' }}>
-                        <Button
-                            component={RouterLink}
-                            to="/quote"
-                            size="small"
-                            variant="contained"
-                            sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', fontWeight: 700, px: 2, fontSize: '0.8rem', borderRadius: 50 }}
-                        >
-                            Quote
-                        </Button>
-                        <IconButton
-                            onClick={() => setDrawerOpen(true)}
-                            sx={{ color: '#1A1A2E', bgcolor: 'rgba(0,0,0,0.04)', borderRadius: 2 }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    </Box>
-                </Toolbar>
-            </AppBar >
+                        {/* ── Mobile hamburger ── */}
+                        <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: 1, ml: 'auto' }}>
+                            <Button
+                                component={RouterLink}
+                                to="/quote"
+                                size="small"
+                                variant="contained"
+                                sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', fontWeight: 700, px: 2, fontSize: '0.8rem', borderRadius: 50 }}
+                            >
+                                Quote
+                            </Button>
+                            <IconButton
+                                onClick={() => setDrawerOpen(true)}
+                                sx={{ color: '#1A1A2E', bgcolor: 'rgba(0,0,0,0.04)', borderRadius: 2 }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </Box>
+                    </Toolbar>
+                </AppBar >
+            </Box>
 
             {/* ── Mobile Drawer ───────────────────────────────────────── */}
             < Drawer
