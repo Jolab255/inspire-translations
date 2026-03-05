@@ -304,7 +304,6 @@ const Navbar = () => {
                                 <Button
                                     component={item.children ? 'button' : RouterLink}
                                     to={item.children ? undefined : item.path}
-                                    // Icon only shown when active (Facebook-style: icon appears on selected tab)
                                     startIcon={
                                         isActive(item.path) ? (
                                             <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
@@ -319,34 +318,34 @@ const Navbar = () => {
                                     }
                                     sx={{
                                         color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                        fontWeight: isActive(item.path) ? 700 : 500,
-                                        fontFamily: 'Outfit',
-                                        fontSize: '0.88rem',
-                                        px: isActive(item.path) ? 1.8 : 1.5,
-                                        py: 0.9,
+                                        fontWeight: isActive(item.path) ? 700 : 600,
+                                        fontFamily: '"Outfit", sans-serif',
+                                        fontSize: '0.94rem',
+                                        letterSpacing: '0.01em',
+                                        px: isActive(item.path) ? 2 : 1.6,
+                                        py: 1,
                                         borderRadius: 2.5,
                                         textTransform: 'none',
                                         boxShadow: 'none',
                                         bgcolor: isActive(item.path) ? 'rgba(247,161,26,0.1)' : 'transparent',
-                                        transition: 'all 0.2s ease',
+                                        transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
                                         '&:hover': {
                                             color: '#F7A11A',
-                                            bgcolor: 'rgba(247,161,26,0.08)',
+                                            bgcolor: 'rgba(247,161,26,0.07)',
                                             boxShadow: 'none',
-                                            transform: 'none',
+                                            transform: 'translateY(-1px)',
                                         },
                                         position: 'relative',
-                                        // active orange underline
                                         '&::after': isActive(item.path) ? {
                                             content: '""',
                                             position: 'absolute',
-                                            bottom: 3,
+                                            bottom: 2,
                                             left: '50%',
                                             transform: 'translateX(-50%)',
-                                            width: '55%',
+                                            width: '50%',
                                             height: 2.5,
                                             borderRadius: 2,
-                                            bgcolor: '#F7A11A',
+                                            background: 'linear-gradient(90deg, #F7A11A, #D4880E)',
                                         } : {},
                                     }}
                                 >
