@@ -1,284 +1,539 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link as RouterLink } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import GroupsIcon from '@mui/icons-material/Groups';
-import LanguageIcon from '@mui/icons-material/Language';
-import TranslateIcon from '@mui/icons-material/Translate';
 
-// Import the video
-import heroBg from '../../assets/videos/hero_bg.mp4';
-import heroWoman from '../../assets/images/hero_woman_bg.png';
+// Import images
+import heroWoman from '../../assets/images/Neema Prosper.png';
+import flag1 from '../../assets/images/HERO_FLAG_1.png';
+import flag2 from '../../assets/images/HERO_FLAG_2.png';
+import flag3 from '../../assets/images/HERO_FLAG_3.png';
+import flag4 from '../../assets/images/HERO_FLAG_4.png';
 
+const servicesList = ['Language', 'Translation', 'Interpretation', 'Localization'];
 
-
-// ── Main Hero ─────────────────────────────────────────────────────────
-const KEYWORDS = [
-    "Translation",
-    "Interpretation",
-    "Localization",
-    "Language Classes",
-    "Event Logistics",
+const cardData = [
+    {
+        title: 'Written Translation',
+        image: flag1,
+        desc: 'Delivering culturally nuanced translation and localization that resonates with local audiences.',
+    },
+    {
+        title: 'Document Translation',
+        image: flag2,
+        desc: 'Accurate, certified translation for legal and technical documents.',
+    },
+    {
+        title: 'Spoken Interpretation',
+        image: flag3,
+        desc: 'Real-time interpretation services for conferences and meetings.',
+    },
+    {
+        title: 'Software Localization',
+        image: flag4,
+        desc: 'Adapting software and websites to perfectly match regional linguistic and cultural norms.',
+    }
 ];
 
-const HeroSection = () => {
-    const videoRef = useRef(null);
-    const [text, setText] = useState('');
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [loopNum, setLoopNum] = useState(0);
-    const [typingSpeed, setTypingSpeed] = useState(120);
+// Animation helper
+const FadeInUp = ({ children, delay = 0, threshold = 0.15 }) => {
+    const { ref, inView } = useInView({ triggerOnce: true, threshold });
+    return (
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 40 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+        >
+            {children}
+        </motion.div>
+    );
+};
 
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            handleType();
-        }, typingSpeed);
-        return () => clearTimeout(timer);
-    }, [text, isDeleting, loopNum, typingSpeed]);
+// Animated text component for typewriter spelling effect
+const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
+    const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.4 });
+    const letters = Array.from(text);
 
-    const handleType = () => {
-        const i = loopNum % KEYWORDS.length;
-        const fullText = KEYWORDS[i];
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.04, delayChildren: 0.1 }
+        }
+    };
 
-        setText(isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1));
-
-        if (!isDeleting && text === fullText) {
-            setTimeout(() => setIsDeleting(true), 1500); // Pause before deleting
-            setTypingSpeed(50); // Delete faster
-        } else if (isDeleting && text === '') {
-            setIsDeleting(false);
-            setLoopNum(loopNum + 1);
-            setTypingSpeed(120); // Type normal speed
+    const letterVariants = {
+        hidden: { opacity: 0, y: 25, filter: 'blur(6px)', scale: 0.85 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            scale: 1,
+            transition: {
+                type: "spring",
+                damping: 12,
+                stiffness: 140
+            }
         }
     };
 
     return (
-        <Box
-            sx={{
-                position: 'relative',
-                minHeight: '85vh',
-                display: 'flex',
-                alignItems: 'center',
-            }}
+        <Typography
+            component={motion.div}
+            ref={ref}
+            variants={containerVariants}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            variant={variant}
+            sx={{ ...sx, display: 'inline-block' }}
+            {...props}
         >
-            {/* ── Background video ── */}
-            <Box
-                sx={{ position: 'absolute', inset: 0, overflow: 'hidden' }}
-            >
-                <video
-                    ref={videoRef}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            {letters.map((char, index) => (
+                <motion.span
+                    key={index}
+                    variants={letterVariants}
+                    style={{ display: 'inline-block', whiteSpace: 'pre' }}
                 >
-                    <source src={heroBg} type="video/mp4" />
-                </video>
-            </Box>
+                    {char}
+                </motion.span>
+            ))}
+        </Typography>
+    );
+};
 
-            {/* ── Main content ── */}
-            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, pt: { xs: 8, md: 2 }, pb: { xs: 10, md: 2 } }}>
-                <Grid container>
-                    <Grid item xs={12} md={8} lg={7}>
-                        {/* Headline & Typewriter (Stable Height) */}
-                        <Box sx={{ minHeight: { xs: 110, md: 170 }, mb: 4 }}>
-                            <Typography
-                                component="h1"
-                                sx={{
-                                    fontFamily: '"Playfair Display", serif',
-                                    fontWeight: 700,
-                                    fontSize: 'clamp(2.6rem, 5.5vw, 4.5rem)',
-                                    lineHeight: 1.05,
-                                    color: '#FFFFFF',
-                                    mb: 0.5,
-                                    textShadow: '0 2px 24px rgba(0,0,0,0.4)',
-                                }}
-                            >
-                                Seamless <span style={{ color: '#F7A11A' }}>{text}</span>
-                                <span style={{ borderRight: '3px solid #F7A11A', animation: 'blink 1s step-end infinite' }}>&nbsp;</span>
-                            </Typography>
+const HeroSection = () => {
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-                            <Typography
-                                component="div"
-                                sx={{
-                                    fontFamily: '"Playfair Display", serif',
-                                    fontWeight: 700,
-                                    fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                                    lineHeight: 1.05,
-                                    color: '#FFFFFF',
-                                    textShadow: '0 2px 24px rgba(0,0,0,0.4)',
-                                }}
-                            >
-                                Services in Africa.
-                            </Typography>
-                        </Box>
+    // Auto-advance logic
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % cardData.length);
+        }, 6500);
 
-                        {/* Tagline */}
-                        <Typography
-                            sx={{
-                                color: '#F7A11A',
-                                fontSize: '1.05rem',
-                                fontFamily: 'Inter',
-                                letterSpacing: '0.08em',
-                                textTransform: 'uppercase',
-                                mb: 1.5,
-                                fontWeight: 600,
-                            }}
-                        >
-                            <span style={{ color: '#FFFFFF' }}>Accurate</span> · <span style={{ color: '#FFFFFF' }}>Reliable</span> · <span style={{ color: '#FFFFFF' }}>Native Experts</span>
-                        </Typography>
+        return () => clearInterval(timer);
+    }, []);
 
-                        {/* Sub-description */}
-                        <Typography
-                            sx={{
-                                color: 'rgba(255,255,255,0.72)',
-                                fontSize: '1.08rem',
-                                lineHeight: 1.85,
-                                maxWidth: 520,
-                                mb: 4.5,
-                                fontFamily: 'Inter',
-                                fontWeight: 300,
-                            }}
-                        >
-                            We provide expert document translation, professional conference interpretation, and local language classes in Tanzania and across East Africa. Communicate with confidence and clarity.
-                        </Typography>
-
-                        {/* CTA Buttons */}
-                        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-                            <Button
-                                component={RouterLink}
-                                to="/quote"
-                                variant="contained"
-                                size="large"
-                                endIcon={<ArrowForwardIcon />}
-                                sx={{
-                                    background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
-                                    color: '#fff',
-                                    fontFamily: 'Outfit',
-                                    fontWeight: 700,
-                                    fontSize: '1rem',
-                                    px: 4,
-                                    py: 1.6,
-                                    borderRadius: 50,
-                                    boxShadow: '0 8px 32px rgba(247,161,26,0.45)',
-                                    '&:hover': {
-                                        background: 'linear-gradient(135deg, #D4880E 0%, #F7A11A 100%)',
-                                        boxShadow: '0 12px 48px rgba(247,161,26,0.55)',
-                                        transform: 'translateY(-3px)',
-                                    },
-                                    transition: 'all 0.3s ease',
-                                }}
-                            >
-                                Get a Free Quote
-                            </Button>
-
-                            <Button
-                                component={RouterLink}
-                                to="/services"
-                                variant="outlined"
-                                size="large"
-                                startIcon={<PlayCircleOutlineIcon />}
-                                sx={{
-                                    color: '#FFFFFF',
-                                    borderColor: 'rgba(255,255,255,0.4)',
-                                    backdropFilter: 'blur(8px)',
-                                    bgcolor: 'rgba(255,255,255,0.06)',
-                                    fontFamily: 'Outfit',
-                                    fontWeight: 600,
-                                    fontSize: '1rem',
-                                    px: 3.5,
-                                    py: 1.5,
-                                    borderRadius: 50,
-                                    '&:hover': {
-                                        bgcolor: 'rgba(255,255,255,0.12)',
-                                        borderColor: '#F7A11A',
-                                        color: '#F7A11A',
-                                        transform: 'translateY(-3px)',
-                                    },
-                                    transition: 'all 0.3s ease',
-                                }}
-                            >
-                                Our Services
-                            </Button>
-                        </Box>
-
-                    </Grid>
-                </Grid>
-            </Container>
-
-            {/* ── Hero Woman Image (Right Side) ── */}
+    return (
+        <Box sx={{ position: 'relative', width: '100%', zIndex: 10 }}>
+            {/* The main hero area */}
             <Box
                 sx={{
-                    display: { xs: 'none', md: 'block' },
-                    position: 'absolute',
-                    right: { md: -40, lg: 0 },
-                    bottom: 0,
-                    width: { md: '46%', lg: '44%' },
-                    maxHeight: '90%',
-                    overflow: 'hidden',
-                    zIndex: 1200,
-                    pointerEvents: 'none',
+                    position: 'relative',
+                    minHeight: '100vh',
                     display: 'flex',
-                    alignItems: 'flex-end',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #1A5C2A 0%, #0F3A1A 100%)', // Premium dark green gradient
+                    // overflow: 'hidden' removed so the card can overlap the next section
+                    pt: { xs: 8, md: 0 },
                 }}
             >
-                {/* Soft golden glow beneath the figure */}
+                {/* ── Premium Decorative Glows ── */}
                 <Box
                     sx={{
                         position: 'absolute',
-                        bottom: '5%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '60%',
-                        height: 80,
-                        background: 'radial-gradient(ellipse at center, rgba(247,161,26,0.35) 0%, transparent 70%)',
-                        filter: 'blur(20px)',
+                        top: '-10%',
+                        right: '-5%',
+                        width: '40%',
+                        height: '60%',
+                        background: 'radial-gradient(circle, rgba(247,161,26,0.15) 0%, transparent 70%)',
+                        filter: 'blur(80px)',
                         zIndex: 1,
+                        pointerEvents: 'none',
                     }}
                 />
                 <Box
-                    component="img"
-                    src={heroWoman}
-                    alt="Professional translator"
                     sx={{
-                        width: '100%',
-                        height: 'auto',
-                        display: 'block',
-                        mixBlendMode: 'screen',
-                        filter: 'drop-shadow(0 0 40px rgba(247,161,26,0.2))',
-                        animation: 'heroFadeIn 1.2s ease-out forwards',
-                        opacity: 0,
-                        '@keyframes heroFadeIn': {
-                            from: { opacity: 0, transform: 'translateY(20px)' },
-                            to: { opacity: 1, transform: 'translateY(0)' },
-                        },
+                        position: 'absolute',
+                        bottom: '-10%',
+                        left: '-5%',
+                        width: '30%',
+                        height: '50%',
+                        background: 'radial-gradient(circle, rgba(74,222,128,0.1) 0%, transparent 70%)',
+                        filter: 'blur(60px)',
+                        zIndex: 1,
+                        pointerEvents: 'none',
                     }}
                 />
-            </Box>
-            <Box
-                sx={{
-                    position: 'absolute',
-                    bottom: 32,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    zIndex: 3,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 1.5,
-                }}
-            >
-                <Box sx={{ width: 1, height: 40, bgcolor: 'rgba(255,255,255,0.35)', borderRadius: 1 }} />
-                <KeyboardArrowDownIcon sx={{ color: 'rgba(255,255,255,0.45)', fontSize: 28 }} />
+
+
+
+                {/* ── Main Title Area ── */}
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: { xs: '15%', md: '20%' },
+                        left: 0,
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        px: { xs: 3, md: 8, lg: 12 },
+                        pointerEvents: 'none',
+                    }}
+                >
+                    <Box sx={{ width: '100%', maxWidth: '1280px' }}>
+                        <Typography
+                            component="h1"
+                            sx={{
+                                position: 'relative',
+                                zIndex: 1,
+                                fontFamily: '"Inknut Antiqua", serif',
+                                fontWeight: 400,
+                                fontSize: { xs: '2rem', sm: '2.8rem', md: '3.6rem', lg: '4.5rem' },
+                                lineHeight: 1.1,
+                                color: '#FFFFFF',
+                                textAlign: 'left',
+                                textShadow: '0 4px 24px rgba(0,0,0,0.3)',
+                            }}
+                        >
+                            Seamless{' '}
+                            <Box component="span" sx={{ display: 'inline-block', color: '#F7A11A', minWidth: '200px' }}>
+                                <AnimatePresence mode="wait">
+                                    <motion.span
+                                        key={currentIndex}
+                                        initial={{ rotateX: 90, opacity: 0 }}
+                                        animate={{ rotateX: 0, opacity: 1 }}
+                                        exit={{ rotateX: -90, opacity: 0 }}
+                                        transition={{ duration: 0.5, type: 'tween', ease: 'easeInOut' }}
+                                        style={{ display: 'inline-block', transformOrigin: 'center center' }}
+                                    >
+                                        {servicesList[currentIndex]}
+                                    </motion.span>
+                                </AnimatePresence>
+                            </Box>
+                            <br />
+                            <Box component="span" sx={{ display: 'inline-block', ml: { xs: 12, sm: 20, md: 36, lg: 52 } }}>
+                                Services in Africa.
+                            </Box>
+                        </Typography>
+
+                        {/* ── Side-by-Side Content Area ── */}
+                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'flex-start', mt: { xs: 4, md: 6 }, gap: { xs: 4, md: 6 } }}>
+                            <Box
+                                sx={{
+                                    position: 'relative',
+                                    mt: { md: -10 },
+                                    width: '100%',
+                                    maxWidth: { xs: '100%', md: '360px' },
+                                    minHeight: { xs: '350px', md: '500px' },
+                                    bgcolor: '#FFFFFF',
+                                    zIndex: 10,
+                                    borderRadius: 0,
+                                    pointerEvents: 'auto',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    textDecoration: 'none',
+                                    border: '3px solid #FFFFFF',
+                                    overflow: 'visible', // Allow flag to pop out
+                                    boxShadow: '0 30px 60px rgba(0,0,0,0.2)',
+                                }}
+                            >
+                                <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={currentIndex}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            variants={{
+                                                animate: { transition: { staggerChildren: 0.1 } }
+                                            }}
+                                            style={{ display: 'flex', flexDirection: 'column', overflow: 'visible' }}
+                                        >
+                                            <Typography
+                                                component={motion.h5}
+                                                variants={{
+                                                    initial: { opacity: 0, y: 10 },
+                                                    animate: { opacity: 1, y: 0 },
+                                                    exit: { opacity: 0, y: -10 }
+                                                }}
+                                                variant="h5"
+                                                sx={{
+                                                    fontFamily: '"Inknut Antiqua", serif',
+                                                    fontWeight: 700,
+                                                    color: '#1A5C2A',
+                                                    bgcolor: '#FFFFFF',
+                                                    textAlign: 'center',
+                                                    p: 1.5,
+                                                    width: '100%',
+                                                    fontSize: '1.2rem',
+                                                    lineHeight: 1.3,
+                                                    zIndex: 2
+                                                }}
+                                            >
+                                                {cardData[currentIndex].title}
+                                            </Typography>
+
+                                            <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', pt: 3, bgcolor: '#FFFFFF', overflow: 'visible' }}>
+                                                <Box
+                                                    component={motion.div}
+                                                    variants={{
+                                                        initial: { opacity: 0, scale: 0.95 },
+                                                        animate: { opacity: 1, scale: 1 },
+                                                        exit: { opacity: 0, scale: 1.05 }
+                                                    }}
+                                                    sx={{ overflow: 'visible', mb: 3 }}
+                                                >
+                                                    <Box
+                                                        component="img"
+                                                        src={cardData[currentIndex].image}
+                                                        alt={cardData[currentIndex].title}
+                                                        sx={{
+                                                            width: '100%',
+                                                            ml: 0,
+                                                            height: 180,
+                                                            objectFit: 'cover',
+                                                            borderRadius: 0,
+                                                            zIndex: 20, // Greater z-index as requested
+                                                            position: 'relative'
+                                                        }}
+                                                    />
+                                                </Box>
+
+                                                <Typography
+                                                    component={motion.p}
+                                                    variants={{
+                                                        initial: { opacity: 0, x: -10 },
+                                                        animate: { opacity: 1, x: 0 },
+                                                        exit: { opacity: 0, x: 10 }
+                                                    }}
+                                                    variant="body2"
+                                                    sx={{
+                                                        fontFamily: '"Inknut Antiqua", serif',
+                                                        color: '#4A4A4A',
+                                                        lineHeight: 1.8,
+                                                        mb: 4,
+                                                        fontSize: '0.9rem',
+                                                        textAlign: 'left'
+                                                    }}
+                                                >
+                                                    {cardData[currentIndex].desc}
+                                                </Typography>
+                                            </Box>
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </Box>
+
+                                {/* Static Button: stays constant */}
+                                <Box sx={{ p: 3, pt: 0, mt: 'auto', display: 'flex', justifyContent: 'center' }}>
+                                    <Box
+                                        component={motion(RouterLink)}
+                                        whileHover="hover"
+                                        initial="rest"
+                                        animate="rest"
+                                        to="/services"
+                                        sx={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            border: '2px solid #1A5C2A',
+                                            borderRadius: 50,
+                                            overflow: 'hidden',
+                                            textDecoration: 'none',
+                                            transition: 'all 0.3s ease',
+                                            cursor: 'pointer',
+                                            '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.04)' }
+                                        }}
+                                    >
+                                        <Typography
+                                            component={motion.span}
+                                            variants={{
+                                                rest: { x: 0 },
+                                                hover: { x: 5 }
+                                            }}
+                                            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                            sx={{
+                                                color: '#1A5C2A',
+                                                fontFamily: '"Inknut Antiqua", serif',
+                                                fontWeight: 700,
+                                                fontSize: '0.8rem',
+                                                px: 2.5,
+                                                lineHeight: '40px',
+                                                whiteSpace: 'nowrap',
+                                                textTransform: 'none',
+                                                letterSpacing: '0.05em'
+                                            }}
+                                        >
+                                            Explore Services
+                                        </Typography>
+                                        <Box
+                                            sx={{
+                                                width: 40,
+                                                height: 40,
+                                                flexShrink: 0,
+                                                bgcolor: '#1A5C2A',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <motion.div
+                                                variants={{
+                                                    rest: { x: 0 },
+                                                    hover: { x: 8 }
+                                                }}
+                                                transition={{ type: 'spring', stiffness: 600, damping: 15 }}
+                                            >
+                                                <ArrowForwardIcon sx={{ color: '#FFFFFF', fontSize: 16 }} />
+                                            </motion.div>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+
+                            {/* Right: Shrunk Yellow Box Area */}
+                            <Box
+                                sx={{
+                                    flex: { md: 1.5, lg: 2 },
+                                    position: 'relative',
+                                    mt: { md: 5 }, // Squeezed to the top
+                                    width: '100%',
+                                    height: { xs: 'auto', md: '260px' },
+                                    bgcolor: '#F7A11A',
+                                    zIndex: 2,
+                                    display: 'flex',
+                                    flexDirection: { xs: 'column', md: 'row' },
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    px: { xs: 4, md: 6 },
+                                    py: { xs: 6, md: 0 },
+                                    borderRadius: 0,
+                                    boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                                    pointerEvents: 'auto'
+                                }}
+                            >
+                                {/* Left: Text Content inside Yellow Box */}
+                                <Box sx={{ flex: 1.5, color: '#1A5C2A', pr: { md: 4 } }}>
+                                    <FadeInUp>
+                                        <TypewriterText
+                                            text="Professional Solutions"
+                                            variant="h4"
+                                            sx={{
+                                                fontFamily: '"Inknut Antiqua", serif',
+                                                fontWeight: 700,
+                                                fontSize: { xs: '1.4rem', md: '1.8rem' },
+                                                mb: 1.5,
+                                                lineHeight: 1.2
+                                            }}
+                                        />
+                                    </FadeInUp>
+                                    <Typography
+                                        variant="body1"
+                                        sx={{
+                                            fontFamily: '"Inknut Antiqua", serif',
+                                            fontSize: { xs: '0.8rem', md: '0.9rem' },
+                                            lineHeight: 1.5,
+                                            opacity: 0.95,
+                                            mb: 3
+                                        }}
+                                    >
+                                        Connecting people and businesses through award-winning translation and interpretation services globally.
+                                    </Typography>
+
+                                    {/* Get a Quote Button — Pill Arrow Style */}
+                                    <Box
+                                        component={motion(RouterLink)}
+                                        whileHover="hover"
+                                        initial="rest"
+                                        animate="rest"
+                                        to="/contact"
+                                        sx={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            border: '2px solid #1A5C2A',
+                                            borderRadius: 50,
+                                            overflow: 'hidden',
+                                            textDecoration: 'none',
+                                            transition: 'all 0.3s ease',
+                                            '&:hover': {
+                                                borderColor: '#1A5C2A',
+                                                bgcolor: 'rgba(26, 92, 42, 0.04)'
+                                            }
+                                        }}
+                                    >
+                                        <Typography
+                                            component={motion.span}
+                                            variants={{
+                                                rest: { x: 0 },
+                                                hover: { x: 5 }
+                                            }}
+                                            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                            sx={{
+                                                color: '#1A5C2A',
+                                                fontFamily: '"Inknut Antiqua", serif',
+                                                fontWeight: 700,
+                                                fontSize: '0.8rem',
+                                                px: 2.5,
+                                                lineHeight: '40px',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            Get a Quote
+                                        </Typography>
+                                        <Box
+                                            className="pill-arrow-w"
+                                            component={motion.div}
+                                            variants={{
+                                                rest: { x: 0 },
+                                                hover: { x: 0 }
+                                            }}
+                                            sx={{
+                                                width: 40,
+                                                height: 40,
+                                                flexShrink: 0,
+                                                bgcolor: '#1A5C2A',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <motion.div
+                                                variants={{
+                                                    rest: { x: 0 },
+                                                    hover: { x: 8 }
+                                                }}
+                                                transition={{ type: 'spring', stiffness: 600, damping: 15 }}
+                                            >
+                                                <ArrowForwardIcon sx={{ color: '#FFFFFF', fontSize: 16 }} />
+                                            </motion.div>
+                                        </Box>
+                                    </Box>
+                                </Box>
+
+                                {/* Right: Overflowing Person Image */}
+                                <Box
+                                    sx={{
+                                        position: 'relative',
+                                        flex: 1,
+                                        height: '100%',
+                                        display: { xs: 'none', md: 'flex' },
+                                        justifyContent: 'center',
+                                        alignItems: 'flex-end'
+                                    }}
+                                >
+                                    <Box
+                                        component="img"
+                                        src={heroWoman}
+                                        alt="Professional Liaison"
+                                        sx={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            right: { md: -20 },
+                                            height: '135%',
+                                            width: 'auto',
+                                            objectFit: 'contain',
+                                            pointerEvents: 'none',
+                                            zIndex: 3
+                                        }}
+                                    />
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     );

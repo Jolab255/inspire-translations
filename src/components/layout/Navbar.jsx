@@ -76,7 +76,18 @@ const Logo = ({ height = 56, white = false }) => (
     <Box
         component={RouterLink}
         to="/"
-        sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', mr: 4, flexShrink: 0 }}
+        sx={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            mr: 4,
+            mt: 1,
+            flexShrink: 0,
+            p: 1,
+            bgcolor: 'white',
+            borderRadius: '16px',
+            transition: 'all 0.3s ease',
+        }}
     >
         <Box
             component="img"
@@ -89,7 +100,7 @@ const Logo = ({ height = 56, white = false }) => (
                 width: 'auto',
                 objectFit: 'contain',
                 display: 'block',
-                filter: white ? 'brightness(0) invert(1)' : 'none',
+                // Remove the mix-blend-mode since we are now placing it on a white background deliberately
             }}
         />
     </Box>
@@ -275,15 +286,29 @@ const Navbar = () => {
 
     return (
         <>
-            <Box sx={{ position: 'sticky', top: 0, zIndex: 1100, width: '100%' }}>
+            <Box sx={{
+                position: 'fixed',
+                top: 0,
+                zIndex: 1100,
+                width: '100%',
+                bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : 'transparent',
+                backdropFilter: scrolled ? 'blur(20px)' : 'none',
+                boxShadow: scrolled ? '0 4px 32px rgba(0,0,0,0.1)' : 'none',
+                borderBottom: scrolled ? 'none' : 'none', // user said no border bottom initially
+                transition: 'all 0.35s ease-in-out',
+            }}>
                 {/* ── Top bar ───────────────────────────────────────────── */}
                 <Box
                     sx={{
-                        background: 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)',
-                        py: 0.65,
+                        background: scrolled ? 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)' : 'transparent',
+                        maxHeight: scrolled ? '50px' : '0px',
+                        opacity: scrolled ? 1 : 0,
+                        overflow: 'hidden',
                         display: { xs: 'none', md: 'block' },
                         position: 'relative',
-                        zIndex: 1101
+                        zIndex: 1101,
+                        borderBottom: 'none',
+                        transition: 'all 0.35s ease-in-out',
                     }}
                 >
                     <Box sx={{ maxWidth: 1280, mx: 'auto', px: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -324,13 +349,13 @@ const Navbar = () => {
                     position="relative"
                     elevation={0}
                     sx={{
-                        bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : '#FFFFFF',
-                        backdropFilter: scrolled ? 'blur(24px)' : 'none',
-                        borderBottom: scrolled ? 'none' : '1px solid rgba(0,0,0,0.06)',
-                        boxShadow: scrolled ? '0 4px 32px rgba(0,0,0,0.10)' : 'none',
-                        transition: 'all 0.35s ease, y 0.35s ease, opacity 0.35s ease',
-                        color: '#1A1A2E',
-                        overflow: 'visible',  // let tabs extend below
+                        bgcolor: 'transparent',
+                        backdropFilter: 'none',
+                        borderBottom: 'none',
+                        boxShadow: 'none',
+                        transition: 'all 0.35s ease',
+                        color: scrolled ? '#1A1A2E' : '#FFFFFF',
+                        overflow: 'visible',
                     }}
                 >
                     <Toolbar
@@ -346,126 +371,121 @@ const Navbar = () => {
                         }}
                     >
                         {/* ── Logo ── */}
-                        <Logo height={70} />
+                        <Logo height={70} white={!scrolled} />
 
                         {/* ── Desktop Nav Items ── */}
-                        <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'stretch', gap: 0.3, flexGrow: 1, overflow: 'visible' }}>
-                            {mainNavItems.map((item) => (
-                                <ClickAwayListener key={item.label} onClickAway={() => item.children && setServicesDropOpen(false)}>
-                                    <Box
-                                        sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}
-                                    >
-                                        <Button
-                                            onClick={item.children ? () => setServicesDropOpen(!servicesDropOpen) : undefined}
-                                            component={item.children ? 'button' : RouterLink}
-                                            to={item.children ? undefined : item.path}
-                                            startIcon={
-                                                isActive(item.path) ? (
-                                                    <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
-                                                        {item.icon}
-                                                    </Box>
-                                                ) : null
-                                            }
-                                            endIcon={
-                                                item.children
-                                                    ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
-                                                    : null
-                                            }
-                                            sx={{
-                                                color: isActive(item.path) ? '#F7A11A' : '#1A1A2E',
-                                                fontWeight: isActive(item.path) ? 700 : 500,
-                                                fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                                fontSize: '0.85rem',
-                                                letterSpacing: '0.01em',
-                                                px: 2.5,
-                                                py: 1,
-                                                borderRadius: '50px',
-                                                textTransform: 'none',
-                                                position: 'relative',
-                                                '&:hover': {
-                                                    color: '#F7A11A',
-                                                    bgcolor: 'rgba(247,161,26,0.06)',
-                                                    boxShadow: 'none',
-                                                    '&::after': {
-                                                        transform: 'translateX(-50%) scaleX(1)',
-                                                    }
-                                                },
-                                                // Active state background (very subtle)
-                                                ...(isActive(item.path) && {
-                                                    bgcolor: 'rgba(247,161,26,0.04)',
-                                                }),
-                                            }}
+                        <Box sx={{
+                            display: { xs: 'none', lg: 'flex' },
+                            alignItems: 'center',
+                            gap: 0,
+                            flexGrow: 1,
+                            justifyContent: 'center',
+                            overflow: 'visible'
+                        }}>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                bgcolor: scrolled ? 'rgba(26, 92, 42, 0.08)' : 'rgba(255,255,255,0.08)', // Greeny glass when scrolled
+                                backdropFilter: 'blur(10px)',
+                                border: scrolled ? '1px solid rgba(26, 92, 42, 0.15)' : '1px solid rgba(255,255,255,0.15)',
+                                borderRadius: '100px', // Creates the pill-shaped capsule
+                                px: 1.5,
+                                py: 0.5,
+                                transition: 'all 0.35s ease'
+                            }}>
+                                {mainNavItems.map((item) => (
+                                    <ClickAwayListener key={item.label} onClickAway={() => item.children && setServicesDropOpen(false)}>
+                                        <Box
+                                            sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}
                                         >
-                                            {item.label}
-                                        </Button>
+                                            <Button
+                                                onClick={item.children ? () => setServicesDropOpen(!servicesDropOpen) : undefined}
+                                                component={item.children ? 'button' : RouterLink}
+                                                to={item.children ? undefined : item.path}
+                                                startIcon={
+                                                    isActive(item.path) ? (
+                                                        <Box sx={{ color: '#F7A11A', display: 'flex', fontSize: 19 }}>
+                                                            {item.icon}
+                                                        </Box>
+                                                    ) : null
+                                                }
+                                                endIcon={
+                                                    item.children
+                                                        ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} />
+                                                        : null
+                                                }
+                                                sx={{
+                                                    color: scrolled ? (isActive(item.path) ? '#F7A11A' : '#1A5C2A') : '#FFFFFF',
+                                                    fontWeight: isActive(item.path) ? 700 : 500,
+                                                    fontFamily: '"Inknut Antiqua", serif',
+                                                    fontSize: '0.75rem',
+                                                    letterSpacing: '0.01em',
+                                                    px: 2,
+                                                    py: 1,
+                                                    borderRadius: '50px',
+                                                    textTransform: 'none',
+                                                    position: 'relative',
+                                                    '&:hover': {
+                                                        color: '#F7A11A',
+                                                        bgcolor: scrolled ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.1)',
+                                                        boxShadow: 'none',
+                                                    },
+                                                    // Active state background (very subtle)
+                                                    ...(isActive(item.path) && {
+                                                        bgcolor: scrolled ? 'rgba(247,161,26,0.08)' : 'rgba(255,255,255,0.12)',
+                                                    }),
+                                                }}
+                                            >
+                                                {item.label}
+                                            </Button>
 
-                                        {/* Services Dropdown */}
-                                        {
-                                            item.children && (
-                                                <AnimatePresence>
-                                                    {servicesDropOpen && (
-                                                        <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
-                                                    )}
-                                                </AnimatePresence>
-                                            )
-                                        }
-                                    </Box>
-                                </ClickAwayListener>
-                            ))}
+                                            {/* Services Dropdown */}
+                                            {
+                                                item.children && (
+                                                    <AnimatePresence>
+                                                        {servicesDropOpen && (
+                                                            <ServicesDropdown onClose={() => setServicesDropOpen(false)} />
+                                                        )}
+                                                    </AnimatePresence>
+                                                )
+                                            }
+                                        </Box>
+                                    </ClickAwayListener>
+                                ))}
+                            </Box>
                         </Box>
 
                         {/* ── Desktop Right Actions ── */}
-                        <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 1.5, ml: 2 }}>
-                            <Tooltip title="Call Us" arrow>
-                                <IconButton
-                                    href="tel:+255000000000"
-                                    size="small"
-                                    sx={{
-                                        bgcolor: 'rgba(247,161,26,0.08)',
-                                        color: '#F7A11A',
-                                        '&:hover': { bgcolor: '#F7A11A', color: '#fff', transform: 'scale(1.1)' },
-                                        transition: 'all 0.25s ease',
-                                    }}
-                                >
-                                    <PhoneIcon sx={{ fontSize: 18 }} />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="WhatsApp" arrow>
-                                <IconButton
-                                    href="https://wa.me/255000000000"
-                                    target="_blank"
-                                    size="small"
-                                    sx={{
-                                        bgcolor: 'rgba(37,211,102,0.1)',
-                                        color: '#25D366',
-                                        '&:hover': { bgcolor: '#25D366', color: '#fff', transform: 'scale(1.1)' },
-                                        transition: 'all 0.25s ease',
-                                    }}
-                                >
-                                    <WhatsAppIcon sx={{ fontSize: 18 }} />
-                                </IconButton>
-                            </Tooltip>
+                        <Box sx={{
+                            display: { xs: 'none', lg: 'flex' },
+                            alignItems: 'center',
+                            gap: 1.5,
+                            ml: 2,
+                        }}>
+                            {/* Standalone Glass Quote Button */}
                             <Button
                                 component={RouterLink}
                                 to="/quote"
-                                variant="contained"
-                                startIcon={<RequestQuoteIcon sx={{ fontSize: '18px !important' }} />}
+                                startIcon={<RequestQuoteIcon sx={{ fontSize: 18 }} />}
                                 sx={{
-                                    background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)',
-                                    color: '#fff',
-                                    fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                    bgcolor: scrolled ? 'rgba(26, 92, 42, 0.08)' : 'rgba(255,255,255,0.08)', // Matches greeny glass of nav links
+                                    backdropFilter: 'blur(10px)',
+                                    border: scrolled ? '1px solid rgba(26, 92, 42, 0.15)' : '1px solid rgba(255,255,255,0.15)',
+                                    borderRadius: '50px',
+                                    color: scrolled ? '#1A5C2A' : '#FFFFFF',
                                     fontWeight: 700,
-                                    fontSize: '0.85rem',
+                                    fontFamily: '"Inknut Antiqua", serif',
+                                    fontSize: '0.75rem',
                                     px: 2.5,
                                     py: 1,
-                                    borderRadius: 50,
-                                    boxShadow: '0 4px 16px rgba(247,161,26,0.35)',
+                                    ml: 1,
+                                    textTransform: 'none',
+                                    transition: 'all 0.35s ease',
                                     '&:hover': {
-                                        background: 'linear-gradient(135deg, #D4880E 0%, #F7A11A 100%)',
-                                        boxShadow: 'none',
-                                        transform: 'translateY(-1px)',
+                                        bgcolor: scrolled ? 'rgba(247,161,26,0.08)' : 'rgba(255,255,255,0.2)',
+                                        transform: 'translateY(-2px)',
                                     },
-                                    transition: 'all 0.25s ease',
                                 }}
                             >
                                 Get a Quote
@@ -479,13 +499,13 @@ const Navbar = () => {
                                 to="/quote"
                                 size="small"
                                 variant="contained"
-                                sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: '"Roboto Mono", "Space Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', fontWeight: 700, px: 2, fontSize: '0.8rem', borderRadius: 50 }}
+                                sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, px: 2, fontSize: '0.7rem', borderRadius: 50 }}
                             >
                                 Quote
                             </Button>
                             <IconButton
                                 onClick={() => setDrawerOpen(true)}
-                                sx={{ color: '#1A1A2E', bgcolor: 'rgba(0,0,0,0.04)', borderRadius: 2 }}
+                                sx={{ color: scrolled ? '#1A1A2E' : '#FFFFFF', bgcolor: scrolled ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.1)', borderRadius: 2 }}
                             >
                                 <MenuIcon />
                             </IconButton>
