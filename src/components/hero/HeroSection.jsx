@@ -283,8 +283,8 @@ const HeroSection = () => {
                                                         src={cardData[currentIndex].image}
                                                         alt={cardData[currentIndex].title}
                                                         sx={{
-                                                            width: '100%',
-                                                            ml: 0,
+                                                            width: '125%',
+                                                            ml: '-12.5%',
                                                             height: 180,
                                                             objectFit: 'cover',
                                                             borderRadius: 0,

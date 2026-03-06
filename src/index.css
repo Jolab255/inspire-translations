@@ -19,7 +19,6 @@ body {
   color: #1A1A2E;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
 /* Custom scrollbar */
