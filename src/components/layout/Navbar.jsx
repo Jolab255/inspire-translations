@@ -33,6 +33,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';    // filled phone
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -46,6 +49,7 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';  // filled
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 // Real logo
 import logoImg from '../../assets/logos/Inspire_Translations_Logo.png';
@@ -266,6 +270,7 @@ const Navbar = () => {
     const [servicesDropOpen, setServicesDropOpen] = useState(false);
     const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const { language, toggleLanguage } = useLanguage();
     const location = useLocation();
 
     useEffect(() => {
@@ -316,7 +321,7 @@ const Navbar = () => {
                         {/* Left: phone + email */}
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
                             {[
-                                { icon: <LocalPhoneIcon sx={{ fontSize: 13, color: '#4ADE80' }} />, text: '+255 000 000 000' },
+                                { icon: <LocalPhoneIcon sx={{ fontSize: 13, color: '#4ADE80' }} />, text: '+255 759 704 170' },
                                 { icon: <EmailIcon sx={{ fontSize: 13, color: '#F7A11A' }} />, text: 'info@inspiretranslations.co.tz' },
                             ].map((item, i) => (
                                 <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 0.7, pr: 2.5, mr: i === 0 ? 2.5 : 0, borderRight: i === 0 ? '1px solid rgba(255,255,255,0.18)' : 'none' }}>
@@ -328,17 +333,44 @@ const Navbar = () => {
                             ))}
                         </Box>
 
-                        {/* Right: ONE horizontal row — hours · separator · Available */}
+                        {/* Right: ONE horizontal row — hours · separator · Socials · separator · Language */}
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <AccessTimeFilledIcon sx={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }} />
                             <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Inter', color: 'rgba(255,255,255,0.72)', whiteSpace: 'nowrap' }}>
                                 Mon – Fri &nbsp;·&nbsp; 8:00 AM – 5:00 PM EAT
                             </Typography>
+
                             <Box sx={{ width: 1, height: 12, bgcolor: 'rgba(255,255,255,0.22)', mx: 0.5 }} />
-                            <FiberManualRecordIcon sx={{ fontSize: 8, color: '#4ADE80', animation: 'pulseGlow 2s infinite' }} />
-                            <Typography sx={{ fontSize: '0.77rem', fontFamily: 'Outfit', fontWeight: 600, color: '#4ADE80', whiteSpace: 'nowrap', letterSpacing: '0.04em' }}>
-                                Available
-                            </Typography>
+
+                            <Box sx={{ display: 'flex', gap: 0.5 }}>
+                                <IconButton size="small" sx={{ p: 0.5, color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://facebook.com/inspiretranslations" target="_blank">
+                                    <FacebookIcon sx={{ fontSize: 15 }} />
+                                </IconButton>
+                                <IconButton size="small" sx={{ p: 0.5, color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://linkedin.com/company/inspiretranslations" target="_blank">
+                                    <LinkedInIcon sx={{ fontSize: 15 }} />
+                                </IconButton>
+                                <IconButton size="small" sx={{ p: 0.5, color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://instagram.com/inspiretranslations" target="_blank">
+                                    <InstagramIcon sx={{ fontSize: 15 }} />
+                                </IconButton>
+                            </Box>
+
+                            <Box sx={{ width: 1, height: 12, bgcolor: 'rgba(255,255,255,0.22)', mx: 0.5 }} />
+
+                            <Button
+                                onClick={toggleLanguage}
+                                size="small"
+                                sx={{
+                                    minWidth: 'auto',
+                                    color: '#fff',
+                                    fontFamily: 'Outfit',
+                                    fontWeight: 600,
+                                    fontSize: '0.75rem',
+                                    p: 0,
+                                    '&:hover': { color: '#F7A11A', bgcolor: 'transparent' }
+                                }}
+                            >
+                                {language === 'en' ? 'SW' : 'EN'}
+                            </Button>
                         </Box>
 
                     </Box>

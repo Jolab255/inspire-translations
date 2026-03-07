@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#F7A11A" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -41,12 +42,13 @@
       "@type": "LocalBusiness",
       "name": "Inspire Translations",
       "description": "Professional translation, interpretation, and language services in Tanzania and East Africa.",
+      "image": "https://inspiretranslations.co.tz/og-image.jpg",
       "url": "https://inspiretranslations.co.tz",
-      "telephone": "+255-000-000-000",
+      "telephone": "+255 759 704 170",
       "email": "info@inspiretranslations.co.tz",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Dar es Salaam",
+        "streetAddress": "Inspire Consulting Services, P. O. Box 45304",
         "addressRegion": "Dar es Salaam",
         "addressCountry": "TZ"
       },
@@ -56,6 +58,11 @@
         "longitude": 39.209083
       },
       "openingHours": "Mo-Fr 08:00-17:00",
+      "priceRange": "$$",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Tanzania"
+      },
       "sameAs": [
         "https://facebook.com/inspiretranslations",
         "https://linkedin.com/company/inspiretranslations",
@@ -64,10 +71,167 @@
       "serviceType": ["Translation", "Interpretation", "Language Classes", "Conference Logistics"]
     }
     </script>
+  <style>
+    /* Premium Brand Skeleton Preloader */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0D2B14;
+      overflow: hidden;
+    }
+
+    #initial-loader {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #1A5C2A 0%, #0D2B14 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .skeleton-container {
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 40px;
+      display: flex;
+      flex-direction: row;
+      gap: 64px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .skeleton-container {
+        flex-direction: column;
+        gap: 32px;
+        padding-top: 80px;
+      }
+
+      .right-side {
+        display: none;
+      }
+    }
+
+    .left-side {
+      flex: 1.2;
+    }
+
+    .right-side {
+      flex: 1;
+      display: flex;
+      gap: 16px;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    /* Shimmer Effect */
+    .shimmer {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .shimmer::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      animation: loading-shimmer 2s infinite linear;
+    }
+
+    @keyframes loading-shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .title-line {
+      height: 75px;
+      margin-bottom: 12px;
+      background: rgba(247, 161, 26, 0.15);
+      border-radius: 8px;
+    }
+
+    .sub-line {
+      height: 18px;
+      margin-bottom: 12px;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .skeleton-btn {
+      height: 52px;
+      border-radius: 26px;
+    }
+
+    .column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .skeleton-card {
+      height: 120px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      width: 100%;
+    }
+
+    .yellow-shimmer-btn {
+      background: rgba(247, 161, 26, 0.25);
+    }
+  </style>
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <div id="initial-loader">
+      <div class="skeleton-container">
+        <div class="left-side">
+          <div class="shimmer" style="width: 160px; height: 24px; margin-bottom: 24px;"></div>
+          <div class="shimmer title-line" style="width: 95%;"></div>
+          <div class="shimmer title-line" style="width: 80%;"></div>
+          <div class="shimmer title-line" style="width: 88%; margin-bottom: 32px;"></div>
+          <div class="shimmer sub-line" style="width: 98%;"></div>
+          <div class="shimmer sub-line" style="width: 85%;"></div>
+          <div class="btn-row">
+            <div class="shimmer yellow-shimmer-btn skeleton-btn" style="width: 170px;"></div>
+            <div class="shimmer skeleton-btn" style="width: 140px; background: rgba(255,255,255,0.08);"></div>
+          </div>
+        </div>
+        <div class="right-side">
+          <div class="column">
+            <div class="shimmer skeleton-card"></div>
+            <div class="shimmer skeleton-card"></div>
+            <div class="shimmer skeleton-card"></div>
+          </div>
+          <div class="column">
+            <div class="shimmer skeleton-card"></div>
+            <div class="shimmer skeleton-card"></div>
+            <div class="shimmer skeleton-card"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 

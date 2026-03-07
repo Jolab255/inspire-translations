@@ -144,23 +144,7 @@ const Footer = () => {
                 fontFamily: '"Inter", sans-serif'
             }}
         >
-            {/* Background Illustration from Inspiration */}
-            <Box
-                sx={{
-                    position: 'absolute',
-                    right: 0,
-                    bottom: 0,
-                    opacity: 0.1,
-                    pointerEvents: 'none',
-                    display: { xs: 'none', md: 'block' }
-                }}
-            >
-                <svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 250 L350 250 M100 250 L100 150 L200 100 L300 150 L300 250" stroke="currentColor" strokeWidth="2" />
-                    <path d="M100 150 L300 150" stroke="currentColor" strokeWidth="1" />
-                    <path d="M150 250 L150 200 L250 200 L250 250" stroke="currentColor" strokeWidth="2" />
-                </svg>
-            </Box>
+
 
             <Container maxWidth="lg">
                 {/* TOP HEADER SECTION: Title Left, Social Right */}
@@ -404,9 +388,6 @@ const Footer = () => {
                     pb: 2
                 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ bgcolor: 'rgba(255,255,255,0.1)', p: 1, borderRadius: 1.5, display: 'flex' }}>
-                            <CookieIcon sx={{ fontSize: 18 }} />
-                        </Box>
                         <Typography sx={{
                             fontSize: '0.8rem',
                             color: COLORS.white,
@@ -414,7 +395,25 @@ const Footer = () => {
                             lineHeight: 1.6,
                             textAlign: { xs: 'center', lg: 'left' }
                         }}>
-                            Copyright © 2024 <Box component="span" sx={{ color: COLORS.accent, fontWeight: 700 }}>Inspire Translations</Box>. All Rights Reserved.
+                            Copyright © 2026 <Box component="span" sx={{ color: COLORS.accent, fontWeight: 700 }}>Inspire Translations</Box>. All Rights Reserved.
+                            <Box component="span" sx={{ ml: 1, opacity: 0.8 }}>|</Box>
+                            <Box component="span" sx={{ ml: 1 }}>
+                                Developed by{' '}
+                                <Box
+                                    component="a"
+                                    href="https://wa.me/255765929374"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                        color: COLORS.accent,
+                                        textDecoration: 'none',
+                                        fontWeight: 700,
+                                        '&:hover': { textDecoration: 'underline' }
+                                    }}
+                                >
+                                    Jolab
+                                </Box>
+                            </Box>
                         </Typography>
                     </Box>
 
@@ -429,7 +428,7 @@ const Footer = () => {
                                 to={item.path}
                                 sx={{
                                     color: COLORS.white,
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.85rem',
                                     fontFamily: '"Inknut Antiqua", serif',
                                     textDecoration: 'none',
                                     fontWeight: 500,
