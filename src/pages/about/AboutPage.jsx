@@ -300,31 +300,14 @@ const AboutPage = () => {
                 </Container>
             </Box>
 
-                    <Box sx={{ mt: 10, mb: 0 }}>
-                        <Box sx={{ textAlign: 'left', mb: 8 }}>
-                            <AnimatedPreTitle text="Our Purpose" color="#1A5C2A" align="flex-start" />
-                            <TypewriterText
-                                text="Mission and Vision"
-                                variant="h2"
-                                sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: { xs: '2rem', md: '2.6rem' }, color: '#0D2B14', lineHeight: 1.15, mb: 3 }}
-                            />
-                            <Box sx={{ width: 56, height: 4, bgcolor: '#1A5C2A' }} />
-                        </Box>
             <Box sx={{
                 py: 12,
                 position: 'relative',
                 background: `url(${aboutHeroImg}) center/cover no-repeat fixed`,
-                '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    bgcolor: 'rgba(13, 43, 20, 0.92)',
-                    zIndex: 1
-                }
             }}>
                 <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
                     <Box sx={{ textAlign: 'left', mb: 8 }}>
-                        <AnimatedPreTitle text="Our Purpose" color="#F7A11A" align="flex-start" />
+                        <AnimatedPreTitle text="Our Purpose" color="#FFFFFF" align="flex-start" />
                         <TypewriterText
                             text="Mission and Vision"
                             variant="h2"
@@ -333,12 +316,6 @@ const AboutPage = () => {
                         <Box sx={{ width: 56, height: 4, bgcolor: '#F7A11A' }} />
                     </Box>
 
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: { xs: 4, md: 8 } }}>
-                            {[
-                                { icon: <TrackChangesIcon sx={{ fontSize: 36, color: '#fff' }} />, title: 'Our Mission', desc: 'To deliver exceptional language services that empower clients to communicate effectively and respectfully across all cultures.', iconBg: '#1A5C2A', align: 'left' },
-                                { icon: <VisibilityIcon sx={{ fontSize: 36, color: '#fff' }} />, title: 'Our Vision', desc: 'To be East Africa\'s foremost language services provider, fostering global connections through precision and cultural intelligence.', iconBg: '#F7A11A', align: 'left' },
-                            ].map((item, index) => (
-                                <Box key={item.title} sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: { xs: 4, md: 8 } }}>
                         {[
                             { icon: <TrackChangesIcon sx={{ fontSize: 36, color: '#fff' }} />, title: 'Our Mission', desc: 'To deliver exceptional language services that empower clients to communicate effectively and respectfully across all cultures.', iconBg: '#1A5C2A', align: 'left' },
@@ -360,7 +337,6 @@ const AboutPage = () => {
                                 }}>
                                     {/* Half-in, half-out overlapping icon */}
                                     <Box sx={{
-                                        width: '100%',
                                         position: 'absolute',
                                         top: -45,
                                         left: '50%',
@@ -375,54 +351,14 @@ const AboutPage = () => {
                                         borderRadius: 0,
                                         bgcolor: item.iconBg,
                                         display: 'flex',
-                                        flexDirection: 'column',
-                                        pt: 6, pb: 4, px: { xs: 3, md: 5 },
-                                        borderRadius: 0,
-                                        bgcolor: 'transparent',
-                                        border: '2px solid #0D2B14',
-                                        boxShadow: 'none',
-                                        height: '100%',
-                                        position: 'relative',
-                                        textAlign: { xs: 'center', md: item.align },
-                                        mt: { xs: 5, md: 6 }
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         boxShadow: `0 12px 24px ${item.iconBg}40`,
                                         border: '4px solid #fff'
                                     }}>
-                                        {/* Half-in, half-out overlapping icon */}
-                                        <Box sx={{
-                                            position: 'absolute',
-                                            top: -45,
-                                            left: '50%',
-                                            transform: 'translateX(-50%)',
-                                            '@media (min-width: 900px)': {
-                                                left: item.align === 'left' ? 40 : 'auto',
-                                                right: item.align === 'right' ? 40 : 'auto',
-                                                transform: 'none'
-                                            },
-                                            width: 90,
-                                            height: 90,
-                                            borderRadius: 0,
-                                            bgcolor: item.iconBg,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            boxShadow: `0 12px 24px ${item.iconBg}40`,
-                                            border: '4px solid #0D2B14'
-                                        }}>
-                                            {item.icon}
-                                        </Box>
                                         {item.icon}
                                     </Box>
 
-                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, fontSize: { xs: '1.25rem', md: '1.6rem' }, color: '#0D2B14', mb: 2.5 }}>
-                                            {item.title}
-                                        </Typography>
-                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', lineHeight: 1.8, fontSize: { xs: '0.9rem', md: '1.1rem' }, flexGrow: 1 }}>
-                                            {item.desc}
-                                        </Typography>
-                                    </Box>
                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, fontSize: { xs: '1.25rem', md: '1.6rem' }, color: '#0D2B14', mb: 2.5 }}>
                                         {item.title}
                                     </Typography>
@@ -430,8 +366,6 @@ const AboutPage = () => {
                                         {item.desc}
                                     </Typography>
                                 </Box>
-                            ))}
-                        </Box>
                             </Box>
                         ))}
                     </Box>
@@ -463,13 +397,13 @@ const AboutPage = () => {
                                     alt={v.title}
                                     sx={{ width: '100%', height: 260, objectFit: 'cover', mb: 3, filter: 'contrast(1.1)' }}
                                 />
-                                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 800, color: '#F7A11A', fontSize: '1.2rem', mb: 1, letterSpacing: '0.05em' }}>
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, color: '#F7A11A', fontSize: '1.2rem', mb: 1, letterSpacing: '0.05em' }}>
                                     0{i + 1} /
                                 </Typography>
                                 <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#FFFFFF', mb: 1.5, fontSize: '1.2rem', lineHeight: 1.3 }}>
                                     {v.title}
                                 </Typography>
-                                <Typography sx={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: 'rgba(255,255,255,0.75)', fontSize: '0.95rem', lineHeight: 1.7 }}>
                                     {v.desc}
                                 </Typography>
                             </Box>
