@@ -432,7 +432,7 @@ const HeroSection = () => {
                                 }}
                             >
                                 {/* Left: Text Content inside Yellow Box */}
-                                <Box sx={{ flex: 1.5, color: '#1A5C2A', pr: { md: 4 } }}>
+                                <Box sx={{ flex: 2, color: '#1A5C2A', pr: { md: 1 } }}>
                                     <FadeInUp>
                                         <TypewriterText
                                             key={`prof-sol-${language}`}
@@ -443,7 +443,8 @@ const HeroSection = () => {
                                                 fontWeight: 700,
                                                 fontSize: { xs: '1.2rem', sm: '1.4rem', md: '1.8rem' },
                                                 mb: 1.5,
-                                                lineHeight: 1.2
+                                                lineHeight: 1.2,
+                                                whiteSpace: 'nowrap'
                                             }}
                                         />
                                     </FadeInUp>
@@ -548,7 +549,7 @@ const HeroSection = () => {
                                         sx={{
                                             position: 'absolute',
                                             bottom: 0,
-                                            right: { md: -20 },
+                                            right: { md: -60 }, // Nudged further right
                                             height: '135%',
                                             width: 'auto',
                                             objectFit: 'contain',

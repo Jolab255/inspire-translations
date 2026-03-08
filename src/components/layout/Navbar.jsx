@@ -359,7 +359,12 @@ const Navbar = () => {
                                                 fontSize: '0.75rem',
                                                 letterSpacing: '0.01em',
                                                 px: 2, py: 1, borderRadius: '50px', textTransform: 'none',
-                                                '&:hover': { color: '#F7A11A', bgcolor: scrolled ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.1)' },
+                                                '&:hover': { 
+                                                    color: '#F7A11A', 
+                                                    bgcolor: scrolled ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.1)',
+                                                    boxShadow: 'none',
+                                                    transform: 'none'
+                                                },
                                                 ...(isActive(item.path) && { bgcolor: scrolled ? 'rgba(247,161,26,0.08)' : 'rgba(255,255,255,0.12)' }),
                                             }}
                                         >

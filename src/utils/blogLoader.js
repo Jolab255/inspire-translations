@@ -1,7 +1,22 @@
-import matter from 'gray-matter';
+import yaml from 'js-yaml';
 
 // Use Vite's glob import to get all markdown files
 const modules = import.meta.glob('../content/blog/*.md', { query: '?raw', import: 'default', eager: true });
+
+const parseMarkdown = (content) => {
+    const regex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/;
+    const match = content.match(regex);
+    
+    if (!match) return { data: {}, content: content };
+    
+    try {
+        const data = yaml.load(match[1]);
+        return { data, content: match[2] };
+    } catch (e) {
+        console.error('Error parsing markdown frontmatter:', e);
+        return { data: {}, content: match[2] };
+    }
+};
 
 export const getAllPosts = (lang = 'en') => {
     const posts = [];
@@ -9,12 +24,15 @@ export const getAllPosts = (lang = 'en') => {
     for (const path in modules) {
         // Only process files matching the requested language
         if (path.endsWith(`.${lang}.md`)) {
-            const content = modules[path];
-            const { data } = matter(content);
-            posts.push({
-                ...data,
-                id: data.slug, // Use slug as ID
-            });
+            const rawContent = modules[path];
+            const { data } = parseMarkdown(rawContent);
+            
+            if (data.slug) {
+                posts.push({
+                    ...data,
+                    id: data.slug,
+                });
+            }
         }
     }
     
@@ -24,11 +42,11 @@ export const getAllPosts = (lang = 'en') => {
 
 export const getPostBySlug = (slug, lang = 'en') => {
     const path = `../content/blog/${slug}.${lang}.md`;
-    const content = modules[path];
+    const rawContent = modules[path];
     
-    if (!content) return null;
+    if (!rawContent) return null;
     
-    const { data, content: body } = matter(content);
+    const { data, content: body } = parseMarkdown(rawContent);
     return {
         ...data,
         body
