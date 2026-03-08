@@ -20,35 +20,21 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import CookieIcon from '@mui/icons-material/Cookie';
-import customerCare from '../../assets/images/customer_care.png';
-import arrowImg from '../../assets/images/arrows.png';
-import serviceEquipment from '../../assets/images/equipment_rental.png';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { motion } from 'framer-motion';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { uiTranslations } from '../../data/translations/ui';
+
+import customerCare from '../../assets/images/customer_care.png';
+import arrowImg from '../../assets/images/arrows.png';
+import serviceEquipment from '../../assets/images/equipment_rental.png';
 
 const COLORS = {
-    primary: '#1A5C2A', // Using established brand dark green
-    accent: '#F7A11A',  // Using established brand yellow
+    primary: '#1A5C2A',
+    accent: '#F7A11A',
     white: '#FFFFFF',
-};
-
-// Animation helper from HomePage
-const FadeInUp = ({ children, delay = 0, ...props }) => {
-    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.15 });
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 40 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-            {...props}
-        >
-            {children}
-        </motion.div>
-    );
 };
 
 const TypewriterText = ({ text, sx, variant = "h2", delay = 0, ...props }) => {
@@ -70,11 +56,7 @@ const TypewriterText = ({ text, sx, variant = "h2", delay = 0, ...props }) => {
             y: 0,
             filter: 'blur(0px)',
             scale: 1,
-            transition: {
-                type: "spring",
-                damping: 12,
-                stiffness: 140
-            }
+            transition: { type: "spring", damping: 12, stiffness: 140 }
         }
     };
 
@@ -86,22 +68,11 @@ const TypewriterText = ({ text, sx, variant = "h2", delay = 0, ...props }) => {
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             variant={variant}
-            sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                ...sx
-            }}
+            sx={{ display: 'flex', flexWrap: 'wrap', ...sx }}
             {...props}
         >
             {letters.map((char, index) => (
-                <motion.span
-                    key={index}
-                    variants={letterVariants}
-                    style={{
-                        display: 'inline-block',
-                        whiteSpace: 'pre'
-                    }}
-                >
+                <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block', whiteSpace: 'pre' }}>
                     {char}
                 </motion.span>
             ))}
@@ -110,26 +81,70 @@ const TypewriterText = ({ text, sx, variant = "h2", delay = 0, ...props }) => {
 };
 
 const Footer = () => {
+    const { language } = useLanguage();
+    const ui = uiTranslations[language];
+
+    const content = {
+        en: {
+            tagline: "Precision. Culture. Trust.",
+            contactUs: "Contact Us!",
+            address: "123 Translation Ave, Dar es Salaam, Tanzania",
+            hours: "Mon - Fri: 9.00am - 17.00pm",
+            closed: "Weekends & Holidays: Closed",
+            quickLinks: "Quick Links",
+            subscribe: "Subscribe Newsletter",
+            subscribeDesc: "Join our mailing list to get the latest updates, news, and insights from the world of professional translation.",
+            emailLabel: "Your Email Address",
+            subscribeBtn: "Subscribe",
+            rights: "All Rights Reserved.",
+            developedBy: "Developed by",
+            privacy: "Privacy Policy",
+            terms: "Terms & Conditions",
+            links: [
+                { label: 'About Us', path: '/about' },
+                { label: 'Services', path: '/services' },
+                { label: 'Our Work', path: '/projects' },
+                { label: 'Blog', path: '/blog' },
+                { label: 'Contact Us', path: '/contact' },
+            ]
+        },
+        sw: {
+            tagline: "Usahihi. Utamaduni. Imani.",
+            contactUs: "Wasiliana Nasi!",
+            address: "123 Translation Ave, Dar es Salaam, Tanzania",
+            hours: "Jumatatu - Ijumaa: 3.00 Asubuhi - 11.00 Jioni",
+            closed: "Wikiendi na Likizo: Tumefunga",
+            quickLinks: "Viungo vya Haraka",
+            subscribe: "Jisajili na Jarida Letu",
+            subscribeDesc: "Jiunge na orodha yetu ya barua pepe ili kupata sasisho, habari, na maarifa ya hivi punde kutoka ulimwengu wa tafsiri ya kitaalamu.",
+            emailLabel: "Anwani Yako ya Barua Pepe",
+            subscribeBtn: "Jisajili",
+            rights: "Haki zote zimehifadhiwa.",
+            developedBy: "Imeundwa na",
+            privacy: "Sera ya Faragha",
+            terms: "Vigezo na Masharti",
+            links: [
+                { label: 'Kuhusu Sisi', path: '/about' },
+                { label: 'Huduma', path: '/services' },
+                { label: 'Kazi Zetu', path: '/projects' },
+                { label: 'Blogu', path: '/blog' },
+                { label: 'Wasiliana Nasi', path: '/contact' },
+            ]
+        }
+    };
+
+    const c = content[language];
+
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const socialLinks = [
-        { icon: <FacebookIcon fontSize="small" />, href: '#', label: 'Facebook' },
-        { icon: <LinkedInIcon fontSize="small" />, href: '#', label: 'LinkedIn' },
-        { icon: <InstagramIcon fontSize="small" />, href: '#', label: 'Instagram' },
+        { icon: <FacebookIcon fontSize="small" />, href: 'https://facebook.com/inspiretranslations', label: 'Facebook' },
+        { icon: <LinkedInIcon fontSize="small" />, href: 'https://linkedin.com/company/inspiretranslations', label: 'LinkedIn' },
+        { icon: <InstagramIcon fontSize="small" />, href: 'https://instagram.com/inspiretranslations', label: 'Instagram' },
         { icon: <YouTubeIcon fontSize="small" />, href: '#', label: 'YouTube' },
     ];
-
-    const quickLinks = [
-        { label: 'About Us', path: '/about' },
-        { label: 'Services', path: '/services' },
-        { label: 'Our Work', path: '/projects' },
-        { label: 'Blog', path: '/blog' },
-        { label: 'Contact Us', path: '/contact' },
-    ];
-
-    const newsPosts = [];
 
     return (
         <Box
@@ -144,26 +159,17 @@ const Footer = () => {
                 fontFamily: '"Inter", sans-serif'
             }}
         >
-
-
             <Container maxWidth="lg">
-                {/* TOP HEADER SECTION: Title Left, Social Right */}
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', md: 'row' },
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    mb: 5,
-                    gap: 3
-                }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center', mb: 5, gap: 3 }}>
                     <TypewriterText
-                        text="Precision. Culture. Trust."
+                        key={`footer-tagline-${language}`}
+                        text={c.tagline}
                         variant="h2"
                         sx={{
                             fontFamily: '"Inknut Antiqua", serif',
                             fontWeight: 800,
                             fontSize: { xs: '2rem', md: '2.8rem' },
-                            color: COLORS.accent,
+                            color: COLORS.white,
                             lineHeight: 1.2,
                             textAlign: { xs: 'center', md: 'left' },
                             maxWidth: { xs: '100%', md: '800px' }
@@ -176,6 +182,7 @@ const Footer = () => {
                                 <IconButton
                                     key={i}
                                     href={s.href}
+                                    target="_blank"
                                     sx={{
                                         color: COLORS.white,
                                         width: 38,
@@ -187,7 +194,7 @@ const Footer = () => {
                                             borderColor: COLORS.accent,
                                             transform: 'translateY(-3px)'
                                         },
-                                        transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                                        transition: 'all 0.3s ease'
                                     }}
                                 >
                                     {s.icon}
@@ -199,66 +206,55 @@ const Footer = () => {
 
                 <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.2)', mb: 8 }} />
 
-                {/* MAIN CONTENT: 3 Columns NEWS | CONTACT | LINKS (Equal Width) */}
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 4, mb: 8 }}>
-                    {/* Contact Us Card */}
-                    <Card sx={{ display: 'flex', flexDirection: 'column', textDecoration: 'none', border: `3px solid ${COLORS.accent}`, borderRadius: 0, boxShadow: 'none', overflow: 'hidden', background: 'transparent', transition: 'none', '&:hover': { transform: 'none', boxShadow: 'none', bgcolor: 'transparent' } }}>
-                        <Typography variant="h5" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, color: COLORS.primary, bgcolor: COLORS.accent, textAlign: 'center', p: 1.5, width: '100%', fontSize: '1.2rem', lineHeight: 1.3 }}>
-                            Contact Us!
+                    {/* Contact Card */}
+                    <Card sx={{ display: 'flex', flexDirection: 'column', border: `3px solid ${COLORS.white}`, borderRadius: 0, boxShadow: 'none', background: 'transparent' }}>
+                        <Typography variant="h5" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, color: COLORS.primary, bgcolor: COLORS.white, textAlign: 'center', p: 1.5, fontSize: '1.2rem' }}>
+                            {c.contactUs}
                         </Typography>
-                        <CardContent sx={{ p: 2.5, flexGrow: 1, display: 'flex', flexDirection: 'column', pt: 3 }}>
-                            <Box component="img" src={customerCare} alt="Contact Us" sx={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 0, mb: 3 }} />
+                        <CardContent sx={{ p: 2.5, pt: 3 }}>
+                            <Box component="img" src={customerCare} sx={{ width: '100%', height: 220, objectFit: 'cover', mb: 3 }} />
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36, flexShrink: 0 }}>
+                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36 }}>
                                         <LocationOnIcon fontSize="small" />
                                     </Avatar>
-                                    <Typography variant="body2" sx={{ color: COLORS.white, lineHeight: 1.6, fontFamily: '"Inknut Antiqua", serif' }}>
-                                        123 Translation Ave, Dar es Salaam, Tanzania
-                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: COLORS.white, fontFamily: '"Inknut Antiqua", serif' }}>{c.address}</Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36, flexShrink: 0 }}>
+                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36 }}>
                                         <PhoneIcon fontSize="small" />
                                     </Avatar>
-                                    <Typography variant="body2" sx={{ color: COLORS.white, fontFamily: '"Inknut Antiqua", serif' }}>
-                                        +255 123 456 789
-                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: COLORS.white, fontFamily: '"Inknut Antiqua", serif' }}>+255 759 704 170</Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36, flexShrink: 0 }}>
+                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36 }}>
                                         <EmailIcon fontSize="small" />
                                     </Avatar>
-                                    <Typography variant="body2" sx={{ color: COLORS.white, fontFamily: '"Inknut Antiqua", serif' }}>
-                                        contact@inspiretranslations.co.tz
-                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: COLORS.white, fontFamily: '"Inknut Antiqua", serif' }}>info@inspiretranslations.co.tz</Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36, flexShrink: 0 }}>
+                                    <Avatar sx={{ bgcolor: `${COLORS.accent}22`, color: COLORS.accent, width: 36, height: 36 }}>
                                         <AccessTimeIcon fontSize="small" />
                                     </Avatar>
                                     <Box>
-                                        <Typography variant="body2" sx={{ color: COLORS.white, fontFamily: '"Inknut Antiqua", serif' }}>
-                                            Mon - Fri: 9.00am - 17.00pm
-                                        </Typography>
-                                        <Typography variant="caption" sx={{ color: COLORS.accent, letterSpacing: '0.1em', fontFamily: '"Inknut Antiqua", serif', fontWeight: 600 }}>
-                                            Weekends & Holidays: Closed
-                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: COLORS.white, fontFamily: '"Inknut Antiqua", serif' }}>{c.hours}</Typography>
+                                        <Typography variant="caption" sx={{ color: COLORS.accent, fontWeight: 600, fontFamily: '"Inknut Antiqua", serif' }}>{c.closed}</Typography>
                                     </Box>
                                 </Box>
                             </Box>
                         </CardContent>
                     </Card>
 
-                    {/* Quick Links Card */}
-                    <Card sx={{ display: 'flex', flexDirection: 'column', textDecoration: 'none', border: `3px solid ${COLORS.accent}`, borderRadius: 0, boxShadow: 'none', overflow: 'hidden', background: 'transparent', transition: 'none', '&:hover': { transform: 'none', boxShadow: 'none', bgcolor: 'transparent' } }}>
-                        <Typography variant="h5" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, color: COLORS.primary, bgcolor: COLORS.accent, textAlign: 'center', p: 1.5, width: '100%', fontSize: '1.2rem', lineHeight: 1.3 }}>
-                            Quick Links
+                    {/* Links Card */}
+                    <Card sx={{ display: 'flex', flexDirection: 'column', border: `3px solid ${COLORS.white}`, borderRadius: 0, boxShadow: 'none', background: 'transparent' }}>
+                        <Typography variant="h5" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, color: COLORS.primary, bgcolor: COLORS.white, textAlign: 'center', p: 1.5, fontSize: '1.2rem' }}>
+                            {c.quickLinks}
                         </Typography>
-                        <CardContent sx={{ p: 2.5, flexGrow: 1, display: 'flex', flexDirection: 'column', pt: 3 }}>
-                            <Box component="img" src={arrowImg} alt="Quick Links" sx={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 0, mb: 3 }} />
+                        <CardContent sx={{ p: 2.5, pt: 3 }}>
+                            <Box component="img" src={arrowImg} sx={{ width: '100%', height: 220, objectFit: 'cover', mb: 3 }} />
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                {quickLinks.map((link) => (
+                                {c.links.map((link) => (
                                     <Typography
                                         key={link.label}
                                         component={RouterLink}
@@ -282,18 +278,18 @@ const Footer = () => {
                         </CardContent>
                     </Card>
 
-                    {/* Subscribe Newsletter Card */}
-                    <Card sx={{ display: 'flex', flexDirection: 'column', textDecoration: 'none', border: `3px solid ${COLORS.accent}`, borderRadius: 0, boxShadow: 'none', overflow: 'hidden', background: 'transparent', transition: 'none', '&:hover': { transform: 'none', boxShadow: 'none', bgcolor: 'transparent' } }}>
-                        <Typography variant="h5" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, color: COLORS.primary, bgcolor: COLORS.accent, textAlign: 'center', p: 1.5, width: '100%', fontSize: '1.2rem', lineHeight: 1.3 }}>
-                            Subscribe Newsletter
+                    {/* Subscribe Card */}
+                    <Card sx={{ display: 'flex', flexDirection: 'column', border: `3px solid ${COLORS.white}`, borderRadius: 0, boxShadow: 'none', background: 'transparent' }}>
+                        <Typography variant="h5" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, color: COLORS.primary, bgcolor: COLORS.white, textAlign: 'center', p: 1.5, fontSize: '1.2rem' }}>
+                            {c.subscribe}
                         </Typography>
-                        <CardContent sx={{ p: 2.5, flexGrow: 1, display: 'flex', flexDirection: 'column', pt: 3 }}>
-                            <Box component="img" src={serviceEquipment} alt="Newsletter" sx={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 0, mb: 3 }} />
-                            <Typography variant="body2" sx={{ color: COLORS.white, lineHeight: 1.8, mb: 3, flexGrow: 1, fontFamily: '"Inknut Antiqua", serif', opacity: 0.9 }}>
-                                Join our mailing list to get the latest updates, news, and insights from the world of professional translation.
+                        <CardContent sx={{ p: 2.5, pt: 3 }}>
+                            <Box component="img" src={serviceEquipment} sx={{ width: '100%', height: 220, objectFit: 'cover', mb: 3 }} />
+                            <Typography variant="body2" sx={{ color: COLORS.white, lineHeight: 1.8, mb: 3, fontFamily: '"Inknut Antiqua", serif' }}>
+                                {c.subscribeDesc}
                             </Typography>
                             <TextField
-                                label="Your Email Address"
+                                label={c.emailLabel}
                                 variant="outlined"
                                 size="small"
                                 fullWidth
@@ -301,15 +297,11 @@ const Footer = () => {
                                     mb: 3,
                                     '& .MuiOutlinedInput-root': {
                                         borderRadius: '0px',
-                                        '& fieldset': {
-                                            borderColor: 'rgba(255,255,255,0.5)',
-                                            borderWidth: '2px',
-                                            borderRadius: '0px'
-                                        },
+                                        '& fieldset': { borderColor: 'rgba(255,255,255,0.5)', borderWidth: '2px' },
                                         '&:hover fieldset': { borderColor: COLORS.accent },
-                                        '&.Mui-focused fieldset': { borderColor: COLORS.accent, borderWidth: '2.5px' },
+                                        '&.Mui-focused fieldset': { borderColor: COLORS.accent },
                                     },
-                                    '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem' },
+                                    '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.7)' },
                                     '& .MuiInputLabel-root.Mui-focused': { color: COLORS.accent },
                                     '& .MuiOutlinedInput-input': { color: COLORS.white },
                                 }}
@@ -322,50 +314,49 @@ const Footer = () => {
                                 sx={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    bgcolor: 'transparent',
-                                    border: `2px solid ${COLORS.accent}`,
+                                    border: `2px solid ${COLORS.white}`,
                                     borderRadius: '50px',
                                     overflow: 'hidden',
                                     cursor: 'pointer',
-                                    transition: 'all 0.3s ease',
                                     height: '46px',
-                                    width: 'fit-content',
+                                    bgcolor: 'transparent',
                                     '&:hover': {
-                                        bgcolor: 'rgba(247, 161, 26, 0.1)',
-                                        boxShadow: `0 0 20px rgba(247, 161, 26, 0.2)`
+                                        bgcolor: 'rgba(255,255,255,0.05)'
                                     }
                                 }}
                             >
                                 <Typography
                                     component={motion.span}
-                                    variants={{ rest: { x: 0 }, hover: { x: 5 } }}
+                                    variants={{
+                                        rest: { x: 0 },
+                                        hover: { x: 5 }
+                                    }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                                    sx={{
-                                        color: COLORS.white,
-                                        fontFamily: '"Inknut Antiqua", serif',
-                                        fontWeight: 700,
-                                        fontSize: '0.85rem',
-                                        pl: 3,
-                                        pr: 2,
-                                        whiteSpace: 'nowrap',
-                                        textTransform: 'none',
+                                    sx={{ 
+                                        color: COLORS.white, 
+                                        fontFamily: '"Inknut Antiqua", serif', 
+                                        fontWeight: 700, 
+                                        fontSize: '0.85rem', 
+                                        pl: 3, 
+                                        pr: 2 
                                     }}
                                 >
-                                    Subscribe
+                                    {c.subscribeBtn}
                                 </Typography>
-                                <Box
-                                    sx={{
-                                        width: 46,
-                                        height: '100%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        bgcolor: COLORS.accent,
-                                        ml: 1
-                                    }}
-                                >
-                                    <motion.div
-                                        variants={{ rest: { x: 0 }, hover: { x: 5 } }}
+                                <Box sx={{ 
+                                    width: 46, 
+                                    height: '100%', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center', 
+                                    bgcolor: COLORS.white, 
+                                    ml: 1 
+                                }}>
+                                    <motion.div 
+                                        variants={{ 
+                                            rest: { x: 0 }, 
+                                            hover: { x: 5 } 
+                                        }}
                                         transition={{ type: 'spring', stiffness: 600, damping: 15 }}
                                     >
                                         <ArrowForwardIcon sx={{ color: COLORS.primary, fontSize: 18 }} />
@@ -378,71 +369,27 @@ const Footer = () => {
 
                 <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.2)', mb: 5 }} />
 
-                {/* BOTTOM BAR: Legal and Meta */}
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', lg: 'row' },
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: 3,
-                    pb: 2
-                }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography sx={{
-                            fontSize: '0.8rem',
-                            color: COLORS.white,
-                            fontFamily: '"Inknut Antiqua", serif',
-                            lineHeight: 1.6,
-                            textAlign: { xs: 'center', lg: 'left' }
-                        }}>
-                            Copyright © 2026 <Box component="span" sx={{ color: COLORS.accent, fontWeight: 700 }}>Inspire Translations</Box>. All Rights Reserved.
-                            <Box component="span" sx={{ ml: 1, opacity: 0.8 }}>|</Box>
-                            <Box component="span" sx={{ ml: 1 }}>
-                                Developed by{' '}
-                                <Box
-                                    component="a"
-                                    href="https://wa.me/255765929374"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    sx={{
-                                        color: COLORS.accent,
-                                        textDecoration: 'none',
-                                        fontWeight: 700,
-                                        '&:hover': { textDecoration: 'underline' }
-                                    }}
-                                >
-                                    Jolab
-                                </Box>
-                            </Box>
-                        </Typography>
-                    </Box>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 3, pb: 2 }}>
+                    <Typography sx={{ fontSize: '0.8rem', color: COLORS.white, fontFamily: '"Inknut Antiqua", serif', textAlign: { xs: 'center', lg: 'left' } }}>
+                        Copyright © 2026 <Box component="span" sx={{ color: COLORS.accent, fontWeight: 700 }}>Inspire Translations</Box>. {c.rights}
+                        <Box component="span" sx={{ ml: 1, opacity: 0.8 }}>|</Box>
+                        <Box component="span" sx={{ ml: 1 }}>
+                            {c.developedBy} <Box component="a" href="https://wa.me/255765929374" target="_blank" rel="noopener" sx={{ color: COLORS.accent, textDecoration: 'none', fontWeight: 700 }}>Jolab</Box>
+                        </Box>
+                    </Typography>
 
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: { xs: 2, md: 4 } }}>
+                    <Box sx={{ display: 'flex', gap: { xs: 2, md: 4 } }}>
                         {[
-                            { text: 'Privacy Policy', path: '/privacy-policy' },
-                            { text: 'Terms & Conditions', path: '/terms' }
+                            { text: c.privacy, path: '/privacy-policy' },
+                            { text: c.terms, path: '/terms' }
                         ].map((item) => (
-                            <Typography
-                                key={item.text}
-                                component={RouterLink}
-                                to={item.path}
-                                sx={{
-                                    color: COLORS.white,
-                                    fontSize: '0.85rem',
-                                    fontFamily: '"Inknut Antiqua", serif',
-                                    textDecoration: 'none',
-                                    fontWeight: 500,
-                                    '&:hover': { color: COLORS.accent }
-                                }}
-                            >
+                            <Typography key={item.text} component={RouterLink} to={item.path} sx={{ color: COLORS.white, fontSize: '0.85rem', fontFamily: '"Inknut Antiqua", serif', textDecoration: 'none', '&:hover': { color: COLORS.accent } }}>
                                 {item.text}
                             </Typography>
                         ))}
                     </Box>
                 </Box>
             </Container>
-
-            {/* FIXED ELEMENTS - Badge Updated */}
 
             <Fab
                 size="medium"
@@ -454,7 +401,6 @@ const Footer = () => {
                     bgcolor: COLORS.accent,
                     color: COLORS.white,
                     zIndex: 1000,
-                    boxShadow: '0 8px 25px rgba(0,0,0,0.2)',
                     '&:hover': { bgcolor: COLORS.primary, transform: 'scale(1.1) translateY(-5px)' },
                     transition: 'all 0.3s ease'
                 }}

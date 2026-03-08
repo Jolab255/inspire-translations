@@ -16,8 +16,12 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { motion } from 'framer-motion';
 import SEOHead from '../../components/seo/SEOHead';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { uiTranslations } from '../../data/translations/ui';
 
 const ContactPage = () => {
+    const { language } = useLanguage();
+    const ui = uiTranslations[language];
     const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -32,20 +36,66 @@ const ContactPage = () => {
         setSubmitted(true);
     };
 
-    const contactDetails = [
-        { icon: <LocationOnIcon sx={{ color: '#F7A11A' }} />, label: 'Address', value: 'Dar es Salaam, Tanzania' },
-        { icon: <PhoneIcon sx={{ color: '#F7A11A' }} />, label: 'Phone', value: '+255 000 000 000' },
-        { icon: <WhatsAppIcon sx={{ color: '#25D366' }} />, label: 'WhatsApp', value: '+255 000 000 000' },
-        { icon: <EmailIcon sx={{ color: '#F7A11A' }} />, label: 'Email', value: 'info@inspiretranslations.co.tz' },
-        { icon: <AccessTimeIcon sx={{ color: '#F7A11A' }} />, label: 'Working Hours', value: 'Mon – Fri: 8:00 AM – 5:00 PM' },
-    ];
+    const content = {
+        en: {
+            heroLabel: "Contact Us",
+            heroTitle: <>Let's <Box component="span" sx={{ color: '#F7A11A' }}>Start a Conversation</Box></>,
+            heroDesc: "Whether you have a project or just want to learn more — we're here to help.",
+            getInTouch: "Get in Touch",
+            touchDesc: "Our team is ready to assist you with any language service need. Expect a response within 4 hours during business hours.",
+            details: [
+                { icon: <LocationOnIcon sx={{ color: '#F7A11A' }} />, label: 'Address', value: 'Dar es Salaam, Tanzania' },
+                { icon: <PhoneIcon sx={{ color: '#F7A11A' }} />, label: 'Phone', value: '+255 759 704 170' },
+                { icon: <WhatsAppIcon sx={{ color: '#25D366' }} />, label: 'WhatsApp', value: '+255 759 704 170' },
+                { icon: <EmailIcon sx={{ color: '#F7A11A' }} />, label: 'Email', value: 'info@inspiretranslations.co.tz' },
+                { icon: <AccessTimeIcon sx={{ color: '#F7A11A' }} />, label: 'Working Hours', value: 'Mon – Fri: 8:00 AM – 5:00 PM' },
+            ],
+            sendMessage: "Send Us a Message",
+            formDesc: "Fill out the form and we'll get back to you within 4 hours.",
+            success: "Thank you! Your message has been sent. We'll respond within 4 hours.",
+            fullName: "Full Name",
+            email: "Email Address",
+            phone: "Phone / WhatsApp",
+            subject: "Subject",
+            message: "Your Message",
+            send: "Send Message",
+            sending: "Sending...",
+            subjects: ['General Enquiry', 'Request a Quote', 'Partnership', 'Careers', 'Technical Support', 'Other']
+        },
+        sw: {
+            heroLabel: "Wasiliana Nasi",
+            heroTitle: <>Tuwe na <Box component="span" sx={{ color: '#F7A11A' }}>Mazungumzo</Box></>,
+            heroDesc: "Iwe una mradi au unataka tu kujifunza zaidi — tupo hapa kusaidia.",
+            getInTouch: "Wasiliana Nasi",
+            touchDesc: "Timu yetu iko tayari kukusaidia kwa mahitaji yoyote ya huduma ya lugha. Tarajia jibu ndani ya saa 4 wakati wa saa za kazi.",
+            details: [
+                { icon: <LocationOnIcon sx={{ color: '#F7A11A' }} />, label: 'Anwani', value: 'Dar es Salaam, Tanzania' },
+                { icon: <PhoneIcon sx={{ color: '#F7A11A' }} />, label: 'Simu', value: '+255 759 704 170' },
+                { icon: <WhatsAppIcon sx={{ color: '#25D366' }} />, label: 'WhatsApp', value: '+255 759 704 170' },
+                { icon: <EmailIcon sx={{ color: '#F7A11A' }} />, label: 'Barua Pepe', value: 'info@inspiretranslations.co.tz' },
+                { icon: <AccessTimeIcon sx={{ color: '#F7A11A' }} />, label: 'Saa za Kazi', value: 'Jumatatu – Ijumaa: 2:00 Asubuhi – 11:00 Jioni' },
+            ],
+            sendMessage: "Tutunuku Ujumbe",
+            formDesc: "Jaza fomu na tutakujibu ndani ya saa 4.",
+            success: "Asante! Ujumbe wako umetumwa. Tutakujibu ndani ya saa 4.",
+            fullName: "Jina Kamili",
+            email: "Anwani ya Barua Pepe",
+            phone: "Simu / WhatsApp",
+            subject: "Mada",
+            message: "Ujumbe Wako",
+            send: "Tuma Ujumbe",
+            sending: "Inatuma...",
+            subjects: ['Uchunguzi wa Jumla', 'Omba Makadirio', 'Ushirikiano', 'Kazi', 'Msaada wa Kiufundi', 'Nyingine']
+        }
+    };
+
+    const c = content[language];
 
     return (
         <>
             <SEOHead
-                title="Contact Inspire Translations | Get in Touch"
-                description="Contact Inspire Translations in Dar es Salaam, Tanzania. Reach us by phone, email, WhatsApp, or fill out our contact form for a quick response."
-                canonicalUrl="https://inspiretranslations.co.tz/contact"
+                title={language === 'en' ? "Contact Inspire Translations | Get in Touch" : "Wasiliana na Inspire Translations | Tuandikie"}
+                description={language === 'en' ? "Contact Inspire Translations in Dar es Salaam, Tanzania. Reach us by phone, email, WhatsApp, or fill out our contact form." : "Wasiliana na Inspire Translations jijini Dar es Salaam, Tanzania. Tupigie simu, barua pepe, WhatsApp, au jaza fomu yetu."}
             />
 
             {/* Hero */}
@@ -55,12 +105,12 @@ const ContactPage = () => {
                 ))}
                 <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
                     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-                        <Chip label="Contact Us" sx={{ bgcolor: 'rgba(247,161,26,0.15)', color: '#F7A11A', border: '1px solid rgba(247,161,26,0.3)', fontFamily: 'Outfit', fontWeight: 600, mb: 3 }} />
+                        <Chip label={c.heroLabel} sx={{ bgcolor: 'rgba(247,161,26,0.15)', color: '#F7A11A', border: '1px solid rgba(247,161,26,0.3)', fontFamily: 'Outfit', fontWeight: 600, mb: 3 }} />
                         <Typography variant="h1" sx={{ color: '#FFFFFF', fontWeight: 900, mb: 3 }}>
-                            Let's <Box component="span" sx={{ color: '#F7A11A' }}>Start a Conversation</Box>
+                            {c.heroTitle}
                         </Typography>
                         <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', lineHeight: 1.8 }}>
-                            Whether you have a project or just want to learn more — we're here to help.
+                            {c.heroDesc}
                         </Typography>
                     </motion.div>
                 </Container>
@@ -72,12 +122,12 @@ const ContactPage = () => {
                         {/* Contact Info */}
                         <Grid item xs={12} md={5}>
                             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-                                <Typography variant="h3" sx={{ color: '#1A1A2E', fontWeight: 700, mb: 1.5 }}>Get in Touch</Typography>
+                                <Typography variant="h3" sx={{ color: '#1A1A2E', fontWeight: 700, mb: 1.5 }}>{c.getInTouch}</Typography>
                                 <Typography sx={{ color: '#4A4A6A', mb: 4, lineHeight: 1.8 }}>
-                                    Our team is ready to assist you with any language service need. Expect a response within 4 hours during business hours.
+                                    {c.touchDesc}
                                 </Typography>
 
-                                {contactDetails.map((item) => (
+                                {c.details.map((item) => (
                                     <Box key={item.label} sx={{ display: 'flex', alignItems: 'flex-start', gap: 2.5, mb: 3, p: 2.5, bgcolor: '#F8F9FA', borderRadius: 3, border: '1px solid rgba(0,0,0,0.06)', transition: 'all 0.3s', '&:hover': { bgcolor: 'rgba(247,161,26,0.04)', borderColor: 'rgba(247,161,26,0.2)', transform: 'translateX(4px)' } }}>
                                         <Box sx={{ width: 44, height: 44, borderRadius: 2, bgcolor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
                                             {item.icon}
@@ -89,7 +139,6 @@ const ContactPage = () => {
                                     </Box>
                                 ))}
 
-                                {/* Map placeholder */}
                                 <Box sx={{ height: 200, borderRadius: 3, bgcolor: '#F8F9FA', border: '2px dashed rgba(0,0,0,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
                                     <Box sx={{ textAlign: 'center' }}>
                                         <Typography sx={{ fontSize: '2rem', mb: 1 }}>🗺️</Typography>
@@ -103,38 +152,38 @@ const ContactPage = () => {
                         <Grid item xs={12} md={7}>
                             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
                                 <Box sx={{ p: { xs: 3, md: 5 }, bgcolor: '#F8F9FA', borderRadius: 4, border: '1px solid rgba(0,0,0,0.06)' }}>
-                                    <Typography variant="h4" sx={{ fontFamily: 'Outfit', fontWeight: 700, color: '#1A1A2E', mb: 1 }}>Send Us a Message</Typography>
-                                    <Typography sx={{ color: '#4A4A6A', mb: 4, fontSize: '0.95rem' }}>Fill out the form and we'll get back to you within 4 hours.</Typography>
+                                    <Typography variant="h4" sx={{ fontFamily: 'Outfit', fontWeight: 700, color: '#1A1A2E', mb: 1 }}>{c.sendMessage}</Typography>
+                                    <Typography sx={{ color: '#4A4A6A', mb: 4, fontSize: '0.95rem' }}>{c.formDesc}</Typography>
 
                                     {submitted ? (
                                         <Alert severity="success" sx={{ borderRadius: 3, fontFamily: 'Outfit', fontWeight: 600 }}>
-                                            ✅ Thank you! Your message has been sent. We'll respond within 4 hours.
+                                            ✅ {c.success}
                                         </Alert>
                                     ) : (
                                         <Box component="form" onSubmit={handleSubmit}>
                                             <Grid container spacing={2.5}>
                                                 <Grid item xs={12} sm={6}>
-                                                    <TextField fullWidth name="name" label="Full Name" value={form.name} onChange={handleChange} required variant="outlined" sx={{ bgcolor: '#fff', borderRadius: 2 }} />
+                                                    <TextField fullWidth name="name" label={c.fullName} value={form.name} onChange={handleChange} required variant="outlined" sx={{ bgcolor: '#fff' }} />
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <TextField fullWidth name="email" label="Email Address" type="email" value={form.email} onChange={handleChange} required variant="outlined" sx={{ bgcolor: '#fff' }} />
+                                                    <TextField fullWidth name="email" label={c.email} type="email" value={form.email} onChange={handleChange} required variant="outlined" sx={{ bgcolor: '#fff' }} />
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <TextField fullWidth name="phone" label="Phone / WhatsApp" value={form.phone} onChange={handleChange} variant="outlined" sx={{ bgcolor: '#fff' }} />
+                                                    <TextField fullWidth name="phone" label={c.phone} value={form.phone} onChange={handleChange} variant="outlined" sx={{ bgcolor: '#fff' }} />
                                                 </Grid>
                                                 <Grid item xs={12} sm={6}>
-                                                    <TextField fullWidth name="subject" label="Subject" value={form.subject} onChange={handleChange} required select variant="outlined" sx={{ bgcolor: '#fff' }}>
-                                                        {['General Enquiry', 'Request a Quote', 'Partnership', 'Careers', 'Technical Support', 'Other'].map((opt) => (
+                                                    <TextField fullWidth name="subject" label={c.subject} value={form.subject} onChange={handleChange} required select variant="outlined" sx={{ bgcolor: '#fff' }}>
+                                                        {c.subjects.map((opt) => (
                                                             <MenuItem key={opt} value={opt}>{opt}</MenuItem>
                                                         ))}
                                                     </TextField>
                                                 </Grid>
                                                 <Grid item xs={12}>
-                                                    <TextField fullWidth name="message" label="Your Message" value={form.message} onChange={handleChange} required multiline rows={5} variant="outlined" sx={{ bgcolor: '#fff' }} />
+                                                    <TextField fullWidth name="message" label={c.message} value={form.message} onChange={handleChange} required multiline rows={5} variant="outlined" sx={{ bgcolor: '#fff' }} />
                                                 </Grid>
                                                 <Grid item xs={12}>
                                                     <Button type="submit" variant="contained" color="primary" size="large" fullWidth disabled={loading} endIcon={<SendIcon />} sx={{ py: 1.8, fontSize: '1rem' }}>
-                                                        {loading ? 'Sending...' : 'Send Message'}
+                                                        {loading ? c.sending : c.send}
                                                     </Button>
                                                 </Grid>
                                             </Grid>

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { uiTranslations } from '../../data/translations/ui';
 
 // Import images
 import heroWoman from '../../assets/images/Neema Prosper.png';
@@ -13,28 +16,43 @@ import flag2 from '../../assets/images/HERO_FLAG_2.png';
 import flag3 from '../../assets/images/HERO_FLAG_3.png';
 import flag4 from '../../assets/images/HERO_FLAG_4.png';
 
-const servicesList = ['Language', 'Translation', 'Interpretation', 'Localization'];
+const servicesList = {
+    en: ['Language', 'Translation', 'Interpretation', 'Localization'],
+    sw: ['Lugha', 'Tafsiri', 'Ukalimani', 'Ujanibishaji']
+};
 
 const cardData = [
     {
-        title: 'Written Translation',
+        title: { en: 'Written Translation', sw: 'Tafsiri ya Maandishi' },
         image: flag1,
-        desc: 'Delivering culturally nuanced translation and localization that resonates with local audiences.',
+        desc: {
+            en: 'Delivering culturally nuanced translation and localization that resonates with local audiences.',
+            sw: 'Kutoa tafsiri na ujanibishaji unaozingatia utamaduni na unaovutia hadhira ya mahali husika.'
+        },
     },
     {
-        title: 'Document Translation',
+        title: { en: 'Document Translation', sw: 'Tafsiri ya Nyaraka' },
         image: flag2,
-        desc: 'Accurate, certified translation for legal and technical documents.',
+        desc: {
+            en: 'Accurate, certified translation for legal and technical documents.',
+            sw: 'Tafsiri sahihi na iliyothibitishwa kwa nyaraka za kisheria na kiufundi.'
+        },
     },
     {
-        title: 'Spoken Interpretation',
+        title: { en: 'Spoken Interpretation', sw: 'Ukalimani wa Mazungumzo' },
         image: flag3,
-        desc: 'Real-time interpretation services for conferences and meetings.',
+        desc: {
+            en: 'Real-time interpretation services for conferences and meetings.',
+            sw: 'Huduma za ukalimani wa papo hapo kwa mikutano na makongamano.'
+        },
     },
     {
-        title: 'Software Localization',
+        title: { en: 'Software Localization', sw: 'Ujanibishaji wa Programu' },
         image: flag4,
-        desc: 'Adapting software and websites to perfectly match regional linguistic and cultural norms.',
+        desc: {
+            en: 'Adapting software and websites to perfectly match regional linguistic and cultural norms.',
+            sw: 'Kurekebisha programu na tovuti ili ziendane kikamilifu na kanuni za lugha na utamaduni wa kikanda.'
+        }
     }
 ];
 
@@ -106,6 +124,8 @@ const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
 };
 
 const HeroSection = () => {
+    const { language, t } = useLanguage();
+    const ui = uiTranslations[language];
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Auto-advance logic
@@ -117,19 +137,39 @@ const HeroSection = () => {
         return () => clearInterval(timer);
     }, []);
 
+    const content = {
+        en: {
+            seamless: "Seamless",
+            africa: "Services in Africa.",
+            explore: "Explore Services",
+            profSol: "Professional Solutions",
+            profDesc: "Connecting people and businesses through award-winning translation and interpretation services globally.",
+        },
+        sw: {
+            seamless: "Huduma ya",
+            africa: "Bora Afrika.",
+            explore: "Gundua Huduma",
+            profSol: "Suluhu za Kitaalamu",
+            profDesc: "Kuunganisha watu na biashara kupitia huduma za tafsiri na ukalimani zilizoshinda tuzo duniani kote.",
+        }
+    };
+
+    const c = content[language];
+
     return (
         <Box sx={{ position: 'relative', width: '100%', zIndex: 10 }}>
             {/* The main hero area */}
             <Box
                 sx={{
                     position: 'relative',
-                    minHeight: '100vh',
+                    minHeight: { xs: 'auto', md: '100vh' },
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'linear-gradient(135deg, #1A5C2A 0%, #0F3A1A 100%)', // Premium dark green gradient
-                    // overflow: 'hidden' removed so the card can overlap the next section
-                    pt: { xs: 8, md: 0 },
+                    background: 'linear-gradient(135deg, #1A5C2A 0%, #0F3A1A 100%)',
+                    pt: { xs: 24, md: 16 },
+                    pb: { xs: 8, md: 0 },
+                    overflow: { xs: 'hidden', md: 'visible' }
                 }}
             >
                 {/* ── Premium Decorative Glows ── */}
@@ -160,22 +200,8 @@ const HeroSection = () => {
                     }}
                 />
 
-
-
-                {/* ── Main Title Area ── */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: { xs: '15%', md: '20%' },
-                        left: 0,
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        px: { xs: 3, md: 8, lg: 12 },
-                        pointerEvents: 'none',
-                    }}
-                >
-                    <Box sx={{ width: '100%', maxWidth: '1280px' }}>
+                <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
+                    <Box sx={{ width: '100%', pointerEvents: 'none' }}>
                         <Typography
                             component="h1"
                             sx={{
@@ -183,43 +209,43 @@ const HeroSection = () => {
                                 zIndex: 1,
                                 fontFamily: '"Inknut Antiqua", serif',
                                 fontWeight: 400,
-                                fontSize: { xs: '2rem', sm: '2.8rem', md: '3.6rem', lg: '4.5rem' },
+                                fontSize: { xs: '1.6rem', sm: '2.4rem', md: '3.2rem', lg: '4rem' },
                                 lineHeight: 1.1,
                                 color: '#FFFFFF',
                                 textAlign: 'left',
                                 textShadow: '0 4px 24px rgba(0,0,0,0.3)',
                             }}
                         >
-                            Seamless{' '}
-                            <Box component="span" sx={{ display: 'inline-block', color: '#F7A11A', minWidth: '200px' }}>
+                            {c.seamless}{' '}
+                            <Box component="span" sx={{ display: 'inline-block', color: '#F7A11A', minWidth: { xs: '120px', sm: '200px' } }}>
                                 <AnimatePresence mode="wait">
                                     <motion.span
-                                        key={currentIndex}
+                                        key={currentIndex + language}
                                         initial={{ rotateX: 90, opacity: 0 }}
                                         animate={{ rotateX: 0, opacity: 1 }}
                                         exit={{ rotateX: -90, opacity: 0 }}
                                         transition={{ duration: 0.5, type: 'tween', ease: 'easeInOut' }}
                                         style={{ display: 'inline-block', transformOrigin: 'center center' }}
                                     >
-                                        {servicesList[currentIndex]}
+                                        {servicesList[language][currentIndex]}
                                     </motion.span>
                                 </AnimatePresence>
                             </Box>
                             <br />
-                            <Box component="span" sx={{ display: 'inline-block', ml: { xs: 12, sm: 20, md: 36, lg: 52 } }}>
-                                Services in Africa.
+                            <Box component="span" sx={{ display: 'inline-block', ml: { xs: 4, sm: 10, md: 36, lg: 52 } }}>
+                                {c.africa}
                             </Box>
                         </Typography>
 
                         {/* ── Side-by-Side Content Area ── */}
-                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'flex-start', mt: { xs: 4, md: 6 }, gap: { xs: 4, md: 6 } }}>
+                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'flex-start', mt: { xs: 6, md: 6 }, gap: { xs: 4, md: 6 } }}>
                             <Box
                                 sx={{
                                     position: 'relative',
                                     mt: { md: -10 },
                                     width: '100%',
                                     maxWidth: { xs: '100%', md: '360px' },
-                                    minHeight: { xs: '350px', md: '500px' },
+                                    minHeight: { xs: 'auto', md: '500px' },
                                     bgcolor: '#FFFFFF',
                                     zIndex: 10,
                                     borderRadius: 0,
@@ -228,14 +254,14 @@ const HeroSection = () => {
                                     flexDirection: 'column',
                                     textDecoration: 'none',
                                     border: '3px solid #FFFFFF',
-                                    overflow: 'visible', // Allow flag to pop out
-                                    boxShadow: '0 30px 60px rgba(0,0,0,0.2)',
+                                    overflow: 'visible',
+                                    boxShadow: 'none',
                                 }}
                             >
                                 <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
                                     <AnimatePresence mode="wait">
                                         <motion.div
-                                            key={currentIndex}
+                                            key={currentIndex + language}
                                             initial="initial"
                                             animate="animate"
                                             exit="exit"
@@ -265,10 +291,10 @@ const HeroSection = () => {
                                                     zIndex: 2
                                                 }}
                                             >
-                                                {cardData[currentIndex].title}
+                                                {t(cardData[currentIndex].title)}
                                             </Typography>
 
-                                            <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', pt: 3, bgcolor: '#FFFFFF', overflow: 'visible' }}>
+                                            <Box sx={{ p: { xs: 2, sm: 3 }, display: 'flex', flexDirection: 'column', pt: 3, bgcolor: '#FFFFFF', overflow: 'visible' }}>
                                                 <Box
                                                     component={motion.div}
                                                     variants={{
@@ -281,14 +307,14 @@ const HeroSection = () => {
                                                     <Box
                                                         component="img"
                                                         src={cardData[currentIndex].image}
-                                                        alt={cardData[currentIndex].title}
+                                                        alt={t(cardData[currentIndex].title)}
                                                         sx={{
                                                             width: '125%',
                                                             ml: '-12.5%',
-                                                            height: 180,
+                                                            height: { xs: 140, sm: 180 },
                                                             objectFit: 'cover',
                                                             borderRadius: 0,
-                                                            zIndex: 20, // Greater z-index as requested
+                                                            zIndex: 20,
                                                             position: 'relative'
                                                         }}
                                                     />
@@ -311,7 +337,7 @@ const HeroSection = () => {
                                                         textAlign: 'left'
                                                     }}
                                                 >
-                                                    {cardData[currentIndex].desc}
+                                                    {t(cardData[currentIndex].desc)}
                                                 </Typography>
                                             </Box>
                                         </motion.div>
@@ -357,7 +383,7 @@ const HeroSection = () => {
                                                 letterSpacing: '0.05em'
                                             }}
                                         >
-                                            Explore Services
+                                            {c.explore}
                                         </Typography>
                                         <Box
                                             sx={{
@@ -389,7 +415,7 @@ const HeroSection = () => {
                                 sx={{
                                     flex: { md: 1.5, lg: 2 },
                                     position: 'relative',
-                                    mt: { md: 5 }, // Squeezed to the top
+                                    mt: { md: 5 },
                                     width: '100%',
                                     height: { xs: 'auto', md: '260px' },
                                     bgcolor: '#F7A11A',
@@ -398,8 +424,8 @@ const HeroSection = () => {
                                     flexDirection: { xs: 'column', md: 'row' },
                                     alignItems: 'center',
                                     justifyContent: 'space-between',
-                                    px: { xs: 4, md: 6 },
-                                    py: { xs: 6, md: 0 },
+                                    px: { xs: 3, sm: 4, md: 6 },
+                                    py: { xs: 5, md: 0 },
                                     borderRadius: 0,
                                     boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
                                     pointerEvents: 'auto'
@@ -409,12 +435,13 @@ const HeroSection = () => {
                                 <Box sx={{ flex: 1.5, color: '#1A5C2A', pr: { md: 4 } }}>
                                     <FadeInUp>
                                         <TypewriterText
-                                            text="Professional Solutions"
+                                            key={`prof-sol-${language}`}
+                                            text={c.profSol}
                                             variant="h4"
                                             sx={{
                                                 fontFamily: '"Inknut Antiqua", serif',
                                                 fontWeight: 700,
-                                                fontSize: { xs: '1.4rem', md: '1.8rem' },
+                                                fontSize: { xs: '1.2rem', sm: '1.4rem', md: '1.8rem' },
                                                 mb: 1.5,
                                                 lineHeight: 1.2
                                             }}
@@ -424,13 +451,13 @@ const HeroSection = () => {
                                         variant="body1"
                                         sx={{
                                             fontFamily: '"Inknut Antiqua", serif',
-                                            fontSize: { xs: '0.8rem', md: '0.9rem' },
+                                            fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.9rem' },
                                             lineHeight: 1.5,
                                             opacity: 0.95,
                                             mb: 3
                                         }}
                                     >
-                                        Connecting people and businesses through award-winning translation and interpretation services globally.
+                                        {c.profDesc}
                                     </Typography>
 
                                     {/* Get a Quote Button — Pill Arrow Style */}
@@ -471,7 +498,7 @@ const HeroSection = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            Get a Quote
+                                            {ui.getAQuote}
                                         </Typography>
                                         <Box
                                             className="pill-arrow-w"
@@ -533,7 +560,7 @@ const HeroSection = () => {
                             </Box>
                         </Box>
                     </Box>
-                </Box>
+                </Container>
             </Box>
         </Box>
     );

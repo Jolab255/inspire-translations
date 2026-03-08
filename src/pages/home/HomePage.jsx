@@ -27,6 +27,8 @@ import CountUp from 'react-countup';
 import HeroSection from '../../components/hero/HeroSection';
 import SEOHead from '../../components/seo/SEOHead';
 import { services, stats, testimonials, clients, blogPosts } from '../../data/siteData';
+import { uiTranslations } from '../../data/translations/ui';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { DotLottiePlayer } from '@dotlottie/react-player';
 import lottieLangTranslator from '../../assets/lottie/language translator.lottie';
 import heroWoman from '../../assets/images/hero_woman_bg.png';
@@ -79,7 +81,7 @@ const FadeInUp = ({ children, delay = 0, ...props }) => {
 // Animated text component for typewriter spelling effect
 const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
     const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.4 });
-    const letters = Array.from(text);
+    const words = text.split(' ');
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -112,13 +114,20 @@ const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             variant={variant}
-            sx={{ ...sx, display: 'inline-block' }}
+            sx={{ ...sx, display: 'block' }}
             {...props}
         >
-            {letters.map((char, index) => (
-                <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block', whiteSpace: 'pre' }}>
-                    {char}
-                </motion.span>
+            {words.map((word, wordIndex) => (
+                <Box key={wordIndex} component="span" sx={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                    {Array.from(word).map((char, charIndex) => (
+                        <motion.span key={charIndex} variants={letterVariants} style={{ display: 'inline-block' }}>
+                            {char}
+                        </motion.span>
+                    ))}
+                    {wordIndex < words.length - 1 && (
+                        <Box component="span" sx={{ display: 'inline-block' }}>&nbsp;</Box>
+                    )}
+                </Box>
             ))}
         </Typography>
     );
@@ -164,8 +173,11 @@ const SectionTitle = ({ label, title, subtitle, dark = false, center = true }) =
 // ---- PURPOSE (WHITE) SECTION ----
 const PurposeWhiteSection = () => {
     const { ref: arrowRef, inView } = useInView({ triggerOnce: false, threshold: 0.6 });
+    const { language, t } = useLanguage();
+    const ui = uiTranslations[language];
+
     return (
-        <Box sx={{ pt: { xs: 8, md: 11 }, pb: { xs: 14, md: 22 }, bgcolor: '#FFFFFF', position: 'relative', overflow: 'hidden' }}>
+        <Box sx={{ pt: { xs: 8, md: 11 }, pb: { xs: 10, md: 22 }, bgcolor: '#FFFFFF', position: 'relative', overflow: 'hidden' }}>
             <Box sx={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, bgcolor: '#1A5C2A' }} />
             <Container maxWidth="lg">
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 6, md: 9 }, alignItems: 'center' }}>
@@ -174,9 +186,9 @@ const PurposeWhiteSection = () => {
                     <Box sx={{ flex: '0 0 auto', width: { xs: '100%', md: '42%' } }}>
                         <FadeInUp>
                             <Box sx={{ position: 'relative' }}>
-                                <Box sx={{ position: 'absolute', top: -12, left: -12, width: 60, height: 60, border: '4px solid #F7A11A', borderRight: 'none', borderBottom: 'none', zIndex: 1 }} />
-                                <Box sx={{ position: 'absolute', bottom: -12, right: -12, width: 60, height: 60, border: '4px solid #1A5C2A', borderLeft: 'none', borderTop: 'none', zIndex: 1 }} />
-                                <Box component="img" src={aboutUsPhoto} alt="Inspire Translations" sx={{ width: '100%', maxHeight: 520, objectFit: 'cover', objectPosition: 'top center', display: 'block', mixBlendMode: 'multiply', filter: 'contrast(1.05)' }} />
+                                <Box sx={{ position: 'absolute', top: { xs: -8, md: -12 }, left: { xs: -8, md: -12 }, width: { xs: 40, md: 60 }, height: { xs: 40, md: 60 }, border: '4px solid #F7A11A', borderRight: 'none', borderBottom: 'none', zIndex: 1 }} />
+                                <Box sx={{ position: 'absolute', bottom: { xs: -8, md: -12 }, right: { xs: -8, md: -12 }, width: { xs: 40, md: 60 }, height: { xs: 40, md: 60 }, border: '4px solid #1A5C2A', borderLeft: 'none', borderTop: 'none', zIndex: 1 }} />
+                                <Box component="img" src={aboutUsPhoto} alt="Inspire Translations" sx={{ width: '100%', maxHeight: { xs: 400, md: 520 }, objectFit: 'cover', objectPosition: 'top center', display: 'block', mixBlendMode: 'multiply', filter: 'contrast(1.05)' }} />
                             </Box>
                         </FadeInUp>
                     </Box>
@@ -208,22 +220,23 @@ const PurposeWhiteSection = () => {
                                     transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                                 }}>
                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                                        Our Purpose
+                                        {ui.ourPurpose}
                                     </Typography>
                                 </Box>
                             </Box>
 
                             <TypewriterText
-                                text="Why We Exist"
+                                key={`purpose-title-${language}`}
+                                text={ui.whyWeExist}
                                 variant="h2"
-                                sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: { xs: '2rem', md: '2.6rem' }, color: '#0D2B14', lineHeight: 1.15, mb: 3 }}
+                                sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.6rem' }, color: '#0D2B14', lineHeight: 1.15, mb: 3 }}
                             />
                             <Box sx={{ width: 56, height: 4, bgcolor: '#F7A11A', mb: 3 }} />
-                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 400, fontSize: '0.95rem', lineHeight: 2, color: '#444', mb: 2 }}>
-                                Across Tanzania and East Africa, language has always been both a bridge and a barrier in boardrooms, courtrooms, clinics, and conferences. When language fails, opportunities are lost, rights go unheard, and connections fall short.
+                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 400, fontSize: { xs: '0.85rem', md: '0.95rem' }, lineHeight: { xs: 1.8, md: 2 }, color: '#444', mb: 2 }}>
+                                {language === 'en' ? 'Across Tanzania and East Africa, language has always been both a bridge and a barrier in boardrooms, courtrooms, clinics, and conferences. When language fails, opportunities are lost, rights go unheard, and connections fall short.' : 'Kote Tanzania na Afrika Mashariki, lugha imekuwa daraja na kizuizi katika vyumba vya mikutano, mahakama, kliniki, na makongamano. Wakati lugha inaposhindwa, fursa hupotea, haki hazisikiki, na miunganisho hupungua.'}
                             </Typography>
-                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 400, fontSize: '0.95rem', lineHeight: 2, color: '#444', mb: 4 }}>
-                                Inspire Translations was founded to change this reality connecting people, organizations, and ideas across language lines with accuracy, integrity, and deep cultural sensitivity.
+                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 400, fontSize: { xs: '0.85rem', md: '0.95rem' }, lineHeight: { xs: 1.8, md: 2 }, color: '#444', mb: 4 }}>
+                                {language === 'en' ? 'Inspire Translations was founded to change this reality connecting people, organizations, and ideas across language lines with accuracy, integrity, and deep cultural sensitivity.' : 'Inspire Translations ilianzishwa ili kubadilisha hali hii kwa kuunganisha watu, mashirika, na mawazo kupitia mistari ya lugha kwa usahihi, uadilifu, na unyeti wa kina wa kitamaduni.'}
                             </Typography>
                             <Box
                                 component={motion(RouterLink)}
@@ -262,7 +275,7 @@ const PurposeWhiteSection = () => {
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
-                                    More About Us
+                                    {ui.moreAboutUs}
                                 </Typography>
                                 <Box
                                     className="pill-arrow-w"
@@ -304,12 +317,15 @@ const PurposeWhiteSection = () => {
 // ---- WHAT WE DO SECTION ----
 const WhatWeDoSection = () => {
     const { ref: arrowRef, inView } = useInView({ triggerOnce: false, threshold: 0.6 });
+    const { language } = useLanguage();
+    const ui = uiTranslations[language];
+
     return (
-        <Box sx={{ py: { xs: 8, md: 12 }, minHeight: 400, display: 'flex', alignItems: 'center', background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)', position: 'relative' }}>
+        <Box sx={{ py: { xs: 8, md: 12 }, minHeight: { xs: 'auto', md: 400 }, display: 'flex', alignItems: 'center', background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)', position: 'relative' }}>
 
             {/* Content */}
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 6 }}>
-                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 2, md: 5 }, alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 4, md: 5 }, alignItems: 'center' }}>
 
                     {/* Left — Content */}
                     <Box sx={{ flex: 1.3, display: 'flex', order: { xs: 2, md: 1 } }}>
@@ -340,19 +356,20 @@ const WhatWeDoSection = () => {
                                         transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                                     }}>
                                         <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                                            What We Do
+                                            {ui.whatWeDo}
                                         </Typography>
                                     </Box>
                                 </Box>
 
                                 <TypewriterText
-                                    text="Bridging the Gap Through Expert Language Services"
+                                    key={`what-we-do-title-${language}`}
+                                    text={ui.bridgingGap}
                                     variant="h2"
-                                    sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 700, fontSize: { xs: '2rem', md: '2.6rem' }, lineHeight: 1.15, mb: 3 }}
+                                    sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 700, fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.6rem' }, lineHeight: 1.15, mb: 3 }}
                                 />
                                 <Box sx={{ width: 56, height: 4, bgcolor: '#0D2B14', mb: 3 }} />
-                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 400, color: '#0D2B14', fontSize: '0.95rem', lineHeight: 2, mb: 4 }}>
-                                    We collaborate with businesses, NGOs, and legal professionals to deliver precise, culturally resonant communication solutions. We lay the foundation for seamless cross-border partnerships and impactful global operations.
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 400, color: '#0D2B14', fontSize: { xs: '0.85rem', md: '0.95rem' }, lineHeight: { xs: 1.8, md: 2 }, mb: 4 }}>
+                                    {language === 'en' ? 'We collaborate with businesses, NGOs, and legal professionals to deliver precise, culturally resonant communication solutions. We lay the foundation for seamless cross-border partnerships and impactful global operations.' : 'Tunashirikiana na biashara, NGOs, na wataalamu wa kisheria ili kutoa suluhu sahihi za mawasiliano zinazozingatia utamaduni. Tunaweka msingi wa ushirikiano usio na mshono wa kuvuka mipaka na uendeshaji wenye matokeo duniani kote.'}
                                 </Typography>
                                 <Box
                                     component={motion(RouterLink)}
@@ -391,7 +408,7 @@ const WhatWeDoSection = () => {
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        See Our Services
+                                        {ui.seeOurServices}
                                     </Typography>
                                     <Box
                                         className="pill-arrow-w"
@@ -427,14 +444,9 @@ const WhatWeDoSection = () => {
 
                     {/* Right — Photo and White Box List */}
                     <Box sx={{ flex: 1, minWidth: { md: 450 }, order: { xs: 1, md: 2 } }}>
-                        {/* 
-                          Using absolute positioning breaks BOTH the image and the list out of the flex constraints
-                          so they don't stretch the section height. Building them in a single absolute container 
-                          makes the white box perfectly touch the bottom of the image and overlap the next section.
-                        */}
                         <Box sx={{
                             position: 'absolute',
-                            top: { xs: -150, md: -270 }, // Aggressively pull UPWARD
+                            top: { xs: -150, md: -270 },
                             right: { xs: '-5%', md: '0%' },
                             width: { xs: '110%', md: '500px' },
                             zIndex: 10,
@@ -446,10 +458,10 @@ const WhatWeDoSection = () => {
                                     alt="What We Do"
                                     sx={{
                                         width: '100%',
-                                        display: 'block', // Ensures no gap below the image
+                                        display: 'block',
                                         mixBlendMode: 'multiply',
                                         filter: 'contrast(1.05)',
-                                        pointerEvents: 'none' // Only disable pointer events on the image itself
+                                        pointerEvents: 'none'
                                     }}
                                 />
                             </FadeInUp>
@@ -462,18 +474,17 @@ const WhatWeDoSection = () => {
                                     borderRadius: 0,
                                     p: { xs: 4, md: 5 },
                                     boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
-                                    // Removed mt here so it perfectly touches the image
                                 }}>
                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '1.2rem', color: '#0D2B14', mb: 3 }}>
-                                        How we deliver impact:
+                                        {ui.howWeDeliver}
                                     </Typography>
 
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                                         {[
-                                            { title: "Strategic Collaboration", desc: "Partnering closely with businesses, NGOs, and legal professionals." },
-                                            { title: "Precise Communication", desc: "Delivering language solutions that are strictly accurate and culturally resonant." },
-                                            { title: "Seamless Partnerships", desc: "Laying the foundation for smooth, cross-border relationships." },
-                                            { title: "Global Operations", desc: "Empowering impactful operations on an international scale." }
+                                            { title: ui.strategicCollab, desc: ui.strategicCollabDesc },
+                                            { title: ui.preciseComm, desc: ui.preciseCommDesc },
+                                            { title: ui.seamlessPartnerships, desc: ui.seamlessPartnershipsDesc },
+                                            { title: ui.globalOperations, desc: ui.globalOperationsDesc }
                                         ].map((item, i) => (
                                             <Box key={i} sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
                                                 <Box sx={{ mt: 0.5 }}>
@@ -505,6 +516,9 @@ const WhatWeDoSection = () => {
 // ---- WHAT WE OFFER SECTION ----
 const WhatWeOfferSection = () => {
     const { ref: arrowRef, inView } = useInView({ triggerOnce: false, threshold: 0.6 });
+    const { language, t } = useLanguage();
+    const ui = uiTranslations[language];
+
     return (
         <Box sx={{ pt: 2, pb: 12, background: 'linear-gradient(90deg, #1A5C2A 0%, #0F3A1A 100%)', position: 'relative' }}>
             <Container maxWidth="lg">
@@ -512,13 +526,11 @@ const WhatWeOfferSection = () => {
                     <FadeInUp>
                         {/* Animated arrow label */}
                         <Box ref={arrowRef} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1.5, overflow: 'hidden' }}>
-                            {/* Expanding line */}
                             <Box sx={{
                                 height: 2, bgcolor: '#F7A11A',
                                 width: inView ? 32 : 0,
                                 transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
                             }} />
-                            {/* Arrow icon slides + bounces in */}
                             <Box sx={{
                                 display: 'flex', alignItems: 'center',
                                 transform: inView ? 'translateX(0) scale(1)' : 'translateX(-20px) scale(0.6)',
@@ -527,22 +539,22 @@ const WhatWeOfferSection = () => {
                             }}>
                                 <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
                             </Box>
-                            {/* Label fades up */}
                             <Box sx={{
                                 transform: inView ? 'translateY(0)' : 'translateY(8px)',
                                 opacity: inView ? 1 : 0,
                                 transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                             }}>
                                 <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                                    What We Offer
+                                    {ui.whatWeOffer}
                                 </Typography>
                             </Box>
                         </Box>
 
                         <TypewriterText
-                            text="Comprehensive Language Solutions"
+                            key={`what-we-offer-title-${language}`}
+                            text={ui.comprehensiveSolutions}
                             variant="h2"
-                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#FFFFFF', fontWeight: 800, fontSize: { xs: '2rem', md: '2.5rem' }, mb: 3, maxWidth: '600px', lineHeight: 1.2 }}
+                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#FFFFFF', fontWeight: 800, fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' }, mb: 3, maxWidth: '600px', lineHeight: 1.2 }}
                         />
                         <Box sx={{ width: 60, height: 4, bgcolor: '#F7A11A' }} />
                     </FadeInUp>
@@ -574,7 +586,6 @@ const WhatWeOfferSection = () => {
                                         }
                                     }}
                                 >
-                                    {/* 1. Title — Moved outside CardContent to be flush with border */}
                                     <Typography
                                         variant="h5"
                                         sx={{
@@ -585,15 +596,14 @@ const WhatWeOfferSection = () => {
                                             textAlign: 'center',
                                             p: 1.5,
                                             width: '100%',
-                                            fontSize: '1.2rem',
+                                            fontSize: '1.1rem',
                                             lineHeight: 1.3
                                         }}
                                     >
-                                        {service.title}
+                                        {t(service.title)}
                                     </Typography>
 
-                                    <CardContent sx={{ p: 4, flexGrow: 1, display: 'flex', flexDirection: 'column', pt: 3 }}>
-                                        {/* 2. Photo — Using specific imported assets */}
+                                    <CardContent sx={{ p: { xs: 2, sm: 3, md: 4 }, flexGrow: 1, display: 'flex', flexDirection: 'column', pt: 3 }}>
                                         <Box
                                             component="img"
                                             src={
@@ -605,22 +615,20 @@ const WhatWeOfferSection = () => {
                                                                     service.id === 'equipment-rental' ? serviceEquipment :
                                                                         service.image || heroWoman
                                             }
-                                            alt={service.title}
+                                            alt={t(service.title)}
                                             sx={{
                                                 width: '100%',
-                                                height: 220,
+                                                height: { xs: 180, sm: 220 },
                                                 objectFit: 'cover',
                                                 borderRadius: 0,
                                                 mb: 3,
                                             }}
                                         />
 
-                                        {/* 3. Description — Now full text and justified */}
-                                        <Typography variant="body2" sx={{ fontFamily: '"Inknut Antiqua", serif', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.8, mb: 4, flexGrow: 1, fontSize: '0.95rem', textAlign: 'left' }}>
-                                            {service.fullDesc || service.shortDesc}
+                                        <Typography variant="body2" sx={{ fontFamily: '"Inknut Antiqua", serif', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.8, mb: 4, flexGrow: 1, fontSize: '0.9rem', textAlign: 'left' }}>
+                                            {t(service.fullDesc) || t(service.shortDesc)}
                                         </Typography>
 
-                                        {/* 4. Button to read more — Styled to match your primary button style and centered */}
                                         <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'center' }}>
                                             <Box
                                                 component={motion.div}
@@ -635,9 +643,6 @@ const WhatWeOfferSection = () => {
                                                     overflow: 'hidden',
                                                     textDecoration: 'none',
                                                     transition: 'all 0.3s ease',
-                                                    '&:hover': {
-                                                        // No color changes on hover, only animation
-                                                    }
                                                 }}
                                             >
                                                 <Typography
@@ -659,7 +664,7 @@ const WhatWeOfferSection = () => {
                                                         letterSpacing: '0.05em'
                                                     }}
                                                 >
-                                                    Read more
+                                                    {ui.readMore}
                                                 </Typography>
                                                 <Box
                                                     component={motion.div}
@@ -696,7 +701,6 @@ const WhatWeOfferSection = () => {
                     ))}
                 </Box>
 
-                {/* 5. See All Services Button — Centered at the bottom */}
                 <Box sx={{ mt: 10, display: 'flex', justifyContent: 'center' }}>
                     <FadeInUp delay={0.2}>
                         <Box
@@ -730,14 +734,14 @@ const WhatWeOfferSection = () => {
                                     fontFamily: '"Inknut Antiqua", serif',
                                     fontWeight: 700,
                                     fontSize: '0.9rem',
-                                    px: 4,
+                                    px: { xs: 3, sm: 4 },
                                     lineHeight: '56px',
                                     whiteSpace: 'nowrap',
                                     textTransform: 'none',
                                     letterSpacing: '0.05em'
                                 }}
                             >
-                                See all services
+                                {ui.seeAllServices}
                             </Typography>
                             <Box
                                 component={motion.div}
@@ -773,13 +777,13 @@ const WhatWeOfferSection = () => {
     );
 };
 
-// ---- TESTIMONIALS ----
 // ---- TESTIMONIALS SECTION ----
 const TestimonialsSection = () => {
     const [index, setIndex] = useState(0);
     const { ref: headerRef, inView } = useInView({ triggerOnce: false, threshold: 0.4 });
+    const { language, t: translate } = useLanguage();
+    const ui = uiTranslations[language];
 
-    // Rotating testimonials every 5 seconds
     useEffect(() => {
         const timer = setInterval(() => {
             setIndex((prev) => (prev + 1) % testimonials.length);
@@ -788,8 +792,6 @@ const TestimonialsSection = () => {
     }, []);
 
     const t = testimonials[index];
-
-    // Updated mapping with new photos
     const testimonialImages = [photoNeema, photoDavid, photoEnos, photoNdeigu];
 
     const handleNext = () => {
@@ -826,15 +828,16 @@ const TestimonialsSection = () => {
                                 transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                             }}>
                                 <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                                    Voice of Trust
+                                    {ui.voiceOfTrust}
                                 </Typography>
                             </Box>
                         </Box>
 
                         <TypewriterText
-                            text="Client Testimonials"
+                            key={`testimonials-title-${language}`}
+                            text={ui.clientTestimonials}
                             variant="h2"
-                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 800, fontSize: { xs: '2rem', md: '2.5rem' }, mb: 3, maxWidth: '700px', lineHeight: 1.2 }}
+                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 800, fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' }, mb: 3, maxWidth: '700px', lineHeight: 1.2 }}
                         />
                         <Box sx={{ width: 60, height: 4, bgcolor: '#F7A11A' }} />
                     </FadeInUp>
@@ -842,7 +845,7 @@ const TestimonialsSection = () => {
 
                 <Box sx={{ position: 'relative', height: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end' }}>
 
-                    {/* Green Box - Testimonial Content Box with FLIP Transition */}
+                    {/* Green Box */}
                     <Box sx={{
                         position: 'absolute',
                         left: '10%',
@@ -873,7 +876,7 @@ const TestimonialsSection = () => {
                                     lineHeight: 1.6,
                                     mb: 3
                                 }}>
-                                    "{t.quote}"
+                                    "{translate(t.quote)}"
                                 </Typography>
                                 <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2 }}>
                                     <Typography sx={{
@@ -884,16 +887,16 @@ const TestimonialsSection = () => {
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.15em'
                                     }}>
-                                        {t.role} · {t.organization}
+                                        {translate(t.role)} · {t.organization}
                                     </Typography>
                                 </Box>
                             </Box>
                         </AnimatePresence>
                     </Box>
 
-                    {/* Yellow Card - Name Updates mit Content Switch */}
+                    {/* Yellow Card */}
                     <Box sx={{
-                        width: { xs: '95%', md: '55%' },
+                        width: '55%',
                         height: '55vh',
                         bgcolor: '#F7A11A',
                         display: 'flex',
@@ -950,7 +953,6 @@ const TestimonialsSection = () => {
                         />
                     </AnimatePresence>
 
-                    {/* Manual Navigation Arrows - Far Left and Right on White BG */}
                     <IconButton
                         onClick={handlePrev}
                         sx={{
@@ -1001,8 +1003,9 @@ const TestimonialsSection = () => {
 // ---- CLIENT LOGOS ----
 const ClientsSection = () => {
     const { ref: arrowRef, inView } = useInView({ triggerOnce: false, threshold: 0.4 });
+    const { language } = useLanguage();
+    const ui = uiTranslations[language];
 
-    // 6 Partner Logos
     const gridItems = [
         { image: logoCRDB, label: 'CRDB Bank' },
         { image: logoUNHCR, label: 'UNHCR' },
@@ -1013,7 +1016,7 @@ const ClientsSection = () => {
     ];
 
     return (
-        <Box sx={{ pt: 12, pb: 4, minHeight: '60vh', bgcolor: '#FFFFFF', display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ pt: 12, pb: 4, minHeight: { xs: 'auto', md: '60vh' }, bgcolor: '#FFFFFF', display: 'flex', alignItems: 'center' }}>
             <Container maxWidth="lg">
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', mb: 10, textAlign: 'left' }}>
                     <FadeInUp>
@@ -1038,25 +1041,25 @@ const ClientsSection = () => {
                                 transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                             }}>
                                 <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                                    Partner Collective
+                                    {ui.partnerCollective}
                                 </Typography>
                             </Box>
                         </Box>
 
                         <TypewriterText
-                            text="Strategic Global Alliances"
+                            key={`clients-title-${language}`}
+                            text={ui.strategicAlliances}
                             variant="h2"
-                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 800, fontSize: { xs: '2rem', md: '2.5rem' }, mb: 3, maxWidth: '700px', lineHeight: 1.2 }}
+                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 800, fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' }, mb: 3, maxWidth: '700px', lineHeight: 1.2 }}
                         />
                         <Box sx={{ width: 60, height: 4, bgcolor: '#F7A11A' }} />
                     </FadeInUp>
                 </Box>
 
-                {/* Open Table Grid: 2 rows x 3 columns */}
                 <Box sx={{
                     display: 'grid',
                     gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
-                    border: '2px solid #1A5C2A', // Dark green outline as requested
+                    border: '2px solid #1A5C2A',
                     p: { xs: 2, md: 4 },
                     bgcolor: '#FFFFFF',
                 }}>
@@ -1069,7 +1072,6 @@ const ClientsSection = () => {
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                // Internal lines only (Green and Bold)
                                 borderRight: {
                                     xs: 'none',
                                     sm: (i + 1) % 2 === 0 ? 'none' : '2px solid #1A5C2A',
@@ -1095,7 +1097,7 @@ const ClientsSection = () => {
                                         src={item.image}
                                         alt={item.label}
                                         sx={{
-                                            maxHeight: { xs: 50, md: 65 },
+                                            maxHeight: { xs: 40, md: 65 },
                                             maxWidth: '100%',
                                             mb: 2
                                         }}
@@ -1105,7 +1107,7 @@ const ClientsSection = () => {
                                         fontFamily: 'Outfit',
                                         fontWeight: 800,
                                         fontSize: '0.95rem',
-                                        color: '#1A5C2A', // Green as requested
+                                        color: '#1A5C2A',
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.05em'
                                     }}>
@@ -1117,7 +1119,6 @@ const ClientsSection = () => {
                     ))}
                 </Box>
 
-                {/* Be our partner button */}
                 <FadeInUp delay={0.6}>
                     <Box sx={{ mt: 6, textAlign: 'center' }}>
                         <Box
@@ -1156,7 +1157,7 @@ const ClientsSection = () => {
                                     whiteSpace: 'nowrap'
                                 }}
                             >
-                                Be our partner
+                                {ui.beOurPartner}
                             </Typography>
                             <Box
                                 sx={{
@@ -1190,6 +1191,8 @@ const ClientsSection = () => {
 // ---- BLOG PREVIEW ----
 const BlogSection = () => {
     const { ref: headerRef, inView } = useInView({ triggerOnce: false, threshold: 0.4 });
+    const { language, t } = useLanguage();
+    const ui = uiTranslations[language];
     const blogImages = [serviceWritten, serviceLogistics, serviceEquipment];
 
     return (
@@ -1218,21 +1221,21 @@ const BlogSection = () => {
                                 transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                             }}>
                                 <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '0.85rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                                    LATEST INSIGHTS
+                                    {ui.latestInsights}
                                 </Typography>
                             </Box>
                         </Box>
 
                         <TypewriterText
-                            text="From Our Blog"
+                            key={`blog-title-${language}`}
+                            text={ui.fromOurBlog}
                             variant="h2"
-                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 800, fontSize: { xs: '2rem', md: '2.5rem' }, mb: 3, maxWidth: '700px', lineHeight: 1.2 }}
+                            sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 800, fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' }, mb: 3, maxWidth: '700px', lineHeight: 1.2 }}
                         />
                         <Box sx={{ width: 60, height: 4, bgcolor: '#0D2B14' }} />
                     </FadeInUp>
                 </Box>
 
-                {/* Grid Layout - Open Table Style */}
                 <Box sx={{
                     display: 'grid',
                     gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
@@ -1261,20 +1264,18 @@ const BlogSection = () => {
                                     flexDirection: 'column',
                                     bgcolor: '#F7A11A'
                                 }}>
-                                    {/* News Image */}
                                     <Box
                                         component="img"
                                         src={blogImages[i % blogImages.length]}
-                                        alt={post.title}
+                                        alt={t(post.title)}
                                         sx={{
                                             width: '100%',
-                                            height: 280,
+                                            height: { xs: 220, md: 280 },
                                             objectFit: 'cover'
                                         }}
                                     />
 
-                                    <Box sx={{ p: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                                        {/* Date with Icon and White font */}
+                                    <Box sx={{ p: { xs: 3, md: 4 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
                                             <CalendarTodayIcon sx={{ fontSize: 16, color: '#FFFFFF' }} />
                                             <Typography sx={{
@@ -1285,11 +1286,10 @@ const BlogSection = () => {
                                                 letterSpacing: '0.1em',
                                                 fontWeight: 600
                                             }}>
-                                                {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                                                {new Date(post.date).toLocaleDateString(language === 'en' ? 'en-US' : 'sw-TZ', { month: 'long', day: 'numeric', year: 'numeric' })}
                                             </Typography>
                                         </Box>
 
-                                        {/* News Title - Deep Green */}
                                         <Typography sx={{
                                             fontFamily: 'Outfit',
                                             fontWeight: 800,
@@ -1303,10 +1303,9 @@ const BlogSection = () => {
                                             WebkitLineClamp: 2,
                                             WebkitBoxOrient: 'vertical'
                                         }}>
-                                            {post.title}
+                                            {t(post.title)}
                                         </Typography>
 
-                                        {/* Short Description - Darker contrast */}
                                         <Typography sx={{
                                             fontFamily: 'Inter',
                                             color: '#0D2B14',
@@ -1316,10 +1315,9 @@ const BlogSection = () => {
                                             flexGrow: 1,
                                             opacity: 0.95
                                         }}>
-                                            {post.excerpt}
+                                            {t(post.excerpt)}
                                         </Typography>
 
-                                        {/* Custom Pill Button Style */}
                                         <Box
                                             component={motion(RouterLink)}
                                             whileHover="hover"
@@ -1357,7 +1355,7 @@ const BlogSection = () => {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                Read More
+                                                {ui.readMore}
                                             </Typography>
                                             <Box
                                                 sx={{
@@ -1397,26 +1395,29 @@ const BlogSection = () => {
 // ---- FAQ SECTION ----
 const FAQSection = () => {
     const { ref: faqRef, inView } = useInView({ triggerOnce: false, threshold: 0.3 });
+    const { language } = useLanguage();
+    const ui = uiTranslations[language];
+
     const faqData = [
         {
-            q: "1. What core language services does Inspire Translations provide?",
-            a: "We provide professional written translation, simultaneous and consecutive interpretation, language classes, and full-scale conference logistics including equipment rental."
+            q: language === 'en' ? "1. What core language services does Inspire Translations provide?" : "1. Je, ni huduma gani kuu za lugha ambazo Inspire Translations hutoa?",
+            a: language === 'en' ? "We provide professional written translation, simultaneous and consecutive interpretation, language classes, and full-scale conference logistics including equipment rental." : "Tunatoa tafsiri ya kitaalamu ya maandishi, ukalimani wa papo hapo na mfululizo, madarasa ya lugha, na uratibu kamili wa mikutano ikijumuisha kukodisha vifaa."
         },
         {
-            q: "2. How do you ensure the accuracy of sensitive documents?",
-            a: "We work with certified linguists and subject-matter experts who understand the legal, medical, and technical nuances of both the source and target languages."
+            q: language === 'en' ? "2. How do you ensure the accuracy of sensitive documents?" : "2. Je, mnahakikishaje usahihi wa nyaraka nyeti?",
+            a: language === 'en' ? "We work with certified linguists and subject-matter experts who understand the legal, medical, and technical nuances of both the source and target languages." : "Tunafanya kazi na wanaisimu walioidhinishwa na wataalamu wa nyanja husika wanaoelewa nuances za kisheria, matibabu, na kiufundi za lugha asilia na lugha lengwa."
         },
         {
-            q: "3. Do you offer remote interpretation for virtual events?",
-            a: "Yes, we specialize in Remote Simultaneous Interpretation (RSI), allowing your international meetings to run seamlessly across different time zones and platforms."
+            q: language === 'en' ? "3. Do you offer remote interpretation for virtual events?" : "3. Je, mnatoa ukalimani wa masafa kwa hafla za mtandaoni?",
+            a: language === 'en' ? "Yes, we specialize in Remote Simultaneous Interpretation (RSI), allowing your international meetings to run seamlessly across different time zones and platforms." : "Ndiyo, tunabobea katika Ukalimani wa Papo hapo wa Masafa (RSI), tukiruhusu mikutano yako ya kimataifa kuendeshwa bila mshono katika kanda za muda na majukwaa tofauti."
         },
         {
-            q: "4. How can my organization partner with you?",
-            a: "You can reach out through our contact page to set up a consultation. We offer dedicated account management for long-term partners and large-scale projects."
+            q: language === 'en' ? "4. How can my organization partner with you?" : "4. Je, shirika langu linawezaje kushirikiana nanyi?",
+            a: language === 'en' ? "You can reach out through our contact page to set up a consultation. We offer dedicated account management for long-term partners and large-scale projects." : "Unaweza kuwasiliana nasi kupitia ukurasa wetu wa mawasiliano ili kupanga ushauri. Tunatoa usimamizi maalum wa akaunti kwa washirika wa muda mrefu na miradi mikubwa."
         },
         {
-            q: "5. Why is cultural sensitivity so important in your work?",
-            a: "Translation is more than just words; it's about context. We ensure that idioms, cultural norms, and professional etiquette are preserved so your message resonates correctly."
+            q: language === 'en' ? "5. Why is cultural sensitivity so important in your work?" : "5. Kwa nini unyeti wa kitamaduni ni muhimu sana katika kazi yenu?",
+            a: language === 'en' ? "Translation is more than just words; it's about context. We ensure that idioms, cultural norms, and professional etiquette are preserved so your message resonates correctly." : "Tafsiri ni zaidi ya maneno tu; ni kuhusu muktadha. Tunahakikisha kuwa misemo, kanuni za kitamaduni, na adabu za kitaalamu zinahifadhiwa ili ujumbe wako upate mwitikio sahihi."
         }
     ];
 
@@ -1426,7 +1427,7 @@ const FAQSection = () => {
                 <Box sx={{
                     display: 'grid',
                     gridTemplateColumns: { xs: '1fr', md: 'repeat(12, 1fr)' },
-                    gap: { xs: 8, md: 10 }
+                    gap: { xs: 6, md: 10 }
                 }}>
                     {/* Left side: FAQ Content (7 Columns) */}
                     <Box sx={{ gridColumn: { md: 'span 7' } }}>
@@ -1453,19 +1454,20 @@ const FAQSection = () => {
                                         transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                                     }}>
                                         <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                                            Quick answers to help you understand our work
+                                            {ui.quickAnswers}
                                         </Typography>
                                     </Box>
                                 </Box>
 
                                 <TypewriterText
-                                    text="Frequently Asked Questions."
+                                    key={`faq-title-${language}`}
+                                    text={ui.faqTitle}
                                     variant="h2"
                                     sx={{
                                         fontFamily: '"Inknut Antiqua", serif',
                                         color: '#0D2B14',
                                         fontWeight: 800,
-                                        fontSize: { xs: '2rem', md: '2.8rem' },
+                                        fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.8rem' },
                                         mb: 4,
                                         lineHeight: 1.2
                                     }}
@@ -1479,7 +1481,7 @@ const FAQSection = () => {
                                     maxWidth: '600px',
                                     mb: 2
                                 }}>
-                                    People often have questions when learning about our work, especially because we focus on bringing precision and cultural depth to every communication. These short answers will help you understand our process, our values, and how we ensure your message is heard across every language line.
+                                    {ui.faqDesc}
                                 </Typography>
                             </Box>
 
@@ -1498,18 +1500,18 @@ const FAQSection = () => {
                                     >
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon sx={{ color: '#F7A11A', fontSize: 28 }} />}
-                                            sx={{ px: 4, py: 1.5 }}
+                                            sx={{ px: { xs: 2, sm: 4 }, py: 1.5 }}
                                         >
                                             <Typography sx={{
                                                 fontFamily: 'Outfit',
                                                 fontWeight: 700,
                                                 color: '#FFFFFF !important',
-                                                fontSize: '1.15rem'
+                                                fontSize: { xs: '1rem', md: '1.15rem' }
                                             }}>
                                                 {faq.q}
                                             </Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails sx={{ px: 4, pb: 4, bgcolor: '#FFFFFF', border: '1px solid #1A5C2A', borderTop: 'none', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px' }}>
+                                        <AccordionDetails sx={{ px: { xs: 2, sm: 4 }, pb: 4, bgcolor: '#FFFFFF', border: '1px solid #1A5C2A', borderTop: 'none', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px' }}>
                                             <Typography sx={{
                                                 fontFamily: 'Inter',
                                                 color: '#1A5C2A',
@@ -1526,7 +1528,7 @@ const FAQSection = () => {
                         </FadeInUp>
                     </Box>
 
-                    {/* Right side: Unified CTA Box (5 Columns) */}
+                    {/* Right side: Unified CTA Box */}
                     <Box sx={{ gridColumn: { md: 'span 5' } }}>
                         <FadeInUp delay={0.2}>
                             <Box sx={{
@@ -1537,7 +1539,6 @@ const FAQSection = () => {
                                 boxShadow: '0 30px 60px rgba(0,0,0,0.08)',
                                 border: '1px solid #EEEEEE'
                             }}>
-                                {/* Upper part: Photo - Edge to Edge */}
                                 <Box sx={{
                                     bgcolor: '#FBFBFB',
                                     borderBottom: '1px solid #EEEEEE',
@@ -1549,16 +1550,15 @@ const FAQSection = () => {
                                         alt="Customer Care"
                                         sx={{
                                             width: '100%',
-                                            height: { xs: 350, md: 450 },
+                                            height: { xs: 300, sm: 350, md: 450 },
                                             objectFit: 'cover',
                                             display: 'block'
                                         }}
                                     />
                                 </Box>
 
-                                {/* Lower part: CTA (Yellow) */}
                                 <Box sx={{
-                                    p: { xs: 4, md: 5 },
+                                    p: { xs: 3, sm: 4, md: 5 },
                                     bgcolor: '#F7A11A',
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -1568,11 +1568,11 @@ const FAQSection = () => {
                                         fontFamily: '"Inknut Antiqua", serif',
                                         fontWeight: 700,
                                         color: '#0D2B14',
-                                        fontSize: '1.5rem',
+                                        fontSize: { xs: '1.2rem', md: '1.5rem' },
                                         mb: 2,
                                         lineHeight: 1.3
                                     }}>
-                                        Have more questions?
+                                        {ui.haveMoreQuestions}
                                     </Typography>
                                     <Typography sx={{
                                         fontFamily: '"Inknut Antiqua", serif',
@@ -1582,10 +1582,9 @@ const FAQSection = () => {
                                         mb: 5,
                                         fontWeight: 400
                                     }}>
-                                        Please Contact us for more answers and deeper details about our pilot projects.
+                                        {ui.contactUsDesc}
                                     </Typography>
 
-                                    {/* Bold Dark Green Button Style consistent with site */}
                                     <Box
                                         component={motion(RouterLink)}
                                         whileHover="hover"
@@ -1623,7 +1622,7 @@ const FAQSection = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            Contact Us
+                                            {ui.contactUs}
                                         </Typography>
                                         <Box
                                             className="pill-arrow-w"
@@ -1666,17 +1665,19 @@ const FAQSection = () => {
 // ---- CTA SECTION ----
 const CTASection = () => {
     const { ref: sectionRef, inView } = useInView({ triggerOnce: false, threshold: 0.3 });
+    const { language } = useLanguage();
+    const ui = uiTranslations[language];
 
     return (
-        <Box sx={{ py: { xs: 10, md: 15 }, bgcolor: '#FFFFFF' }}>
+        <Box sx={{ py: { xs: 8, md: 15 }, bgcolor: '#FFFFFF' }}>
             <Container maxWidth="lg">
                 <Box sx={{
                     display: 'grid',
                     gridTemplateColumns: { xs: '1fr', md: 'repeat(12, 1fr)' },
-                    gap: { xs: 6, md: 8 },
+                    gap: { xs: 4, md: 8 },
                     alignItems: 'stretch'
                 }}>
-                    {/* Left side: Photo (5 Columns) */}
+                    {/* Left side: Photo */}
                     <Box sx={{ gridColumn: { md: 'span 5' } }}>
                         <FadeInUp style={{ height: '100%' }}>
                             <Box
@@ -1686,7 +1687,7 @@ const CTASection = () => {
                                 sx={{
                                     width: '100%',
                                     height: '100%',
-                                    maxHeight: { xs: 400, md: 'none' },
+                                    maxHeight: { xs: 300, sm: 400, md: 'none' },
                                     objectFit: 'cover',
                                     display: 'block'
                                 }}
@@ -1694,26 +1695,23 @@ const CTASection = () => {
                         </FadeInUp>
                     </Box>
 
-                    {/* Right side: Content (7 Columns) */}
+                    {/* Right side: Content */}
                     <Box sx={{
                         gridColumn: { md: 'span 7' },
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
-                        p: { xs: 6, md: 10 },
+                        p: { xs: 4, sm: 6, md: 10 },
                         bgcolor: '#1A5C2A',
                         color: '#FFFFFF'
                     }}>
                         <FadeInUp delay={0.1}>
-                            {/* Horizontal Subtitle */}
                             <Box ref={sectionRef} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2, overflow: 'hidden' }}>
-                                {/* Expanding line */}
                                 <Box sx={{
                                     height: 2, bgcolor: '#F7A11A',
                                     width: inView ? 32 : 0,
                                     transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
                                 }} />
-                                {/* Arrow icon slides + bounces in */}
                                 <Box sx={{
                                     display: 'flex', alignItems: 'center',
                                     transform: inView ? 'translateX(0) scale(1)' : 'translateX(-20px) scale(0.6)',
@@ -1722,14 +1720,13 @@ const CTASection = () => {
                                 }}>
                                     <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
                                 </Box>
-                                {/* Label fades up */}
                                 <Box sx={{
                                     transform: inView ? 'translateY(0)' : 'translateY(8px)',
                                     opacity: inView ? 1 : 0,
                                     transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                                 }}>
                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                                        Join Our Growing Community
+                                        {ui.joinCommunity}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -1738,11 +1735,11 @@ const CTASection = () => {
                                 fontFamily: '"Inknut Antiqua", serif',
                                 fontWeight: 700,
                                 color: '#FFFFFF',
-                                fontSize: { xs: '2rem', md: '2.8rem' },
+                                fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.8rem' },
                                 mb: 3,
                                 lineHeight: 1.15
                             }}>
-                                Stay Connected With Our Work!
+                                {ui.stayConnected}
                             </Typography>
                             <Box sx={{ width: 60, height: 4, bgcolor: '#F7A11A', mb: 4 }} />
                             <Typography sx={{
@@ -1754,10 +1751,9 @@ const CTASection = () => {
                                 mb: 6,
                                 maxWidth: '95%'
                             }}>
-                                We believe in openness and connection. Get monthly updates, community stories, and progress reports directly in your inbox, and see how our translation work creates real impact across Tanzania.
+                                {ui.stayConnectedDesc}
                             </Typography>
 
-                            {/* Request Demo Button - White Background for Contrast on Green */}
                             <Box
                                 component={motion.a}
                                 whileHover="hover"
@@ -1767,15 +1763,13 @@ const CTASection = () => {
                                 sx={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    bgcolor: '#FFFFFF',
+                                    border: '2px solid #F7A11A',
                                     borderRadius: 50,
                                     overflow: 'hidden',
                                     textDecoration: 'none',
                                     transition: 'all 0.3s ease',
-                                    border: '2px solid #FFFFFF',
                                     '&:hover': {
-                                        bgcolor: '#F7A11A',
-                                        borderColor: '#F7A11A'
+                                        bgcolor: 'rgba(247, 161, 26, 0.04)'
                                     }
                                 }}
                             >
@@ -1787,7 +1781,7 @@ const CTASection = () => {
                                     }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                     sx={{
-                                        color: '#1A5C2A',
+                                        color: '#F7A11A',
                                         fontFamily: '"Inknut Antiqua", serif',
                                         fontWeight: 700,
                                         fontSize: '0.85rem',
@@ -1796,7 +1790,7 @@ const CTASection = () => {
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
-                                    Request Demo
+                                    {ui.requestDemo}
                                 </Typography>
                                 <Box
                                     className="pill-arrow-w"
@@ -1809,7 +1803,7 @@ const CTASection = () => {
                                         width: 56,
                                         height: 56,
                                         flexShrink: 0,
-                                        bgcolor: 'rgba(26, 92, 42, 0.1)',
+                                        bgcolor: '#F7A11A',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center'
@@ -1835,25 +1829,24 @@ const CTASection = () => {
 };
 
 // ---- HOME PAGE ----
-const HomePage = () => (
-    <>
-        <SEOHead
-            title="Inspire Translations | Professional Translation & Interpretation Services Tanzania"
-            description="Tanzania's premier language services company. Expert translation, interpretation, language classes, and conference logistics. Serving East Africa and beyond."
-            canonicalUrl="https://inspiretranslations.co.tz"
-            keywords="translation services Tanzania, interpretation Dar es Salaam, language services East Africa, conference interpretation Tanzania"
-        />
-        <HeroSection />
-        <PurposeWhiteSection />
-        <WhatWeDoSection />
-        <WhatWeOfferSection />
+const HomePage = () => {
+    const { language } = useLanguage();
+    
+    return (
+        <>
+            <SEOHead />
+            <HeroSection />
+            <PurposeWhiteSection />
+            <WhatWeDoSection />
+            <WhatWeOfferSection />
 
-        <ClientsSection />
-        <TestimonialsSection />
-        <BlogSection />
-        <FAQSection />
-        <CTASection />
-    </>
-);
+            <ClientsSection />
+            <TestimonialsSection />
+            <BlogSection />
+            <FAQSection />
+            <CTASection />
+        </>
+    );
+};
 
 export default HomePage;

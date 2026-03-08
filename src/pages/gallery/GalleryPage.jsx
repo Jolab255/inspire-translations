@@ -8,51 +8,71 @@ import { useState } from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import SEOHead from '../../components/seo/SEOHead';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { uiTranslations } from '../../data/translations/ui';
 
-// Gallery items (gradient placeholders)
-const galleryItems = [
-    { id: 1, title: 'UN Conference Interpretation', category: 'Conference', h: 240, bg: 'linear-gradient(135deg, #F7A11A, #D4880E)', emoji: '🎙️' },
-    { id: 2, title: 'Corporate Language Training', category: 'Training', h: 180, bg: 'linear-gradient(135deg, #1A5C2A, #2A7A3B)', emoji: '📚' },
-    { id: 3, title: 'Interpretation Booth Setup', category: 'Equipment', h: 280, bg: 'linear-gradient(135deg, #0D1B2A, #2A4A60)', emoji: '🎧' },
-    { id: 4, title: 'Team at ARSO Conference', category: 'Events', h: 200, bg: 'linear-gradient(135deg, #D4880E, #F7A11A)', emoji: '🏛️' },
-    { id: 5, title: 'Document Translation Project', category: 'Translation', h: 260, bg: 'linear-gradient(135deg, #1A2E40, #0F3A1A)', emoji: '📄' },
-    { id: 6, title: 'Remote Interpretation Setup', category: 'Remote', h: 180, bg: 'linear-gradient(135deg, #F7A11A, #1A5C2A)', emoji: '💻' },
-    { id: 7, title: 'GIZ Tanzania Partnership', category: 'Events', h: 220, bg: 'linear-gradient(135deg, #2A7A3B, #F7A11A)', emoji: '🤝' },
-    { id: 8, title: 'Legal Translation Team', category: 'Translation', h: 200, bg: 'linear-gradient(135deg, #0F3A1A, #D4880E)', emoji: '⚖️' },
-    { id: 9, title: 'Language Class Session', category: 'Training', h: 270, bg: 'linear-gradient(135deg, #D4880E, #1A5C2A)', emoji: '🌍' },
+const galleryItemsData = [
+    { id: 1, title: { en: 'UN Conference Interpretation', sw: 'Ukalimani wa Mkutano wa UN' }, category: { en: 'Conference', sw: 'Mkutano' }, h: 240, bg: 'linear-gradient(135deg, #F7A11A, #D4880E)', emoji: '🎙️' },
+    { id: 2, title: { en: 'Corporate Language Training', sw: 'Mafunzo ya Lugha ya Kampuni' }, category: { en: 'Training', sw: 'Mafunzo' }, h: 180, bg: 'linear-gradient(135deg, #1A5C2A, #2A7A3B)', emoji: '📚' },
+    { id: 3, title: { en: 'Interpretation Booth Setup', sw: 'Ufungaji wa Vibanda vya Ukalimani' }, category: { en: 'Equipment', sw: 'Vifaa' }, h: 280, bg: 'linear-gradient(135deg, #0D1B2A, #2A4A60)', emoji: '🎧' },
+    { id: 4, title: { en: 'Team at ARSO Conference', sw: 'Timu katika Mkutano wa ARSO' }, category: { en: 'Events', sw: 'Hafla' }, h: 200, bg: 'linear-gradient(135deg, #D4880E, #F7A11A)', emoji: '🏛️' },
+    { id: 5, title: { en: 'Document Translation Project', sw: 'Mradi wa Tafsiri ya Nyaraka' }, category: { en: 'Translation', sw: 'Tafsiri' }, h: 260, bg: 'linear-gradient(135deg, #1A2E40, #0F3A1A)', emoji: '📄' },
+    { id: 6, title: { en: 'Remote Interpretation Setup', sw: 'Maandalizi ya Ukalimani wa Masafa' }, category: { en: 'Remote', sw: 'Masafa' }, h: 180, bg: 'linear-gradient(135deg, #F7A11A, #1A5C2A)', emoji: '💻' },
+    { id: 7, title: { en: 'GIZ Tanzania Partnership', sw: 'Ushirikiano na GIZ Tanzania' }, category: { en: 'Events', sw: 'Hafla' }, h: 220, bg: 'linear-gradient(135deg, #2A7A3B, #F7A11A)', emoji: '🤝' },
+    { id: 8, title: { en: 'Legal Translation Team', sw: 'Timu ya Tafsiri ya Kisheria' }, category: { en: 'Translation', sw: 'Tafsiri' }, h: 200, bg: 'linear-gradient(135deg, #0F3A1A, #D4880E)', emoji: '⚖️' },
+    { id: 9, title: { en: 'Language Class Session', sw: 'Kipindi cha Darasa la Lugha' }, category: { en: 'Training', sw: 'Mafunzo' }, h: 270, bg: 'linear-gradient(135deg, #D4880E, #1A5C2A)', emoji: '🌍' },
 ];
 
 const GalleryPage = () => {
+    const { language, t } = useLanguage();
+    const ui = uiTranslations[language];
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const [filter, setFilter] = useState('All');
 
-    const categories = ['All', ...new Set(galleryItems.map((g) => g.category))];
-    const filtered = filter === 'All' ? galleryItems : galleryItems.filter((g) => g.category === filter);
+    const content = {
+        en: {
+            heroLabel: "Gallery",
+            heroTitle: <>Our <Box component="span" sx={{ color: '#F7A11A' }}>Gallery</Box></>,
+            heroDesc: "A visual journey through our events, conferences, and team activities.",
+            all: "All"
+        },
+        sw: {
+            heroLabel: "Picha",
+            heroTitle: <>Maktaba ya <Box component="span" sx={{ color: '#F7A11A' }}>Picha</Box></>,
+            heroDesc: "Safari ya picha kupitia hafla zetu, mikutano, na shughuli za timu.",
+            all: "Zote"
+        }
+    };
+
+    const c = content[language];
+
+    const categories = [c.all, ...new Set(galleryItemsData.map((g) => t(g.category)))];
+    const filtered = filter === c.all ? galleryItemsData : galleryItemsData.filter((g) => t(g.category) === filter);
 
     return (
         <>
             <SEOHead
-                title="Gallery | Inspire Translations Tanzania"
-                description="Browse photos from Inspire Translations events, conferences, training sessions, and team activities."
-                canonicalUrl="https://inspiretranslations.co.tz/gallery"
+                title={language === 'en' ? "Gallery | Inspire Translations Tanzania" : "Picha | Inspire Translations Tanzania"}
+                description={c.heroDesc}
             />
+            {/* Hero */}
             <Box sx={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #1A2E40 60%, #0F3A1A 100%)', py: { xs: 10, md: 13 }, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                 {[...Array(5)].map((_, i) => <Box key={i} sx={{ position: 'absolute', width: 3, height: 3, borderRadius: '50%', bgcolor: 'rgba(247,161,26,0.4)', top: `${15 + i * 15}%`, left: `${8 + i * 18}%`, animation: `float ${3 + i}s ease-in-out infinite`, animationDelay: `${i * 0.4}s` }} />)}
                 <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
                     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-                        <Chip label="Gallery" sx={{ bgcolor: 'rgba(247,161,26,0.15)', color: '#F7A11A', border: '1px solid rgba(247,161,26,0.3)', fontFamily: 'Outfit', fontWeight: 600, mb: 3 }} />
-                        <Typography variant="h1" sx={{ color: '#FFFFFF', fontWeight: 900, mb: 3 }}>
-                            Our <Box component="span" sx={{ color: '#F7A11A' }}>Gallery</Box>
+                        <Chip label={c.heroLabel} sx={{ bgcolor: 'rgba(247,161,26,0.15)', color: '#F7A11A', border: '1px solid rgba(247,161,26,0.3)', fontFamily: 'Outfit', fontWeight: 600, mb: 3 }} />
+                        <Typography variant="h1" sx={{ color: '#FFFFFF', fontWeight: 900, mb: 3, fontSize: { xs: '2.2rem', sm: '3rem', md: '4rem' } }}>
+                            {c.heroTitle}
                         </Typography>
-                        <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', lineHeight: 1.8 }}>
-                            A visual journey through our events, conferences, and team activities.
+                        <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: { xs: '1rem', md: '1.1rem' }, lineHeight: 1.8 }}>
+                            {c.heroDesc}
                         </Typography>
                     </motion.div>
                 </Container>
             </Box>
 
-            <Box sx={{ py: 10, bgcolor: '#F8F9FA' }}>
+            <Box sx={{ py: { xs: 8, md: 10 }, bgcolor: '#F8F9FA' }}>
                 <Container maxWidth="lg">
                     {/* Filter chips */}
                     <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', justifyContent: 'center', mb: 6 }}>
@@ -88,7 +108,7 @@ const GalleryPage = () => {
                                     <Box
                                         onClick={() => { setIndex(i); setOpen(true); }}
                                         sx={{
-                                            height: item.h,
+                                            height: { xs: 200, sm: item.h },
                                             background: item.bg,
                                             borderRadius: 3,
                                             cursor: 'pointer',
@@ -104,8 +124,8 @@ const GalleryPage = () => {
                                     >
                                         <Typography sx={{ fontSize: '3rem', mb: 1 }}>{item.emoji}</Typography>
                                         <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, p: 2, background: 'linear-gradient(0deg, rgba(0,0,0,0.6), transparent)' }}>
-                                            <Chip label={item.category} size="small" sx={{ bgcolor: 'rgba(247,161,26,0.85)', color: '#fff', fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.65rem', mb: 0.5 }} />
-                                            <Typography sx={{ color: '#fff', fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.85rem' }}>{item.title}</Typography>
+                                            <Chip label={t(item.category)} size="small" sx={{ bgcolor: 'rgba(247,161,26,0.85)', color: '#fff', fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.65rem', mb: 0.5 }} />
+                                            <Typography sx={{ color: '#fff', fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.85rem' }}>{t(item.title)}</Typography>
                                         </Box>
                                     </Box>
                                 </motion.div>
@@ -117,7 +137,7 @@ const GalleryPage = () => {
                         open={open}
                         close={() => setOpen(false)}
                         index={index}
-                        slides={filtered.map((item) => ({ src: `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><text x="50%" y="50%" text-anchor="middle" font-size="80">${encodeURIComponent(item.emoji)}</text></svg>`, alt: item.title }))}
+                        slides={filtered.map((item) => ({ src: `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="black" /><text x="50%" y="50%" text-anchor="middle" font-size="80" fill="white">${encodeURIComponent(item.emoji)}</text></svg>`, alt: t(item.title) }))}
                     />
                 </Container>
             </Box>
