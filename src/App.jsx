@@ -31,38 +31,27 @@ const RouteTransition = ({ children }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayLocation, setDisplayLocation] = useState(location);
 
-  // Use an effect that responds immediately to location changes
   useEffect(() => {
     if (location.pathname !== displayLocation.pathname) {
-      // Start transitioning immediately
       setIsTransitioning(true);
-
-      // Update the actual content after a short delay to allow skeleton to be seen
       const timer = setTimeout(() => {
         setDisplayLocation(location);
         setIsTransitioning(false);
         window.scrollTo(0, 0);
-      }, 500); 
-
+      }, 500);
       return () => clearTimeout(timer);
     }
-  }, [location.pathname, displayLocation.pathname]);
+  }, [location.pathname, displayLocation.pathname, location]);
 
   return (
     <>
-      {/* Show skeleton loader immediately when transitioning */}
       {isTransitioning && <PageSkeleton />}
-
-      {/* Instantly hide the old/new content while the skeleton is active */}
-      <Box sx={{ 
-        display: isTransitioning ? 'none' : 'block'
-      }}>
+      <Box sx={{ display: isTransitioning ? 'none' : 'block' }}>
         {children}
       </Box>
     </>
   );
 };
-
 
 // Language Redirect Handler
 const LangRedirect = () => {
@@ -75,14 +64,12 @@ const LangWrapper = ({ children }) => {
   const { lang } = useParams();
   const { language, setLanguage } = useLanguage();
 
-  // Sync language context with URL parameter
   useEffect(() => {
     if (lang && (lang === 'en' || lang === 'sw') && lang !== language) {
       setLanguage(lang);
     }
   }, [lang, language, setLanguage]);
 
-  // If the lang in URL is invalid, redirect to 404 or default
   if (lang !== 'en' && lang !== 'sw') {
     return <Navigate to="/en/404" replace />;
   }
@@ -96,7 +83,6 @@ const LangWrapper = ({ children }) => {
 
 const App = () => {
   useEffect(() => {
-    // Remove the initial loader from index.html if it exists
     const loader = document.getElementById('initial-loader');
     if (loader) {
       loader.style.opacity = '0';
@@ -119,13 +105,8 @@ const App = () => {
           <RouteTransition>
             <main>
               <Routes>
-                {/* Root redirect */}
                 <Route path="/" element={<LangRedirect />} />
-
-                {/* Admin Bypass - No Language Wrapper */}
                 <Route path="/admin" element={null} />
-                
-                {/* Language Routes */}
                 <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
                 <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
                 <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
@@ -138,8 +119,6 @@ const App = () => {
                 <Route path="/:lang/quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
                 <Route path="/:lang/privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
                 <Route path="/:lang/terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
-                
-                {/* 404 Routes */}
                 <Route path="/:lang/*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
                 <Route path="*" element={<Navigate to="/en/404" replace />} />
               </Routes>
