@@ -22,24 +22,23 @@ export const getAllPosts = (lang = 'en') => {
     const posts = [];
     
     for (const path in modules) {
-        // Only process files matching the requested language
-        if (path.endsWith(`.${lang}.md`)) {
+        const filename = path.split('/').pop();
+        // Check if file matches the language pattern: name.lang.md
+        if (filename.endsWith(`.${lang}.md`)) {
             const rawContent = modules[path];
             const { data } = parseMarkdown(rawContent);
+            const slug = filename.replace(`.${lang}.md`, '');
             
-            if (data.slug) {
-                posts.push({
-                    ...data,
-                    id: data.slug,
-                });
-            }
+            posts.push({
+                ...data,
+                id: slug,
+                slug: slug
+            });
         }
     }
     
     // Sort by date descending
-    const sortedPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    return sortedPosts;
+    return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 };
 
 export const getPostBySlug = (slug, lang = 'en') => {

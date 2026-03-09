@@ -15,34 +15,15 @@ import { uiTranslations } from '../../data/translations/ui';
 import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/common/Animations';
 import CTASection from '../../components/common/CTASection';
 
-// Real Gallery Assets
-import imgARSO from '../../assets/images/ARSO_TC 67 & TC 68 meetings.png';
-import imgCities from '../../assets/images/Cities and Safe Public Spaces Global Leaders’ Forum .png';
-import imgLawEnforcement from '../../assets/images/Large-scale law enforcers training.png';
-import imgFoodSafety from '../../assets/images/SCapacity Building for Food Safety Laboratories in West Africa Official Launch of the FAO-AOAC Project in Dakar.png';
-import imgBorderGov from '../../assets/images/ScreRegional Technical Working Group Meeting on Border Governance and Implementation of the 12th JSC Decisions on Borders in the EAC.png';
-import imgBlueprint from '../../assets/images/ScrThe launch of the Preparation of the Second Blueprint for improving the business and investment environment President’s Office Planning and Investment.png';
-import imgSADC from '../../assets/images/Tanzania Stakeholder Consultations on SADC RAIP 2017-2022 Shadow Report.png';
-import imgAEEP from '../../assets/images/The AEEP-AEF High-Level Policymaker Evening Meeting.png';
-import imgAUDA from '../../assets/images/The AUDA NEPAD Afternoon Partner Meeting Workshops on CMP Phase 3.png';
-import imgYouthLand from '../../assets/images/The Fourth International Conference on Youth and Land Governance in Africa.png';
-import imgWomenTrans from '../../assets/images/Women in Transportation Sector Conference.png';
-import imgLogistics from '../../assets/images/conference_logistics.png';
+import galleryData from '../../content/gallery.json';
 
-const galleryItemsData = [
-    { id: 1, src: imgARSO, title: { en: 'ARSO TC 67 & TC 68 Meetings', sw: 'Mikutano ya ARSO TC 67 & TC 68' }, category: { en: 'Conference', sw: 'Mkutano' }, span: 1 },
-    { id: 2, src: imgCities, title: { en: 'Global Leaders’ Forum', sw: 'Jukwaa la Viongozi wa Kimataifa' }, category: { en: 'Forum', sw: 'Jukwaa' }, span: 2 },
-    { id: 3, src: imgLawEnforcement, title: { en: 'Law Enforcers Training', sw: 'Mafunzo ya Wasimamizi wa Sheria' }, category: { en: 'Training', sw: 'Mafunzo' }, span: 1 },
-    { id: 4, src: imgFoodSafety, title: { en: 'FAO-AOAC Project Launch', sw: 'Uzinduzi wa Mradi wa FAO-AOAC' }, category: { en: 'Project', sw: 'Mradi' }, span: 1 },
-    { id: 5, src: imgBorderGov, title: { en: 'Border Governance Meeting', sw: 'Mkutano wa Utawala wa Mipakani' }, category: { en: 'Governance', sw: 'Utawala' }, span: 1 },
-    { id: 6, src: imgBlueprint, title: { en: 'Business Environment Blueprint', sw: 'Mpango wa Mazingira ya Biashara' }, category: { en: 'Events', sw: 'Hafla' }, span: 1 },
-    { id: 7, src: imgSADC, title: { en: 'SADC RAIP Consultations', sw: 'Mashauriano ya SADC RAIP' }, category: { en: 'Conference', sw: 'Mkutano' }, span: 1 },
-    { id: 8, src: imgAEEP, title: { en: 'High-Level Policymaker Meeting', sw: 'Mkutano wa Watunga Sera wa Ngazi ya Juu' }, category: { en: 'Forum', sw: 'Jukwaa' }, span: 1 },
-    { id: 9, src: imgAUDA, title: { en: 'AUDA NEPAD Workshops', sw: 'Warsha za AUDA NEPAD' }, category: { en: 'Training', sw: 'Mafunzo' }, span: 2 },
-    { id: 10, src: imgYouthLand, title: { en: 'Conference on Youth & Land', sw: 'Mkutano wa Vijana na Ardhi' }, category: { en: 'Conference', sw: 'Mkutano' }, span: 1 },
-    { id: 11, src: imgWomenTrans, title: { en: 'Women in Transportation', sw: 'Wanawake katika Sekta ya Usafirishaji' }, category: { en: 'Events', sw: 'Hafla' }, span: 1 },
-    { id: 12, src: imgLogistics, title: { en: 'Regional Logistics Summit', sw: 'Mkutano wa Vifaa wa Kikanda' }, category: { en: 'Project', sw: 'Mradi' }, span: 1 },
-];
+const galleryItemsData = galleryData.items.map(item => ({
+    ...item,
+    title: { en: item.title_en, sw: item.title_sw },
+    category: { en: item.category_en, sw: item.category_sw },
+    src: item.src // These now point to /assets/images/...
+}));
+
 
 const GalleryItem = ({ item, t, onClick, delay }) => {
     return (

@@ -23,18 +23,6 @@ import { uiTranslations } from '../../data/translations/ui';
 import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/common/Animations';
 import CTASection from '../../components/common/CTASection';
 
-// Dynamic Asset Resolution for Markdown Images
-const allImages = import.meta.glob('../../assets/images/*.{png,jpg,jpeg,svg,webp}', { eager: true, import: 'default' });
-
-const COLORS = {
-    primary: '#1A5C2A',
-    secondary: '#0D2B14',
-    accent: '#F7A11A',
-    text: '#1A1A2E',
-    textMuted: '#4A4A6A',
-    bgSoft: '#FBFBFB'
-};
-
 const BlogPostPage = () => {
     const { slug } = useParams();
     const { language } = useLanguage();
@@ -43,14 +31,8 @@ const BlogPostPage = () => {
     
     const post = getPostBySlug(slug, language);
 
-    // Resolve post image from dynamic imports
-    const postImage = useMemo(() => {
-        if (!post || !post.image) return null;
-        // The markdown path is like "../../assets/images/remote_interpretation.png"
-        // We need to match it against the keys in allImages
-        const imageKey = Object.keys(allImages).find(key => key.includes(post.image.split('/').pop()));
-        return imageKey ? allImages[imageKey] : null;
-    }, [post]);
+    // Resolve post image - directly use string path from CMS or static public path
+    const postImage = post?.image || '';
 
     if (!post) return <Navigate to={`/${language}/blog`} replace />;
 

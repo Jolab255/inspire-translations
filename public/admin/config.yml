@@ -1,0 +1,52 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}.{{lang}}"
+    fields:
+      - { label: "Language", name: "lang", widget: "select", options: ["en", "sw"] }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "projects"
+    label: "Projects"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Type", name: "type", widget: "select", options: ["interpretation", "translation"] }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Client", name: "client", widget: "string" }
+      - { label: "Location", name: "place", widget: "string" }
+      - { label: "Year", name: "year", widget: "string" }
+      - { label: "Short Description", name: "desc", widget: "text" }
+      - { label: "Full Description", name: "fullDesc", widget: "text" }
+      - { label: "Project Image", name: "img", widget: "image" }
+
+  - name: "gallery"
+    label: "Gallery"
+    files:
+      - label: "Gallery Items"
+        name: "gallery_items"
+        file: "src/content/gallery.json"
+        fields:
+          - name: "items"
+            label: "Images"
+            widget: "list"
+            fields:
+              - { label: "English Title", name: "title_en", widget: "string" }
+              - { label: "Swahili Title", name: "title_sw", widget: "string" }
+              - { label: "English Category", name: "category_en", widget: "string" }
+              - { label: "Swahili Category", name: "category_sw", widget: "string" }
+              - { label: "Image", name: "src", widget: "image" }

@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "src": "/assets/images/ARSO_TC 67 & TC 68 meetings.png",
+      "title_en": "ARSO TC 67 & TC 68 Meetings",
+      "title_sw": "Mikutano ya ARSO TC 67 & TC 68",
+      "category_en": "Conference",
+      "category_sw": "Mkutano"
+    },
+    {
+      "id": 2,
+      "src": "/assets/images/Cities and Safe Public Spaces Global Leaders’ Forum .png",
+      "title_en": "Global Leaders’ Forum",
+      "title_sw": "Jukwaa la Viongozi wa Kimataifa",
+      "category_en": "Forum",
+      "category_sw": "Jukwaa"
+    },
+    {
+      "id": 3,
+      "src": "/assets/images/Large-scale law enforcers training.png",
+      "title_en": "Law Enforcers Training",
+      "title_sw": "Mafunzo ya Wasimamizi wa Sheria",
+      "category_en": "Training",
+      "category_sw": "Mafunzo"
+    },
+    {
+      "id": 4,
+      "src": "/assets/images/SCapacity Building for Food Safety Laboratories in West Africa Official Launch of the FAO-AOAC Project in Dakar.png",
+      "title_en": "FAO-AOAC Project Launch",
+      "title_sw": "Uzinduzi wa Mradi wa FAO-AOAC",
+      "category_en": "Project",
+      "category_sw": "Mradi"
+    },
+    {
+      "id": 5,
+      "src": "/assets/images/ScreRegional Technical Working Group Meeting on Border Governance and Implementation of the 12th JSC Decisions on Borders in the EAC.png",
+      "title_en": "Border Governance Meeting",
+      "title_sw": "Mkutano wa Utawala wa Mipakani",
+      "category_en": "Governance",
+      "category_sw": "Utawala"
+    },
+    {
+      "id": 6,
+      "src": "/assets/images/ScrThe launch of the Preparation of the Second Blueprint for improving the business and investment environment President’s Office Planning and Investment.png",
+      "title_en": "Business Environment Blueprint",
+      "title_sw": "Mpango wa Mazingira ya Biashara",
+      "category_en": "Events",
+      "category_sw": "Hafla"
+    },
+    {
+      "id": 7,
+      "src": "/assets/images/Tanzania Stakeholder Consultations on SADC RAIP 2017-2022 Shadow Report.png",
+      "title_en": "SADC RAIP Consultations",
+      "title_sw": "Mashauriano ya SADC RAIP",
+      "category_en": "Conference",
+      "category_sw": "Mkutano"
+    },
+    {
+      "id": 8,
+      "src": "/assets/images/The AEEP-AEF High-Level Policymaker Evening Meeting.png",
+      "title_en": "High-Level Policymaker Meeting",
+      "title_sw": "Mkutano wa Watunga Sera wa Ngazi ya Juu",
+      "category_en": "Forum",
+      "category_sw": "Jukwaa"
+    },
+    {
+      "id": 9,
+      "src": "/assets/images/The AUDA NEPAD Afternoon Partner Meeting Workshops on CMP Phase 3.png",
+      "title_en": "AUDA NEPAD Workshops",
+      "title_sw": "Warsha za AUDA NEPAD",
+      "category_en": "Training",
+      "category_sw": "Mafunzo"
+    },
+    {
+      "id": 10,
+      "src": "/assets/images/The Fourth International Conference on Youth and Land Governance in Africa.png",
+      "title_en": "Conference on Youth & Land",
+      "title_sw": "Mkutano wa Vijana na Ardhi",
+      "category_en": "Conference",
+      "category_sw": "Mkutano"
+    },
+    {
+      "id": 11,
+      "src": "/assets/images/Women in Transportation Sector Conference.png",
+      "title_en": "Women in Transportation",
+      "title_sw": "Wanawake katika Sekta ya Usafirishaji",
+      "category_en": "Events",
+      "category_sw": "Hafla"
+    },
+    {
+      "id": 12,
+      "src": "/assets/images/conference_logistics.png",
+      "title_en": "Regional Logistics Summit",
+      "title_sw": "Mkutano wa Vifaa wa Kikanda",
+      "category_en": "Project",
+      "category_sw": "Mradi"
+    }
+  ]
+}
