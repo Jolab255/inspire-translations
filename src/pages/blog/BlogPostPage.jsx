@@ -23,6 +23,15 @@ import { uiTranslations } from '../../data/translations/ui';
 import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/common/Animations';
 import CTASection from '../../components/common/CTASection';
 
+const COLORS = {
+    primary: '#1A5C2A',
+    secondary: '#0D2B14',
+    accent: '#F7A11A',
+    text: '#1A1A2E',
+    textMuted: '#4A4A6A',
+    bgSoft: '#FBFBFB'
+};
+
 const BlogPostPage = () => {
     const { slug } = useParams();
     const { language } = useLanguage();
