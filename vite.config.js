@@ -11,9 +11,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-mui': ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
+          'vendor-core': ['react', 'react-dom', 'react-router-dom', '@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
           'vendor-framer': ['framer-motion'],
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-utils': ['swiper', 'yet-another-react-lightbox', 'react-markdown', 'js-yaml'],
         },
       },
