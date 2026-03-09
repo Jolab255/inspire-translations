@@ -31,34 +31,38 @@ const RouteTransition = ({ children }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayLocation, setDisplayLocation] = useState(location);
 
+  // Use an effect that responds immediately to location changes
   useEffect(() => {
     if (location.pathname !== displayLocation.pathname) {
+      // Start transitioning immediately
       setIsTransitioning(true);
-      
-      // Artificial delay to allow skeleton to be seen and assets to stay smooth
+
+      // Update the actual content after a short delay to allow skeleton to be seen
       const timer = setTimeout(() => {
         setDisplayLocation(location);
         setIsTransitioning(false);
         window.scrollTo(0, 0);
-      }, 400); // Matching a smooth transition time
+      }, 500); 
 
       return () => clearTimeout(timer);
     }
-  }, [location, displayLocation]);
+  }, [location.pathname, displayLocation.pathname]);
 
   return (
     <>
+      {/* Show skeleton loader immediately when transitioning */}
       {isTransitioning && <PageSkeleton />}
+
+      {/* Instantly hide the old/new content while the skeleton is active */}
       <Box sx={{ 
-        opacity: isTransitioning ? 0 : 1, 
-        transition: 'opacity 0.3s ease',
-        visibility: isTransitioning ? 'hidden' : 'visible' 
+        display: isTransitioning ? 'none' : 'block'
       }}>
         {children}
       </Box>
     </>
   );
 };
+
 
 // Language Redirect Handler
 const LangRedirect = () => {
@@ -84,17 +88,9 @@ const LangWrapper = ({ children }) => {
   }
 
   return (
-    <>
-      <Navbar />
-      <main>
-        <RouteTransition>
-          <Suspense fallback={<PageSkeleton />}>
-            {children}
-          </Suspense>
-        </RouteTransition>
-      </main>
-      <Footer />
-    </>
+    <Suspense fallback={<PageSkeleton />}>
+      {children}
+    </Suspense>
   );
 };
 
@@ -119,29 +115,37 @@ const App = () => {
       <BrowserRouter>
         <ScrollToTop />
         <LanguageProvider>
-          <Routes>
-            {/* Root redirect */}
-            <Route path="/" element={<LangRedirect />} />
+          <Navbar />
+          <RouteTransition>
+            <main>
+              <Routes>
+                {/* Root redirect */}
+                <Route path="/" element={<LangRedirect />} />
 
-            {/* Admin Bypass - No Language Wrapper */}
-            <Route path="/admin" element={null} />
-            <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
-            <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
-            <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
-            <Route path="/:lang/services/:slug" element={<LangWrapper><ServiceDetail /></LangWrapper>} />
-            <Route path="/:lang/projects" element={<LangWrapper><ProjectsPage /></LangWrapper>} />
-            <Route path="/:lang/gallery" element={<LangWrapper><GalleryPage /></LangWrapper>} />
-            <Route path="/:lang/blog" element={<LangWrapper><BlogPage /></LangWrapper>} />
-            <Route path="/:lang/blog/:slug" element={<LangWrapper><BlogPostPage /></LangWrapper>} />
-            <Route path="/:lang/contact" element={<LangWrapper><ContactPage /></LangWrapper>} />
-            <Route path="/:lang/quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
-            <Route path="/:lang/privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
-            <Route path="/:lang/terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
-            
-            {/* 404 Routes */}
-            <Route path="/:lang/*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
-            <Route path="*" element={<Navigate to="/en/404" replace />} />
-          </Routes>
+                {/* Admin Bypass - No Language Wrapper */}
+                <Route path="/admin" element={null} />
+                
+                {/* Language Routes */}
+                <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
+                <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
+                <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
+                <Route path="/:lang/services/:slug" element={<LangWrapper><ServiceDetail /></LangWrapper>} />
+                <Route path="/:lang/projects" element={<LangWrapper><ProjectsPage /></LangWrapper>} />
+                <Route path="/:lang/gallery" element={<LangWrapper><GalleryPage /></LangWrapper>} />
+                <Route path="/:lang/blog" element={<LangWrapper><BlogPage /></LangWrapper>} />
+                <Route path="/:lang/blog/:slug" element={<LangWrapper><BlogPostPage /></LangWrapper>} />
+                <Route path="/:lang/contact" element={<LangWrapper><ContactPage /></LangWrapper>} />
+                <Route path="/:lang/quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
+                <Route path="/:lang/privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
+                <Route path="/:lang/terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
+                
+                {/* 404 Routes */}
+                <Route path="/:lang/*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
+                <Route path="*" element={<Navigate to="/en/404" replace />} />
+              </Routes>
+            </main>
+          </RouteTransition>
+          <Footer />
           <WhatsAppFab />
           <CookieConsent />
         </LanguageProvider>
