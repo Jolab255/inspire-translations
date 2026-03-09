@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -24,10 +25,39 @@ const PrivacyPage = lazy(() => import('./pages/legal/LegalPages').then(m => ({ d
 const TermsPage = lazy(() => import('./pages/legal/LegalPages').then(m => ({ default: m.TermsPage })));
 const NotFoundPage = lazy(() => import('./pages/errors/NotFoundPage'));
 
-// Language Redirect Handler
-const LangRedirect = () => {
-  const { language } = useLanguage();
-  return <Navigate to={`/${language}`} replace />;
+// Route Transition Wrapper
+const RouteTransition = ({ children }) => {
+  const location = useLocation();
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
+  const [displayLocation, setDisplayLocation] = React.useState(location);
+
+  useEffect(() => {
+    if (location.pathname !== displayLocation.pathname) {
+      setIsTransitioning(true);
+      
+      // Artificial delay to allow skeleton to be seen and assets to stay smooth
+      const timer = setTimeout(() => {
+        setDisplayLocation(location);
+        setIsTransitioning(false);
+        window.scrollTo(0, 0);
+      }, 400); // Matching a smooth transition time
+
+      return () => clearTimeout(timer);
+    }
+  }, [location, displayLocation]);
+
+  return (
+    <>
+      {isTransitioning && <PageSkeleton />}
+      <Box sx={{ 
+        opacity: isTransitioning ? 0 : 1, 
+        transition: 'opacity 0.3s ease',
+        visibility: isTransitioning ? 'hidden' : 'visible' 
+      }}>
+        {children}
+      </Box>
+    </>
+  );
 };
 
 // Layout Wrapper to sync lang param with context
@@ -51,9 +81,11 @@ const LangWrapper = ({ children }) => {
     <>
       <Navbar />
       <main>
-        <Suspense fallback={<PageSkeleton />}>
-          {children}
-        </Suspense>
+        <RouteTransition>
+          <Suspense fallback={<PageSkeleton />}>
+            {children}
+          </Suspense>
+        </RouteTransition>
       </main>
       <Footer />
     </>
