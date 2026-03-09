@@ -167,7 +167,7 @@ const HeroSection = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     background: 'linear-gradient(135deg, #1A5C2A 0%, #0F3A1A 100%)',
-                    pt: { xs: 24, md: 16 },
+                    pt: { xs: 14, md: 16 },
                     pb: { xs: 8, md: 0 },
                     overflow: { xs: 'hidden', md: 'visible' }
                 }}
@@ -232,7 +232,7 @@ const HeroSection = () => {
                                 </AnimatePresence>
                             </Box>
                             <br />
-                            <Box component="span" sx={{ display: 'inline-block', ml: { xs: 4, sm: 10, md: 36, lg: 52 } }}>
+                            <Box component="span" sx={{ display: 'inline-block', ml: { xs: 2, sm: 6, md: 36, lg: 52 } }}>
                                 {c.africa}
                             </Box>
                         </Typography>

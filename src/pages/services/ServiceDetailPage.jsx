@@ -1,5 +1,7 @@
 import { useParams, Link as RouterLink, Navigate } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -42,6 +44,9 @@ import fallbackHero from '../../assets/images/project_hero.png';
 const ServiceDetailPage = () => {
     const { slug } = useParams();
     const { language, t } = useLanguage();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 });
     const { ref: overviewRef, inView: overviewInView } = useInView({ triggerOnce: true, threshold: 0.1 });
     const { ref: exploreRef, inView: exploreInView } = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -49,6 +54,13 @@ const ServiceDetailPage = () => {
     const [currentIndex, setCurrentIndex] = useState(services.length); 
     const ui = uiTranslations[language];
     const service = services.find((s) => s.id === slug);
+
+    // Calculate dynamic offset for Framer Motion
+    const getOffset = () => {
+        if (isMobile) return `-${currentIndex * 100}%`;
+        if (isTablet) return `-${currentIndex * 50}%`;
+        return `-${currentIndex * 33.333}%`;
+    };
 
     // Triple the services array for seamless infinite looping
     const infiniteServices = useMemo(() => [...services, ...services, ...services], []);
@@ -557,7 +569,7 @@ const ServiceDetailPage = () => {
                     <Box sx={{ position: 'relative', overflow: 'hidden' }}>
                         <Box 
                             component={motion.div}
-                            animate={{ x: `calc(-${currentIndex} * (100% / 3))` }}
+                            animate={{ x: getOffset() }}
                             transition={{ duration: 0.8, ease: "easeInOut" }}
                             sx={{ 
                                 display: 'flex', 
@@ -568,7 +580,11 @@ const ServiceDetailPage = () => {
                                 <Box 
                                     key={`${s.id}-${idx}`}
                                     sx={{ 
-                                        flex: '0 0 33.333%',
+                                        flex: {
+                                            xs: '0 0 100%',
+                                            sm: '0 0 50%',
+                                            md: '0 0 33.333%'
+                                        },
                                         display: 'flex',
                                         flexDirection: 'column',
                                         p: 2,

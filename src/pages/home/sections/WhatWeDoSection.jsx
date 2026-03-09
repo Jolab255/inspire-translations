@@ -115,7 +115,7 @@ const WhatWeDoSection = () => {
                         {/* Woman Image — Absolute on mobile to overflow above */}
                         <Box sx={{
                             position: 'absolute',
-                            top: { xs: -140, md: -270 },
+                            top: { xs: -220, md: -270 },
                             right: { xs: '-10%', md: '0%' },
                             width: { xs: '90%', sm: '70%', md: '500px' },
                             zIndex: 5,
@@ -141,7 +141,7 @@ const WhatWeDoSection = () => {
                         <Box sx={{
                             position: 'relative',
                             zIndex: 10,
-                            mt: { xs: 12, md: 0 },
+                            mt: { xs: 4, md: 0 },
                             width: '100%'
                         }}>
                             <FadeInUp delay={0.3}>

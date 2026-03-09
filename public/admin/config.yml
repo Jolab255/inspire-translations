@@ -2,6 +2,8 @@ backend:
   name: github
   repo: Jolab255/inspire-translations
   branch: main
+  base_url: https://inspiretranslations.co.tz
+  auth_endpoint: admin/auth.php
 
 media_folder: "public/uploads"
 public_folder: "/uploads"

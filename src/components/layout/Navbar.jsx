@@ -220,6 +220,32 @@ const Navbar = () => {
                             >
                                 {language === 'en' ? 'SW' : 'EN'}
                             </Button>
+
+                            {/* Hard Link for Admin Dashboard */}
+                            <Box 
+                                component="a" 
+                                href="/admin/" 
+                                sx={{ 
+                                    ml: 1.5,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 32,
+                                    height: 32,
+                                    borderRadius: '50%',
+                                    border: scrolled ? '1px solid rgba(26, 92, 42, 0.2)' : '1px solid rgba(255,255,255,0.3)',
+                                    color: scrolled ? '#1A5C2A' : '#FFFFFF',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        color: '#F7A11A',
+                                        borderColor: '#F7A11A',
+                                        transform: 'scale(1.1)'
+                                    }
+                                }}
+                                title="Admin Dashboard"
+                            >
+                                <WorkIcon sx={{ fontSize: 16 }} />
+                            </Box>
                         </Box>
 
                         <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: 1, ml: 'auto' }}>

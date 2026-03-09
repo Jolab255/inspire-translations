@@ -368,7 +368,7 @@ const QuotePage = () => {
                                     <Box sx={{ flexGrow: 1 }}>
                                         {activeStep === 0 && (
                                             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2.5 }}>
-                                                <TextField fullWidth select name="serviceType" value={form.serviceType} onChange={handleChange} label={c.labels.serviceType} required variant="outlined" sx={{ ...inputStyles, gridColumn: 'span 2' }}>
+                                                <TextField fullWidth select name="serviceType" value={form.serviceType} onChange={handleChange} label={c.labels.serviceType} required variant="outlined" sx={{ ...inputStyles, gridColumn: { xs: 'span 1', sm: 'span 2' } }}>
                                                     {services.map((s) => <MenuItem key={s.id} value={s.id} sx={{ fontFamily: 'Outfit' }}>{t(s.title)}</MenuItem>)}
                                                 </TextField>
                                                 <TextField fullWidth select name="sourceLang" value={form.sourceLang} onChange={handleChange} label={c.labels.sourceLang} required variant="outlined" sx={inputStyles}>
@@ -382,30 +382,30 @@ const QuotePage = () => {
                                                 </TextField>
                                                 <TextField fullWidth name="wordCount" value={form.wordCount} onChange={handleChange} label={c.labels.wordCount} type="number" variant="outlined" sx={inputStyles} />
                                                 <TextField fullWidth name="deadline" value={form.deadline} onChange={handleChange} label={c.labels.deadline} type="date" InputLabelProps={{ shrink: true }} variant="outlined" sx={inputStyles} />
-                                                <TextField fullWidth name="description" value={form.description} onChange={handleChange} label={c.labels.description} multiline rows={2} variant="outlined" sx={{ ...inputStyles, gridColumn: 'span 2' }} />
+                                                <TextField fullWidth name="description" value={form.description} onChange={handleChange} label={c.labels.description} multiline rows={2} variant="outlined" sx={{ ...inputStyles, gridColumn: { xs: 'span 1', sm: 'span 2' } }} />
                                             </Box>
                                         )}
 
                                         {activeStep === 1 && (
                                             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2.5 }}>
-                                                <TextField fullWidth name="name" value={form.name} onChange={handleChange} label={c.labels.name} required variant="outlined" sx={{ ...inputStyles, gridColumn: 'span 2' }} />
-                                                <TextField fullWidth name="email" value={form.email} onChange={handleChange} label={c.labels.email} type="email" required variant="outlined" sx={{ ...inputStyles, gridColumn: 'span 2' }} />
+                                                <TextField fullWidth name="name" value={form.name} onChange={handleChange} label={c.labels.name} required variant="outlined" sx={{ ...inputStyles, gridColumn: { xs: 'span 1', sm: 'span 2' } }} />
+                                                <TextField fullWidth name="email" value={form.email} onChange={handleChange} label={c.labels.email} type="email" required variant="outlined" sx={{ ...inputStyles, gridColumn: { xs: 'span 1', sm: 'span 2' } }} />
                                                 <TextField fullWidth name="phone" value={form.phone} onChange={handleChange} label={c.labels.phone} variant="outlined" sx={inputStyles} />
                                                 <TextField fullWidth name="organization" value={form.organization} onChange={handleChange} label={c.labels.org} variant="outlined" sx={inputStyles} />
                                             </Box>
                                         )}
 
                                         {activeStep === 2 && (
-                                            <Box sx={{ p: 3, bgcolor: 'rgba(13, 43, 20, 0.02)', border: '1px solid rgba(13, 43, 20, 0.05)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
+                                            <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: 'rgba(13, 43, 20, 0.02)', border: '1px solid rgba(13, 43, 20, 0.05)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: { xs: 2, sm: 3 } }}>
                                                 <Box sx={{ gridColumn: 'span 2', borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 2 }}>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Target Solution</Typography>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{t(services.find(s => s.id === form.serviceType)?.title) || '-'}</Typography>
                                                 </Box>
-                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 2 }}>
+                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: { xs: 1, sm: 2 } }}>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Linguistic Pair</Typography>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{form.sourceLang} → {form.targetLang}</Typography>
                                                 </Box>
-                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 2 }}>
+                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: { xs: 1, sm: 2 } }}>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Point of Contact</Typography>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{form.name}</Typography>
                                                 </Box>

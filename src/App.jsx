@@ -59,6 +59,14 @@ const LangRedirect = () => {
   return <Navigate to={`/${language}`} replace />;
 };
 
+// Hard redirect for Admin to bypass SPA routing
+const AdminRedirect = () => {
+  useEffect(() => {
+    window.location.href = '/admin/index.html';
+  }, []);
+  return null;
+};
+
 // Layout Wrapper to sync lang param with context
 const LangWrapper = ({ children }) => {
   const { lang } = useParams();
@@ -106,7 +114,7 @@ const App = () => {
             <main>
               <Routes>
                 <Route path="/" element={<LangRedirect />} />
-                <Route path="/admin" element={null} />
+                <Route path="/admin" element={<AdminRedirect />} />
                 <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
                 <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
                 <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
