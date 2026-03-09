@@ -217,8 +217,6 @@ const BlogPage = () => {
         return posts;
     }, [allPosts, selectedCategory, searchQuery]);
 
-    // If no search/filter is active, remaining posts are everything after featured
-    // Otherwise, show all filtered posts (and hide the featured hero entirely if searching)
     const isFiltering = searchQuery !== '' || selectedCategory !== 'All';
     const displayFeatured = featuredPost && !isFiltering;
     const remainingPosts = isFiltering ? filteredPosts : allPosts.slice(1);
@@ -264,9 +262,10 @@ const BlogPage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     px: { xs: 3, sm: 6, md: 12 },
-                    py: { xs: 10, sm: 12, md: 15 },
+                    py: { xs: 8, sm: 10, md: 12 },
                     bgcolor: COLORS.secondary,
-                    zIndex: 2
+                    zIndex: 2,
+                    order: { xs: 2, md: 1 }
                 }}>
                     <Box>
                         <AnimatedPreTitle text={c.heroLabel} color={COLORS.accent} />
@@ -284,20 +283,24 @@ const BlogPage = () => {
                 </Box>
                 <Box sx={{
                     width: { xs: '100%', md: '50%' },
-                    minHeight: { xs: '300px', md: 'auto' },
-                    position: 'relative'
+                    height: { xs: '300px', md: 'auto' },
+                    position: 'relative',
+                    order: { xs: 1, md: 2 }
                 }}>
                     <Box 
                         sx={{ 
                             width: '100%', 
                             height: '100%', 
+                            minHeight: '100%',
                             background: `url(${aboutHeroImg}) center/cover no-repeat`,
                             '&::after': {
                                 content: '""',
                                 position: 'absolute',
                                 inset: 0,
-                                background: 'linear-gradient(to right, #0D2B14 0%, transparent 100%)',
-                                display: { xs: 'none', md: 'block' }
+                                background: {
+                                    xs: 'linear-gradient(to top, #0D2B14 0%, transparent 100%)',
+                                    md: 'linear-gradient(to right, #0D2B14 0%, transparent 100%)'
+                                }
                             }
                         }} 
                     />

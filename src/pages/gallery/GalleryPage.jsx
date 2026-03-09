@@ -133,7 +133,7 @@ const GalleryPage = () => {
     }, [filter, c.all, t]);
 
     return (
-        <>
+        <Box sx={{ bgcolor: '#FFFFFF' }}>
             <SEOHead
                 title={language === 'en' ? "Gallery | Inspire Translations Tanzania" : "Picha | Inspire Translations Tanzania"}
                 description={c.heroDesc}
@@ -156,7 +156,8 @@ const GalleryPage = () => {
                     px: { xs: 3, sm: 6, md: 12 },
                     py: { xs: 10, sm: 12, md: 15 },
                     zIndex: 2,
-                    bgcolor: '#1A5C2A'
+                    bgcolor: '#1A5C2A',
+                    order: { xs: 2, md: 1 }
                 }}>
                     <Box>
                         {/* Animated arrow label */}
@@ -203,20 +204,25 @@ const GalleryPage = () => {
                 </Box>
                 <Box sx={{
                     width: { xs: '100%', md: '45%' },
-                    minHeight: { xs: '300px', md: 'auto' },
-                    position: 'relative'
+                    height: { xs: '300px', md: 'auto' },
+                    position: 'relative',
+                    order: { xs: 1, md: 2 }
                 }}>
                     <Box 
                         sx={{ 
                             width: '100%', 
                             height: '100%', 
+                            minHeight: '100%',
                             background: `url('/assets/images/ARSO_TC 67 & TC 68 meetings.png') center/cover no-repeat`,
                             filter: 'grayscale(0.3) contrast(1.1)',
                             '&::after': {
                                 content: '""',
                                 position: 'absolute',
                                 inset: 0,
-                                bgcolor: 'rgba(26, 92, 42, 0.2)'
+                                background: {
+                                    xs: 'linear-gradient(to top, #1A5C2A 0%, transparent 100%)',
+                                    md: 'rgba(26, 92, 42, 0.2)'
+                                }
                             }
                         }} 
                     />
@@ -310,7 +316,7 @@ const GalleryPage = () => {
                 </Container>
             </Box>
             <CTASection />
-        </>
+        </Box>
     );
 };
 
