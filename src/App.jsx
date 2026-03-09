@@ -85,7 +85,8 @@ const App = () => {
             {/* Root redirect */}
             <Route path="/" element={<LangRedirect />} />
 
-            {/* Language Routes */}
+            {/* Admin Bypass - No Language Wrapper */}
+            <Route path="/admin" element={null} />
             <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
             <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
             <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
