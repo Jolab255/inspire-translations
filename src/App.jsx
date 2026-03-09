@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -28,8 +28,8 @@ const NotFoundPage = lazy(() => import('./pages/errors/NotFoundPage'));
 // Route Transition Wrapper
 const RouteTransition = ({ children }) => {
   const location = useLocation();
-  const [isTransitioning, setIsTransitioning] = React.useState(false);
-  const [displayLocation, setDisplayLocation] = React.useState(location);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayLocation, setDisplayLocation] = useState(location);
 
   useEffect(() => {
     if (location.pathname !== displayLocation.pathname) {
@@ -58,6 +58,12 @@ const RouteTransition = ({ children }) => {
       </Box>
     </>
   );
+};
+
+// Language Redirect Handler
+const LangRedirect = () => {
+  const { language } = useLanguage();
+  return <Navigate to={`/${language}`} replace />;
 };
 
 // Layout Wrapper to sync lang param with context
