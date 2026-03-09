@@ -71,9 +71,38 @@
         "https://instagram.com/inspiretranslations"
       ],
       "serviceType": ["Translation", "Interpretation", "Language Classes", "Conference Logistics"]
-    }
-    </script>
-  <style>
+  <script>
+    // Global error logger for production debugging
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      var message = [
+        'Message: ' + msg,
+        'URL: ' + url,
+        'Line: ' + lineNo,
+        'Column: ' + columnNo,
+        'Error object: ' + JSON.stringify(error)
+      ].join(' - ');
+      
+      console.error("CRITICAL APP ERROR:", message);
+      
+      // If we are stuck in the loader, show the error
+      setTimeout(function() {
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          loader.style.background = '#800'; // Turn red to indicate error
+          var errDiv = document.createElement('div');
+          errDiv.style.color = 'white';
+          errDiv.style.padding = '20px';
+          errDiv.style.fontFamily = 'monospace';
+          errDiv.style.fontSize = '12px';
+          errDiv.innerHTML = '<h3>App Startup Error Detected:</h3>' + message;
+          loader.appendChild(errDiv);
+        }
+      }, 500);
+      
+      return false;
+    };
+  </script>
+</head>
     /* Premium Brand Skeleton Preloader */
     body {
       margin: 0;
