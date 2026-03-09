@@ -16,10 +16,11 @@ collections:
     slug: "{{slug}}.{{lang}}"
     fields:
       - { label: "Language", name: "lang", widget: "select", options: ["en", "sw"] }
-      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Title", name: "title", widget: "string", hint: "Max 70 characters for best display. Example: The Future of Translation in Africa" }
+      - { label: "Category", name: "category", widget: "string", hint: "Example: Technology, Business, Education" }
       - { label: "Date", name: "date", widget: "datetime" }
       - { label: "Featured Image", name: "image", widget: "image", required: false }
-      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Excerpt", name: "excerpt", widget: "text", hint: "Max 160 characters. A short summary for the blog card. Example: Discover how AI is reshaping the translation landscape..." }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "projects"
@@ -29,12 +30,12 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Type", name: "type", widget: "select", options: ["interpretation", "translation"] }
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Client", name: "client", widget: "string" }
-      - { label: "Location", name: "place", widget: "string" }
-      - { label: "Year", name: "year", widget: "string" }
-      - { label: "Short Description", name: "desc", widget: "text" }
-      - { label: "Full Description", name: "fullDesc", widget: "text" }
+      - { label: "Title", name: "title", widget: "string", hint: "Max 60 characters. Example: UN Conference Interpretation" }
+      - { label: "Client", name: "client", widget: "string", hint: "Example: UNICEF, EAC, World Bank" }
+      - { label: "Location", name: "place", widget: "string", hint: "Example: Arusha, Tanzania" }
+      - { label: "Year", name: "year", widget: "string", hint: "Example: 2024" }
+      - { label: "Short Description", name: "desc", widget: "text", hint: "Max 100 characters. Shows on project cards. Example: High-level simultaneous interpretation for regional summit." }
+      - { label: "Full Description", name: "fullDesc", widget: "text", hint: "Detailed description of the project and its impact." }
       - { label: "Project Image", name: "img", widget: "image" }
 
   - name: "gallery"
@@ -48,8 +49,8 @@ collections:
             label: "Images"
             widget: "list"
             fields:
-              - { label: "English Title", name: "title_en", widget: "string" }
-              - { label: "Swahili Title", name: "title_sw", widget: "string" }
-              - { label: "English Category", name: "category_en", widget: "string" }
-              - { label: "Swahili Category", name: "category_sw", widget: "string" }
+              - { label: "English Title", name: "title_en", widget: "string", hint: "Max 40 chars. Example: Regional Logistics Summit" }
+              - { label: "Swahili Title", name: "title_sw", widget: "string", hint: "Max 40 chars. Mfano: Mkutano wa Vifaa wa Kikanda" }
+              - { label: "English Category", name: "category_en", widget: "string", hint: "Example: Conference, Project, Training" }
+              - { label: "Swahili Category", name: "category_sw", widget: "string", hint: "Mfano: Mkutano, Mradi, Mafunzo" }
               - { label: "Image", name: "src", widget: "image" }
