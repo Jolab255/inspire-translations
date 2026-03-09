@@ -6,17 +6,17 @@ A professional language services website for **Inspire Translations** — Tanzan
 
 ## Tech Stack
 
-- **Framework:** React 18 + Vite
-- **UI Library:** MUI (Material UI v5)
+- **Framework:** React 19 + Vite
+- **UI Library:** MUI (Material UI v7)
 - **Animations:** Framer Motion
-- **Routing:** React Router v6
+- **Routing:** React Router v7
 - **SEO:** react-helmet-async
 
 ## Features
 
 - 🌍 Full SEO with JSON-LD structured data, Open Graph, sitemap
 - ✨ Lionbridge-inspired animated hero section (parallax card columns + light streaks)
-- 🎯 Lottie animated icons throughout
+- 🎯 Framer Motion animated icons and components
 - 💀 Skeleton loading + lazy loading on all pages
 - 📱 Fully responsive (mobile, tablet, desktop)
 - ⚡ Route-level code splitting

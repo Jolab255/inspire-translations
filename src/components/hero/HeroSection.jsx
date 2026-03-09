@@ -73,7 +73,7 @@ const FadeInUp = ({ children, delay = 0, threshold = 0.15 }) => {
 
 // Animated text component for typewriter spelling effect
 const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
-    const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.4 });
+    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
     const letters = Array.from(text);
 
     const containerVariants = {
@@ -351,7 +351,7 @@ const HeroSection = () => {
                                         whileHover="hover"
                                         initial="rest"
                                         animate="rest"
-                                        to="/services"
+                                        to={`/${language}/services`}
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
@@ -467,7 +467,7 @@ const HeroSection = () => {
                                         whileHover="hover"
                                         initial="rest"
                                         animate="rest"
-                                        to="/contact"
+                                        to={`/${language}/contact`}
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',

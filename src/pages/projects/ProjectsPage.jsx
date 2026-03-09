@@ -16,18 +16,18 @@ import PlaceIcon from '@mui/icons-material/Place';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import GroupsIcon from '@mui/icons-material/Groups';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DownloadIcon from '@mui/icons-material/Download';
 import { Link as RouterLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import SEOHead from '../../components/seo/SEOHead';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { uiTranslations } from '../../data/translations/ui';
+import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/common/Animations';
+import CTASection from '../../components/common/CTASection';
 
 import projectHeroImg from '../../assets/images/project_hero.png';
-import ctaImage from '../../assets/images/CTA.png';
 import imgInterpretation from '../../assets/images/onsite_interpretation.png';
 import imgTranslation from '../../assets/images/written_translation.png';
-import imgConference from '../../assets/images/conference_logistics.png';
 
 // Import specific project images
 import imgSafeCities from '../../assets/images/Cities and Safe Public Spaces Global Leaders’ Forum .png';
@@ -38,107 +38,6 @@ import imgBlueprint from '../../assets/images/ScrThe launch of the Preparation o
 import imgWomenTrans from '../../assets/images/Women in Transportation Sector Conference.png';
 import imgAEEP from '../../assets/images/The AEEP-AEF High-Level Policymaker Evening Meeting.png';
 import imgAUDA from '../../assets/images/The AUDA NEPAD Afternoon Partner Meeting Workshops on CMP Phase 3.png';
-import imgSADC from '../../assets/images/Tanzania Stakeholder Consultations on SADC RAIP 2017-2022 Shadow Report.png';
-import imgPolice from '../../assets/images/Large-scale law enforcers training.png';
-import imgYouth from '../../assets/images/The Fourth International Conference on Youth and Land Governance in Africa.png';
-
-// Animated text component for typewriter spelling effect
-const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
-    const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.4 });
-    const words = text.split(' ');
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.04, delayChildren: 0.1 }
-        }
-    };
-
-    const letterVariants = {
-        hidden: { opacity: 0, y: 25, filter: 'blur(6px)', scale: 0.85 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            filter: 'blur(0px)',
-            scale: 1,
-            transition: {
-                type: "spring",
-                damping: 12,
-                stiffness: 140
-            }
-        }
-    };
-
-    return (
-        <Typography
-            component={motion.div}
-            ref={ref}
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            variant={variant}
-            sx={{ ...sx, display: 'block' }}
-            {...props}
-        >
-            {words.map((word, wordIndex) => (
-                <Box key={wordIndex} component="span" sx={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
-                    {Array.from(word).map((char, charIndex) => (
-                        <motion.span key={charIndex} variants={letterVariants} style={{ display: 'inline-block' }}>
-                            {char}
-                        </motion.span>
-                    ))}
-                    {wordIndex < words.length - 1 && (
-                        <Box component="span" sx={{ display: 'inline-block' }}>&nbsp;</Box>
-                    )}
-                </Box>
-            ))}
-        </Typography>
-    );
-};
-
-// Animated Pre-Title with Sliding Line and Arrow
-const AnimatedPreTitle = ({ text, color = '#F7A11A', align = 'flex-start' }) => {
-    const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.6 });
-    return (
-        <Box ref={ref} sx={{ display: 'flex', alignItems: 'center', justifyContent: align, mb: 1, overflow: 'hidden' }}>
-            <Box sx={{
-                height: 2, bgcolor: color,
-                width: inView ? 32 : 0,
-                transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
-            }} />
-            <Box sx={{
-                display: 'flex', alignItems: 'center',
-                transform: inView ? 'translateX(0) scale(1)' : 'translateX(-20px) scale(0.6)',
-                opacity: inView ? 1 : 0,
-                transition: 'opacity 0.4s ease 0.45s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.45s',
-                ml: 1
-            }}>
-                <ArrowForwardIcon sx={{ color: color, fontSize: 18 }} />
-            </Box>
-            <Box sx={{
-                transform: inView ? 'translateY(0)' : 'translateY(8px)',
-                opacity: inView ? 1 : 0,
-                transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
-                ml: 1
-            }}>
-                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: color, fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                    {text}
-                </Typography>
-            </Box>
-        </Box>
-    );
-};
-
-// Fade In Up helper
-const FadeInUp = ({ children, delay = 0 }) => {
-    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
-    return (
-        <motion.div ref={ref} initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay }}>
-            {children}
-        </motion.div>
-    );
-};
 
 const interpretationProjects = [
     { 
@@ -331,7 +230,7 @@ const ProjectCard = ({ project, onReadMore }) => {
                         </Typography>
                     </Box>
 
-                    {/* Read More Button with signature animation */}
+                    {/* Read More Button with signature design */}
                     <Box 
                         component={motion.button} 
                         whileHover="hover" 
@@ -339,21 +238,61 @@ const ProjectCard = ({ project, onReadMore }) => {
                         animate="rest"
                         onClick={() => onReadMore(project)}
                         sx={{ 
-                            background: 'none', 
-                            border: 'none', 
-                            p: 0, 
-                            cursor: 'pointer', 
-                            display: 'flex', 
+                            display: 'inline-flex',
                             alignItems: 'center',
-                            gap: 1.5
+                            border: '1.5px solid #F7A11A',
+                            borderRadius: 50,
+                            overflow: 'hidden',
+                            textDecoration: 'none',
+                            transition: 'all 0.3s ease',
+                            bgcolor: 'transparent',
+                            cursor: 'pointer',
+                            p: 0,
+                            '&:hover': {
+                                bgcolor: 'rgba(247, 161, 26, 0.04)'
+                            }
                         }}
                     >
-                        <Typography component={motion.span} variants={{ rest: { x: 0 }, hover: { x: 5 } }} sx={{ color: '#F7A11A', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.85rem' }}>
+                        <Typography
+                            component={motion.span}
+                            variants={{
+                                rest: { x: 0 },
+                                hover: { x: 5 }
+                            }}
+                            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                            sx={{
+                                color: '#F7A11A',
+                                fontFamily: '"Inknut Antiqua", serif',
+                                fontWeight: 700,
+                                fontSize: '0.8rem',
+                                px: 3,
+                                lineHeight: '36px',
+                                whiteSpace: 'nowrap'
+                            }}
+                        >
                             Read More
                         </Typography>
-                        <motion.div variants={{ rest: { x: 0 }, hover: { x: 8 } }} transition={{ type: 'spring', stiffness: 600, damping: 15 }}>
-                            <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
-                        </motion.div>
+                        <Box
+                            sx={{
+                                width: 36,
+                                height: 36,
+                                flexShrink: 0,
+                                bgcolor: '#F7A11A',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <motion.div
+                                variants={{
+                                    rest: { x: 0 },
+                                    hover: { x: 8 }
+                                }}
+                                transition={{ type: 'spring', stiffness: 600, damping: 15 }}
+                            >
+                                <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 18 }} />
+                            </motion.div>
+                        </Box>
                     </Box>
                 </CardContent>
             </Card>
@@ -500,21 +439,17 @@ const ProjectsPage = () => {
             heroTitle: "Our Projects",
             heroDesc: "Showcasing our commitment to linguistic precision and cultural excellence across every mission.",
             moreBtn: "Explore Our Work",
+            downloadBtn: "Download Company Profile",
             interpretation: "Interpretation Projects",
-            translation: "Translation Projects",
-            readyTitle: "Ready to Start Your Project?",
-            readyDesc: "Let's discuss how we can bring precision and cultural insight to your next mission.",
-            contactBtn: "Contact Us Today"
+            translation: "Translation Projects"
         },
         sw: {
             heroTitle: "Miradi Yetu",
             heroDesc: "Kuonyesha kujitolea kwetu kwa usahihi wa kilugha na ubora wa kitamaduni katika kila mradi.",
             moreBtn: "Chunguza Kazi Zetu",
+            downloadBtn: "Pakua Wasifu wa Kampuni",
             interpretation: "Miradi ya Ukalimani",
-            translation: "Miradi ya Tafsiri",
-            readyTitle: "Uko Tayari Kuanza Mradi Wako?",
-            readyDesc: "Tujadili jinsi tunavyoweza kuleta usahihi na uelewa wa kitamaduni katika mradi wako ujao.",
-            contactBtn: "Wasiliana Nasi Leo"
+            translation: "Miradi ya Tafsiri"
         }
     };
 
@@ -561,53 +496,75 @@ const ProjectsPage = () => {
                             {c.heroDesc}
                         </Typography>
                         
-                        <Box
-                            component={motion.a}
-                            whileHover="hover"
-                            initial="rest"
-                            animate="rest"
-                            href="#projects"
-                            sx={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                border: '2px solid #F7A11A',
-                                borderRadius: 50,
-                                overflow: 'hidden',
-                                textDecoration: 'none',
-                                transition: 'all 0.3s ease',
-                                '&:hover': { bgcolor: 'rgba(247, 161, 26, 0.04)' }
-                            }}
-                        >
-                            <Typography
-                                component={motion.span}
-                                variants={{
-                                    rest: { x: 0 },
-                                    hover: { x: 5 }
-                                }}
-                                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+                            <Box
+                                component={motion.a}
+                                whileHover="hover"
+                                initial="rest"
+                                animate="rest"
+                                href="#projects"
                                 sx={{
-                                    color: '#F7A11A',
-                                    fontFamily: '"Inknut Antiqua", serif',
-                                    fontWeight: 700,
-                                    fontSize: '0.85rem',
-                                    px: 4,
-                                    lineHeight: '56px',
-                                    whiteSpace: 'nowrap'
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    border: '1.5px solid #F7A11A',
+                                    borderRadius: 50,
+                                    overflow: 'hidden',
+                                    textDecoration: 'none',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': { bgcolor: 'rgba(247, 161, 26, 0.04)' }
                                 }}
                             >
-                                {c.moreBtn}
-                            </Typography>
-                            <Box sx={{ width: 56, height: 56, flexShrink: 0, bgcolor: '#F7A11A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <motion.div
+                                <Typography
+                                    component={motion.span}
                                     variants={{
                                         rest: { x: 0 },
-                                        hover: { x: 8 }
+                                        hover: { x: 5 }
                                     }}
-                                    transition={{ type: 'spring', stiffness: 600, damping: 15 }}
+                                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                    sx={{
+                                        color: '#F7A11A',
+                                        fontFamily: '"Inknut Antiqua", serif',
+                                        fontWeight: 700,
+                                        fontSize: '0.85rem',
+                                        px: 4,
+                                        lineHeight: '36px',
+                                        whiteSpace: 'nowrap'
+                                    }}
                                 >
-                                    <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 24 }} />
-                                </motion.div>
+                                    {c.moreBtn}
+                                </Typography>
+                                <Box sx={{ width: 36, height: 36, flexShrink: 0, bgcolor: '#F7A11A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <motion.div
+                                        variants={{
+                                            rest: { x: 0 },
+                                            hover: { x: 8 }
+                                        }}
+                                        transition={{ type: 'spring', stiffness: 600, damping: 15 }}
+                                    >
+                                        <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 24 }} />
+                                    </motion.div>
+                                </Box>
                             </Box>
+
+                            <Button 
+                                component="a" 
+                                href="/Company_Profile.pdf" 
+                                download="Inspire_Translations_Profile.pdf"
+                                variant="outlined" 
+                                startIcon={<DownloadIcon />}
+                                sx={{ 
+                                    borderColor: '#1A5C2A', 
+                                    color: '#1A5C2A',
+                                    borderRadius: 50,
+                                    px: 4,
+                                    fontFamily: 'Outfit',
+                                    fontWeight: 700,
+                                    textTransform: 'none',
+                                    '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.04)', borderColor: '#1A5C2A' }
+                                }}
+                            >
+                                {c.downloadBtn}
+                            </Button>
                         </Box>
                     </motion.div>
                 </Box>
@@ -676,148 +633,7 @@ const ProjectsPage = () => {
                 </Container>
             </Box>
 
-            {/* CTA SECTION */}
-            <Box sx={{ py: { xs: 8, md: 15 }, bgcolor: '#FFFFFF' }}>
-                <Container maxWidth="lg">
-                    <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: { xs: '1fr', md: 'repeat(12, 1fr)' },
-                        gap: { xs: 4, md: 8 },
-                        alignItems: 'stretch'
-                    }}>
-                        {/* Left side: Photo */}
-                        <Box sx={{ gridColumn: { md: 'span 5' } }}>
-                            <Box component={motion.div} initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} style={{ height: '100%' }}>
-                                <Box
-                                    component="img"
-                                    src={ctaImage}
-                                    alt="Join our community"
-                                    sx={{
-                                        width: '100%',
-                                        height: '100%',
-                                        maxHeight: { xs: 300, sm: 400, md: 'none' },
-                                        objectFit: 'cover',
-                                        display: 'block'
-                                    }}
-                                />
-                            </Box>
-                        </Box>
-
-                        {/* Right side: Content */}
-                        <Box sx={{
-                            gridColumn: { md: 'span 7' },
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            p: { xs: 4, sm: 6, md: 10 },
-                            bgcolor: '#1A5C2A',
-                            color: '#FFFFFF'
-                        }}>
-                            <Box component={motion.div} initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2, overflow: 'hidden' }}>
-                                    <Box sx={{ height: 2, bgcolor: '#F7A11A', width: 32 }} />
-                                    <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
-                                        <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
-                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase', ml: 1 }}>
-                                            {ui.joinCommunity}
-                                        </Typography>
-                                    </Box>
-                                </Box>
-
-                                <Typography sx={{
-                                    fontFamily: '"Inknut Antiqua", serif',
-                                    fontWeight: 700,
-                                    color: '#FFFFFF',
-                                    fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.8rem' },
-                                    mb: 3,
-                                    lineHeight: 1.15
-                                }}>
-                                    {ui.stayConnected}
-                                </Typography>
-                                <Box sx={{ width: 60, height: 4, bgcolor: '#F7A11A', mb: 4 }} />
-                                <Typography sx={{
-                                    fontFamily: '"Inknut Antiqua", serif',
-                                    fontWeight: 400,
-                                    color: 'rgba(255,255,255,0.85)',
-                                    fontSize: '0.95rem',
-                                    lineHeight: 1.9,
-                                    mb: 6,
-                                    maxWidth: '95%'
-                                }}>
-                                    {ui.stayConnectedDesc}
-                                </Typography>
-
-                                {/* Yellow Pill Arrow Button */}
-                                <Box
-                                    component={motion(RouterLink)}
-                                    whileHover="hover"
-                                    initial="rest"
-                                    animate="rest"
-                                    to={`/${language}/contact`}
-                                    sx={{
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        border: '2px solid #F7A11A',
-                                        borderRadius: 50,
-                                        overflow: 'hidden',
-                                        textDecoration: 'none',
-                                        transition: 'all 0.3s ease',
-                                        bgcolor: 'transparent',
-                                        '&:hover': { bgcolor: 'rgba(247, 161, 26, 0.04)' }
-                                    }}
-                                >
-                                    <Typography
-                                        component={motion.span}
-                                        variants={{
-                                            rest: { x: 0 },
-                                            hover: { x: 5 }
-                                        }}
-                                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                                        sx={{
-                                            color: '#F7A11A',
-                                            fontFamily: '"Inknut Antiqua", serif',
-                                            fontWeight: 700,
-                                            fontSize: '0.85rem',
-                                            px: 4,
-                                            lineHeight: '56px',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        {ui.requestDemo}
-                                    </Typography>
-                                    <Box
-                                        className="pill-arrow-w"
-                                        component={motion.div}
-                                        variants={{
-                                            rest: { x: 0 },
-                                            hover: { x: 0 }
-                                        }}
-                                        sx={{
-                                            width: 56,
-                                            height: 56,
-                                            flexShrink: 0,
-                                            bgcolor: '#F7A11A',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}
-                                    >
-                                        <motion.div
-                                            variants={{
-                                                rest: { x: 0 },
-                                                hover: { x: 8 }
-                                            }}
-                                            transition={{ type: 'spring', stiffness: 600, damping: 15 }}
-                                        >
-                                            <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 24 }} />
-                                        </motion.div>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Container>
-            </Box>
+            <CTASection />
 
             <ProjectModal
                 project={selectedProject}

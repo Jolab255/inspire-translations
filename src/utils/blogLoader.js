@@ -37,7 +37,9 @@ export const getAllPosts = (lang = 'en') => {
     }
     
     // Sort by date descending
-    return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sortedPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    return sortedPosts;
 };
 
 export const getPostBySlug = (slug, lang = 'en') => {

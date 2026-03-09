@@ -71,7 +71,7 @@ const PillButton = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 bgcolor,
-                border: `2px solid ${borderColor}`,
+                border: `1.5px solid ${borderColor}`,
                 borderRadius: 50,
                 overflow: 'hidden',
                 textDecoration: 'none',
@@ -99,7 +99,7 @@ const PillButton = ({
                     fontWeight: 700,
                     fontSize: '0.85rem',
                     px: 3,
-                    lineHeight: '46px',
+                    lineHeight: '34px',
                     whiteSpace: 'nowrap'
                 }}
             >
@@ -113,8 +113,8 @@ const PillButton = ({
                     hover: { x: 0 }
                 }}
                 sx={{
-                    width: 48,
-                    height: 48,
+                    width: 34,
+                    height: 34,
                     flexShrink: 0,
                     bgcolor: iconBgcolor,
                     display: 'flex',

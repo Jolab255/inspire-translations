@@ -115,8 +115,8 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: 50,
-                    padding: '12px 32px',
-                    fontSize: '1rem',
+                    padding: '8px 24px',
+                    fontSize: '0.95rem',
                     fontWeight: 600,
                     transition: 'all 0.3s ease',
                     '&:hover': {

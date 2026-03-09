@@ -85,10 +85,10 @@ const NotFoundPage = () => {
                         </Typography>
 
                         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap', px: 2 }}>
-                            <Button component={RouterLink} to="/" variant="contained" color="primary" size="large" startIcon={<HomeIcon />} sx={{ px: 4, width: { xs: '100%', sm: 'auto' } }}>
+                            <Button component={RouterLink} to={`/${language}`} variant="contained" color="primary" size="large" startIcon={<HomeIcon />} sx={{ px: 4, width: { xs: '100%', sm: 'auto' } }}>
                                 {c.backHome}
                             </Button>
-                            <Button component={RouterLink} to="/contact" variant="outlined" size="large" startIcon={<ContactSupportIcon />}
+                            <Button component={RouterLink} to={`/${language}/contact`} variant="outlined" size="large" startIcon={<ContactSupportIcon />}
                                 sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.35)', px: 4, width: { xs: '100%', sm: 'auto' }, '&:hover': { borderColor: '#F7A11A', color: '#F7A11A', bgcolor: 'rgba(247,161,26,0.06)' } }}>
                                 {c.contactUs}
                             </Button>

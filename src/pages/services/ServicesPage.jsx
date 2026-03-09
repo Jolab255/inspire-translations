@@ -11,6 +11,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import SEOHead from '../../components/seo/SEOHead';
+import CTASection from '../../components/common/CTASection';
+import FAQSection from '../../components/common/FAQSection';
 import { services } from '../../data/siteData';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { uiTranslations } from '../../data/translations/ui';
@@ -119,7 +121,7 @@ const ServicesPage = () => {
                                                     whileHover="hover"
                                                     initial="rest"
                                                     animate="rest"
-                                                    to={`/services/${service.id}`}
+                                                    to={`/${language}/services/${service.id}`}
                                                     sx={{
                                                         display: 'inline-flex',
                                                         alignItems: 'center',
@@ -141,7 +143,7 @@ const ServicesPage = () => {
                                                             fontWeight: 700,
                                                             fontSize: '0.8rem',
                                                             px: 2.5,
-                                                            lineHeight: '44px',
+                                                            lineHeight: '36px',
                                                             whiteSpace: 'nowrap'
                                                         }}
                                                     >
@@ -149,8 +151,8 @@ const ServicesPage = () => {
                                                     </Typography>
                                                     <Box
                                                         sx={{
-                                                            width: 44,
-                                                            height: 44,
+                                                            width: 36,
+                                                            height: 36,
                                                             flexShrink: 0,
                                                             bgcolor: '#1A5C2A',
                                                             display: 'flex',
@@ -206,7 +208,7 @@ const ServicesPage = () => {
                                 whileHover="hover"
                                 initial="rest"
                                 animate="rest"
-                                to="/quote"
+                                to={`/${language}/quote`}
                                 sx={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
@@ -228,7 +230,7 @@ const ServicesPage = () => {
                                         fontWeight: 700,
                                         fontSize: '0.9rem',
                                         px: 4,
-                                        lineHeight: '56px',
+                                        lineHeight: '36px',
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
@@ -236,8 +238,8 @@ const ServicesPage = () => {
                                 </Typography>
                                 <Box
                                     sx={{
-                                        width: 56,
-                                        height: 56,
+                                        width: 36,
+                                        height: 36,
                                         flexShrink: 0,
                                         bgcolor: '#F7A11A',
                                         display: 'flex',
@@ -257,6 +259,8 @@ const ServicesPage = () => {
                     </FadeInUp>
                 </Container>
             </Box>
+            <FAQSection />
+            <CTASection />
         </>
     );
 };

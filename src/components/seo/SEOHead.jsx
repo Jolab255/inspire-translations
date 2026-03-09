@@ -8,6 +8,7 @@ const SEOHead = ({
     keywords,
     ogImage = 'https://inspiretranslations.co.tz/og-image.jpg',
     ogType = 'website',
+    jsonLd = null,
 }) => {
     const { language } = useLanguage();
     const location = useLocation();
@@ -116,7 +117,7 @@ const SEOHead = ({
 
             {/* Structured Data */}
             <script type="application/ld+json">
-                {JSON.stringify(structuredData)}
+                {JSON.stringify(jsonLd || structuredData)}
             </script>
         </Helmet>
     );

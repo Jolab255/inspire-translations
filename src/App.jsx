@@ -5,6 +5,8 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/layout/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
+import WhatsAppFab from './components/common/WhatsAppFab';
+import CookieConsent from './components/common/CookieConsent';
 import { PageSkeleton } from './components/skeletons/Skeletons';
 
 // Lazy-loaded pages
@@ -77,8 +79,8 @@ const App = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>
+        <ScrollToTop />
         <LanguageProvider>
-          <ScrollToTop />
           <Routes>
             {/* Root redirect */}
             <Route path="/" element={<LangRedirect />} />
@@ -101,6 +103,8 @@ const App = () => {
             <Route path="/:lang/*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
             <Route path="*" element={<Navigate to="/en/404" replace />} />
           </Routes>
+          <WhatsAppFab />
+          <CookieConsent />
         </LanguageProvider>
       </BrowserRouter>
     </ErrorBoundary>
