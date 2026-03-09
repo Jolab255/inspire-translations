@@ -16,7 +16,7 @@ const WhatWeDoSection = () => {
     const ui = uiTranslations[language];
 
     return (
-        <Box sx={{ py: { xs: 8, md: 12 }, minHeight: { xs: 'auto', md: 400 }, display: 'flex', alignItems: 'center', background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)', position: 'relative' }}>
+        <Box sx={{ py: { xs: 12, md: 12 }, minHeight: { xs: 'auto', md: 400 }, display: 'flex', alignItems: 'center', background: 'linear-gradient(135deg, #F7A11A 0%, #D4880E 100%)', position: 'relative' }}>
 
             {/* Content */}
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 6 }}>
@@ -111,13 +111,15 @@ const WhatWeDoSection = () => {
                     </Box>
 
                     {/* Right — Photo and White Box List */}
-                    <Box sx={{ flex: 1, minWidth: { md: 450 }, order: { xs: 1, md: 2 } }}>
+                    <Box sx={{ flex: 1, minWidth: { md: 450 }, order: { xs: 1, md: 2 }, width: '100%', position: 'relative' }}>
+                        {/* Woman Image — Absolute on mobile to overflow above */}
                         <Box sx={{
                             position: 'absolute',
-                            top: { xs: -150, md: -270 },
-                            right: { xs: '-5%', md: '0%' },
-                            width: { xs: '110%', md: '500px' },
-                            zIndex: 10,
+                            top: { xs: -140, md: -270 },
+                            right: { xs: '-10%', md: '0%' },
+                            width: { xs: '90%', sm: '70%', md: '500px' },
+                            zIndex: 5,
+                            pointerEvents: 'none'
                         }}>
                             <FadeInUp delay={0.15}>
                                 <Box
@@ -129,11 +131,19 @@ const WhatWeDoSection = () => {
                                         display: 'block',
                                         mixBlendMode: 'multiply',
                                         filter: 'contrast(1.05)',
-                                        pointerEvents: 'none'
+                                        transform: { xs: 'translateX(30px)', md: 'none' }
                                     }}
                                 />
                             </FadeInUp>
+                        </Box>
 
+                        {/* White Box — Relative on mobile to maintain section height */}
+                        <Box sx={{
+                            position: 'relative',
+                            zIndex: 10,
+                            mt: { xs: 12, md: 0 },
+                            width: '100%'
+                        }}>
                             <FadeInUp delay={0.3}>
                                 <Box sx={{
                                     bgcolor: '#FFFFFF',
