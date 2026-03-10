@@ -1,4 +1,5 @@
 ---
+lang: "en"
 type: "translation"
 title: "Translation of the Policy Briefs"
 client: "ESRF"

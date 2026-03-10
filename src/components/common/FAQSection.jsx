@@ -97,11 +97,11 @@ const FAQSection = () => {
                                     <Accordion
                                         key={i}
                                         sx={{
-                                            bgcolor: '#1A5C2A !important',
+                                            bgcolor: '#FFFFFF !important',
                                             mb: 1.5,
-                                            borderRadius: '8px !important',
+                                            borderRadius: '0px !important',
                                             boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                                            border: 'none',
+                                            border: '1.5px solid #0D2B14',
                                             '&:before': { display: 'none' }
                                         }}
                                     >
@@ -111,17 +111,18 @@ const FAQSection = () => {
                                         >
                                             <Typography sx={{
                                                 fontFamily: 'Outfit',
-                                                fontWeight: 600,
-                                                color: '#FFFFFF !important',
+                                                fontWeight: 700,
+                                                color: '#0D2B14 !important',
                                                 fontSize: { xs: '0.95rem', md: '1.05rem' }
                                             }}>
                                                 {faq.q}
                                             </Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails sx={{ px: { xs: 2, sm: 4 }, pb: 2, bgcolor: '#FFFFFF', border: '1px solid #1A5C2A', borderTop: 'none', borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px' }}>
+                                        <AccordionDetails sx={{ px: { xs: 2, sm: 4 }, pb: 2, bgcolor: '#FFFFFF', borderTop: '1px solid rgba(13, 43, 20, 0.1)' }}>
                                             <Typography sx={{
                                                 fontFamily: 'Inter',
-                                                color: '#1A5C2A',
+                                                color: '#0D2B14',
+                                                opacity: 0.8,
                                                 lineHeight: 1.7,
                                                 fontSize: '0.95rem',
                                                 pt: 1.5

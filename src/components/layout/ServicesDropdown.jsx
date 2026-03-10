@@ -48,7 +48,7 @@ const ServicesDropdown = ({ onClose, scrolled }) => {
                         borderBottom: '1px solid rgba(0,0,0,0.06)',
                         zIndex: 10
                     }}>
-                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#1A5C2A', fontSize: '1.1rem' }}>
+                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '1.1rem' }}>
                             {language === 'en' ? 'Our Professional Services' : 'Huduma Zetu za Kitaalamu'}
                         </Typography>
                     </Box>
@@ -80,7 +80,7 @@ const ServicesDropdown = ({ onClose, scrolled }) => {
                                     }}
                                 >
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.95rem', color: '#1A5C2A' }}>
+                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.95rem', color: '#0D2B14' }}>
                                             {t(item.title)}
                                         </Typography>
                                     </Box>
@@ -104,10 +104,10 @@ const ServicesDropdown = ({ onClose, scrolled }) => {
                                                 '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.08)' }
                                             }}
                                         >
-                                            <Typography sx={{ color: '#1A5C2A', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.75rem', px: 2, lineHeight: '32px' }}>
+                                            <Typography sx={{ color: '#0D2B14', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.75rem', px: 2, lineHeight: '32px' }}>
                                                 {language === 'en' ? 'Read More' : 'Soma Zaidi'}
                                             </Typography>
-                                            <Box sx={{ bgcolor: '#1A5C2A', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Box sx={{ bgcolor: '#0D2B14', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                 <ArrowForwardIosIcon sx={{ color: '#fff', fontSize: '14px !important' }} />
                                             </Box>
                                         </Box>
@@ -176,7 +176,7 @@ const ServicesDropdown = ({ onClose, scrolled }) => {
                                 {ui.getAQuote}
                             </Typography>
                             <Box sx={{ bgcolor: '#F7A11A', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <ArrowForwardIosIcon sx={{ color: '#1A5C2A', fontSize: '14px !important' }} />
+                                <ArrowForwardIosIcon sx={{ color: '#0D2B14', fontSize: '14px !important' }} />
                             </Box>
                             </Box>                    </Box>
                 </Box>

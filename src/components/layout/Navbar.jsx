@@ -122,43 +122,43 @@ const Navbar = () => {
                 transition: 'background-color 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease',
             }}>
                 {/* ── Main AppBar ── */}
-                <AppBar position="static" elevation={0} sx={{ bgcolor: 'transparent', color: scrolled ? '#1A1A2E' : '#FFFFFF', transition: 'color 0.4s ease' }}>
+                <AppBar position="static" elevation={0} sx={{ bgcolor: 'transparent', color: '#0D2B14', transition: 'color 0.4s ease' }}>
                     <Toolbar disableGutters sx={{ 
                         maxWidth: 1280, 
                         width: '100%', 
                         mx: 'auto', 
-                        px: { xs: 2, md: 4 }, 
+                        px: { xs: 1.5, sm: 2, md: 4 }, 
                         height: { xs: 70, md: 90 }, // Fixed heights to prevent squeezing
                         minHeight: { xs: 70, md: 90 }, 
                         overflow: 'visible' 
                     }}>
                         <NavbarLogo height={64} />
                         <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0, flexGrow: 1, justifyContent: 'center', overflow: 'visible' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: scrolled ? 'rgba(26, 92, 42, 0.08)' : 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', border: scrolled ? '1px solid rgba(26, 92, 42, 0.15)' : '1px solid rgba(255,255,255,0.15)', borderRadius: '100px', px: 1.5, py: 0.5, transition: 'all 0.35s ease' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(13, 43, 20, 0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(13, 43, 20, 0.15)', borderRadius: '100px', px: 1.5, py: 0.5, transition: 'all 0.35s ease' }}>
                                 {navLinks.map((item) => (
                                     <Box key={item.path} sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                                         <Button
                                             onClick={item.path === '/services' ? () => setServicesDropOpen(!servicesDropOpen) : undefined}
                                             component={item.path === '/services' ? 'button' : RouterLink}
                                             to={item.path === '/services' ? undefined : `/${language}${item.path === '/' ? '' : item.path}`}
-                                            startIcon={isActive(item.path) ? <Box sx={{ color: scrolled ? '#1A5C2A' : '#F7A11A', display: 'flex', fontSize: 19 }}>{navIcons[item.path]}</Box> : null}
+                                            startIcon={isActive(item.path) ? <Box sx={{ color: '#0D2B14', display: 'flex', fontSize: 19 }}>{navIcons[item.path]}</Box> : null}
                                             endIcon={item.path === '/services' ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} /> : null}
                                             sx={{
-                                                color: scrolled ? '#1A5C2A' : '#FFFFFF',
+                                                color: '#0D2B14',
                                                 fontWeight: isActive(item.path) ? 700 : 500,
                                                 fontFamily: '"Inknut Antiqua", serif',
                                                 fontSize: '0.75rem',
                                                 letterSpacing: '0.01em',
                                                 px: 2, py: 0.6, borderRadius: '100px', textTransform: 'none',
                                                 border: isActive(item.path) 
-                                                    ? (scrolled ? '1px solid #1A5C2A' : '1px solid #F7A11A')
+                                                    ? '1px solid #0D2B14'
                                                     : '1px solid transparent',
                                                 bgcolor: isActive(item.path)
-                                                    ? (scrolled ? 'rgba(247,161,26,0.12)' : 'rgba(255,255,255,0.15)')
+                                                    ? 'rgba(13, 43, 20, 0.08)'
                                                     : 'transparent',
                                                 '&:hover': { 
-                                                    color: '#F7A11A', 
-                                                    bgcolor: scrolled ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.1)',
+                                                    color: '#0D2B14', 
+                                                    bgcolor: 'rgba(13, 43, 20, 0.1)',
                                                     boxShadow: 'none',
                                                     transform: 'none'
                                                 },
@@ -180,18 +180,18 @@ const Navbar = () => {
                                     display: 'inline-flex', 
                                     alignItems: 'center', 
                                     textDecoration: 'none', 
-                                    border: scrolled ? '1px solid #1A5C2A' : '1px solid #FFFFFF', 
+                                    border: '1px solid #0D2B14', 
                                     borderRadius: '50px', 
                                     overflow: 'hidden', 
                                     transition: 'all 0.35s ease', 
-                                    '&:hover': { bgcolor: scrolled ? 'rgba(26, 92, 42, 0.04)' : 'rgba(255,255,255,0.1)' } 
+                                    '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.08)' } 
                                 }}
                             >
-                                <Typography sx={{ color: scrolled ? '#1A5C2A' : '#FFFFFF', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.75rem', px: 2, py: 0.6 }}>
+                                <Typography sx={{ color: '#0D2B14', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.75rem', px: 2, py: 0.6 }}>
                                     {ui.getAQuote}
                                 </Typography>
-                                <Box sx={{ bgcolor: '#F7A11A', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <RequestQuoteIcon sx={{ color: '#1A5C2A', fontSize: 18 }} />
+                                <Box sx={{ bgcolor: '#F7A11A', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid #0D2B14' }}>
+                                    <RequestQuoteIcon sx={{ color: '#0D2B14', fontSize: 18 }} />
                                 </Box>
                             </Box>
 
@@ -202,19 +202,19 @@ const Navbar = () => {
                                 sx={{ 
                                     minWidth: 'auto', 
                                     ml: 1.5,
-                                    color: scrolled ? '#1A5C2A' : '#FFFFFF', 
+                                    color: '#0D2B14', 
                                     fontFamily: 'Outfit', 
                                     fontWeight: 700, 
                                     fontSize: '0.8rem', 
                                     px: 1.5,
                                     py: 0.6,
                                     borderRadius: '50px',
-                                    border: scrolled ? '1.5px solid #1A5C2A' : '1.5px solid #FFFFFF',
+                                    border: '1.5px solid #0D2B14',
                                     transition: 'all 0.3s ease',
                                     '&:hover': { 
-                                        color: '#F7A11A', 
-                                        borderColor: '#F7A11A', 
-                                        bgcolor: 'transparent' 
+                                        color: '#0D2B14', 
+                                        borderColor: '#0D2B14', 
+                                        bgcolor: 'rgba(13, 43, 20, 0.08)' 
                                     } 
                                 }}
                             >
@@ -233,13 +233,14 @@ const Navbar = () => {
                                     width: 32,
                                     height: 32,
                                     borderRadius: '50%',
-                                    border: scrolled ? '1px solid rgba(26, 92, 42, 0.2)' : '1px solid rgba(255,255,255,0.3)',
-                                    color: scrolled ? '#1A5C2A' : '#FFFFFF',
+                                    border: '1px solid rgba(13, 43, 20, 0.2)',
+                                    color: '#0D2B14',
                                     transition: 'all 0.3s ease',
                                     '&:hover': {
-                                        color: '#F7A11A',
-                                        borderColor: '#F7A11A',
-                                        transform: 'scale(1.1)'
+                                        color: '#0D2B14',
+                                        borderColor: '#0D2B14',
+                                        transform: 'scale(1.1)',
+                                        bgcolor: 'rgba(13, 43, 20, 0.08)'
                                     }
                                 }}
                                 title="Admin Dashboard"
@@ -248,8 +249,8 @@ const Navbar = () => {
                             </Box>
                         </Box>
 
-                        <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: 1, ml: 'auto' }}>
-                            <Button component={RouterLink} to={`/${language}/quote`} size="small" variant="contained" sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#fff', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, px: 2, fontSize: '0.7rem', borderRadius: 50 }}>{ui.quote}</Button>
+                        <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: { xs: 0.5, sm: 1 }, ml: 'auto' }}>
+                            <Button component={RouterLink} to={`/${language}/quote`} size="small" variant="contained" sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#0D2B14', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, px: { xs: 1.5, sm: 2 }, py: 0.5, minWidth: 'auto', fontSize: { xs: '0.65rem', sm: '0.7rem' }, borderRadius: 50, border: '1px solid #0D2B14' }}>{ui.quote}</Button>
                             
                             {/* Mobile Language Toggle */}
                             <Button 
@@ -257,18 +258,18 @@ const Navbar = () => {
                                 size="small" 
                                 sx={{ 
                                     minWidth: 'auto', 
-                                    color: scrolled ? '#1A1A2E' : '#FFFFFF', 
+                                    color: '#0D2B14', 
                                     fontFamily: 'Outfit', 
                                     fontWeight: 700, 
-                                    fontSize: '0.75rem', 
-                                    px: 1,
-                                    '&:hover': { bgcolor: 'transparent', color: '#F7A11A' } 
+                                    fontSize: { xs: '0.7rem', sm: '0.75rem' }, 
+                                    px: { xs: 0.5, sm: 1 },
+                                    '&:hover': { bgcolor: 'transparent', color: '#0D2B14' } 
                                 }}
                             >
                                 {language === 'en' ? 'SW' : 'EN'}
                             </Button>
 
-                            <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: scrolled ? '#1A1A2E' : '#FFFFFF', bgcolor: scrolled ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.1)', borderRadius: 2 }}><MenuIcon /></IconButton>
+                            <IconButton onClick={() => setDrawerOpen(true)} size="small" sx={{ color: '#0D2B14', bgcolor: 'rgba(13, 43, 20, 0.08)', borderRadius: 2, p: { xs: 0.5, sm: 1 } }}><MenuIcon fontSize="small" /></IconButton>
                         </Box>
                     </Toolbar>
                 </AppBar >

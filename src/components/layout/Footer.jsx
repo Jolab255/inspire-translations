@@ -24,8 +24,8 @@ import { services } from '../../data/siteData';
 import logoImg from '../../assets/logos/Inspire_Translations_Logo.png';
 
 const COLORS = {
-    primary: '#1A5C2A', // Brand Green matching sections
-    dark: '#0D2B14', // Deeper Green for accents if needed
+    primary: '#0D2B14', // Deep Dark Green Background
+    dark: '#05140A', // Even deeper for extra contrast
     accent: '#F7A11A', // Brand Orange/Gold
     text: '#FFFFFF',
     textMuted: 'rgba(255, 255, 255, 0.7)',
@@ -127,7 +127,7 @@ const Footer = () => {
                 }}>
                     {/* Brand Section */}
                     <Box>
-                        <Box sx={{ mb: 3, bgcolor: 'white', p: 1.5, display: 'inline-block', borderRadius: 0 }}>
+                        <Box sx={{ mb: 3, bgcolor: '#FFFFFF', p: 1.5, display: 'inline-block', borderRadius: 0 }}>
                             <Box component="img" src={logoImg} alt="Inspire Translations" sx={{ height: 50, display: 'block' }} />
                         </Box>
                         <Typography sx={{ 

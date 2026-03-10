@@ -26,13 +26,13 @@ import imgInterpretation from '../../assets/images/onsite_interpretation.png';
 import imgLogistics from '../../assets/images/conference_logistics.png';
 
 const COLORS = {
-    primary: '#1A5C2A',
+    primary: '#0D2B14', // Deep Dark Green
     secondary: '#0D2B14',
-    accent: '#F7A11A',
+    accent: '#F7A11A', // Boutique Yellow
     bg: '#FFFFFF',
     bgSoft: '#FBFBFB',
-    text: '#1A1A2E',
-    textMuted: '#4A4A6A'
+    text: '#0D2B14',
+    textMuted: 'rgba(13, 43, 20, 0.7)'
 };
 
 const BlogCard = ({ post, language, index }) => {
@@ -49,14 +49,13 @@ const BlogCard = ({ post, language, index }) => {
                     flexDirection: 'column',
                     textDecoration: 'none',
                     bgcolor: COLORS.bg,
-                    transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+                    transition: 'none',
                     position: 'relative',
                     height: '100%',
-                    border: '1px solid rgba(0,0,0,0.05)',
+                    border: '1.5px solid #0D2B14',
                     '&:hover': {
-                        transform: 'translateY(-8px)',
-                        '& .card-image': { transform: 'scale(1.05)' },
-                        '& .card-title': { color: COLORS.primary }
+                        boxShadow: 'none',
+                        '& .card-image': { transform: 'scale(1.05)' }
                     }
                 }}
             >
@@ -78,8 +77,8 @@ const BlogCard = ({ post, language, index }) => {
                             label={post.category} 
                             size="small" 
                             sx={{ 
-                                bgcolor: COLORS.accent, 
-                                color: COLORS.secondary, 
+                                bgcolor: '#0D2B14', 
+                                color: '#F7A11A', 
                                 fontWeight: 700, 
                                 fontFamily: 'Outfit',
                                 borderRadius: 0
@@ -113,8 +112,7 @@ const BlogCard = ({ post, language, index }) => {
                             fontSize: '1.1rem',
                             mb: 2,
                             lineHeight: 1.4,
-                            color: COLORS.secondary,
-                            transition: 'color 0.3s ease'
+                            color: COLORS.secondary
                         }}
                     >
                         {post.title}
@@ -133,7 +131,7 @@ const BlogCard = ({ post, language, index }) => {
                             sx={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                border: `1.5px solid ${COLORS.primary}`,
+                                border: `1.5px solid #0D2B14`,
                                 borderRadius: 50,
                                 overflow: 'hidden',
                                 textDecoration: 'none',
@@ -148,7 +146,7 @@ const BlogCard = ({ post, language, index }) => {
                                 }}
                                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                 sx={{
-                                    color: COLORS.primary,
+                                    color: '#0D2B14',
                                     fontFamily: '"Inknut Antiqua", serif',
                                     fontWeight: 700,
                                     fontSize: '0.7rem',
@@ -164,7 +162,7 @@ const BlogCard = ({ post, language, index }) => {
                                     width: 36,
                                     height: 36,
                                     flexShrink: 0,
-                                    bgcolor: COLORS.primary,
+                                    bgcolor: '#0D2B14',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center'
@@ -177,7 +175,7 @@ const BlogCard = ({ post, language, index }) => {
                                     }}
                                     transition={{ type: 'spring', stiffness: 600, damping: 15 }}
                                 >
-                                    <ArrowForwardIcon sx={{ color: '#FFFFFF', fontSize: 14 }} />
+                                    <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 14 }} />
                                 </motion.div>
                             </Box>
                         </Box>
@@ -241,7 +239,7 @@ const BlogPage = () => {
     const c = content[language];
 
     return (
-        <Box sx={{ bgcolor: COLORS.bgSoft }}>
+        <Box sx={{ bgcolor: '#FFFFFF' }}>
             <SEOHead
                 title={language === 'en' ? "Blog & Articles | Inspire Translations Tanzania" : "Blogu na Makala | Inspire Translations Tanzania"}
                 description={c.heroDesc}
@@ -249,11 +247,11 @@ const BlogPage = () => {
 
             {/* Premium Split Hero */}
             <Box sx={{
-                minHeight: { xs: 'auto', md: '60vh' },
+                minHeight: { xs: 'auto', md: '65vh' },
                 display: 'flex',
                 alignItems: 'stretch',
                 flexDirection: { xs: 'column', md: 'row' },
-                background: COLORS.secondary,
+                background: '#F7A11A',
                 position: 'relative',
                 overflow: 'hidden'
             }}>
@@ -262,21 +260,21 @@ const BlogPage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     px: { xs: 3, sm: 6, md: 12 },
-                    py: { xs: 8, sm: 10, md: 12 },
-                    bgcolor: COLORS.secondary,
+                    py: { xs: 10, sm: 12, md: 15 },
+                    bgcolor: '#F7A11A',
                     zIndex: 2,
                     order: { xs: 2, md: 1 }
                 }}>
                     <Box>
-                        <AnimatedPreTitle text={c.heroLabel} color={COLORS.accent} />
+                        <AnimatedPreTitle text={c.heroLabel} color="#0D2B14" />
                         <TypewriterText 
                             key={`blog-hero-${language}`}
                             text={c.heroTitle}
                             variant="h1" 
-                            sx={{ color: '#FFFFFF', fontWeight: 900, mb: 3, fontSize: { xs: '2.4rem', sm: '3.2rem', md: '4rem' }, lineHeight: 1.1, fontFamily: '"Inknut Antiqua", serif' }} 
+                            sx={{ color: '#0D2B14', fontWeight: 900, mb: 3, fontSize: { xs: '2.4rem', sm: '3.2rem', md: '4.2rem' }, lineHeight: 1.1, fontFamily: '"Inknut Antiqua", serif' }} 
                         />
-                        <Box sx={{ width: 80, height: 4, bgcolor: COLORS.accent, mb: 4 }} />
-                        <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: { xs: '1rem', md: '1.1rem' }, maxWidth: 500, lineHeight: 1.8, fontFamily: '"Inknut Antiqua", serif' }}>
+                        <Box sx={{ width: 80, height: 4, bgcolor: '#0D2B14', mb: 4 }} />
+                        <Typography sx={{ color: 'rgba(13, 43, 20, 0.8)', fontSize: { xs: '1rem', md: '1.1rem' }, maxWidth: 500, lineHeight: 1.8, fontFamily: '"Inknut Antiqua", serif', fontWeight: 500 }}>
                             {c.heroDesc}
                         </Typography>
                     </Box>
@@ -285,7 +283,8 @@ const BlogPage = () => {
                     width: { xs: '100%', md: '50%' },
                     height: { xs: '300px', md: 'auto' },
                     position: 'relative',
-                    order: { xs: 1, md: 2 }
+                    order: { xs: 1, md: 2 },
+                    borderLeft: { md: '2px solid #0D2B14' }
                 }}>
                     <Box 
                         sx={{ 
@@ -298,8 +297,8 @@ const BlogPage = () => {
                                 position: 'absolute',
                                 inset: 0,
                                 background: {
-                                    xs: 'linear-gradient(to top, #0D2B14 0%, transparent 100%)',
-                                    md: 'linear-gradient(to right, #0D2B14 0%, transparent 100%)'
+                                    xs: 'linear-gradient(to top, rgba(13, 43, 20, 0.8) 0%, transparent 100%)',
+                                    md: 'linear-gradient(to right, rgba(13, 43, 20, 0.2) 0%, transparent 100%)'
                                 }
                             }
                         }} 
@@ -315,15 +314,15 @@ const BlogPage = () => {
                             <Box sx={{ 
                                 display: 'flex', 
                                 flexDirection: { xs: 'column', lg: 'row' }, 
-                                bgcolor: COLORS.bg,
-                                boxShadow: '0 40px 100px rgba(0,0,0,0.12)',
-                                border: '1px solid rgba(0,0,0,0.05)'
+                                bgcolor: '#FFFFFF',
+                                boxShadow: 'none',
+                                border: '2px solid #0D2B14'
                             }}>
-                                <Box sx={{ flex: 1.2, height: { xs: 300, lg: 'auto' }, overflow: 'hidden' }}>
+                                <Box sx={{ flex: 1.2, height: { xs: 300, lg: 'auto' }, overflow: 'hidden', borderRight: { lg: '2px solid #0D2B14' } }}>
                                     <Box component="img" src={imgLogistics} alt={featuredPost.title} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </Box>
                                 <Box sx={{ flex: 1, p: { xs: 4, md: 8 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <Typography sx={{ color: COLORS.accent, fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.15em', mb: 2, fontFamily: 'Outfit' }}>
+                                    <Typography sx={{ color: '#F7A11A', bgcolor: '#0D2B14', px: 2, py: 0.5, display: 'inline-block', alignSelf: 'flex-start', fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.15em', mb: 3, fontFamily: 'Outfit' }}>
                                         {c.featured}
                                     </Typography>
                                     
@@ -331,10 +330,10 @@ const BlogPage = () => {
                                         key={`featured-title-${language}`}
                                         text={featuredPost.title}
                                         variant="h3" 
-                                        sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: { xs: '1.5rem', md: '2rem' }, color: COLORS.secondary, mb: 3, lineHeight: 1.3 }} 
+                                        sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: { xs: '1.5rem', md: '2rem' }, color: '#0D2B14', mb: 3, lineHeight: 1.3 }} 
                                     />
 
-                                    <Typography sx={{ color: COLORS.textMuted, mb: 4, lineHeight: 1.8, fontSize: '1rem', fontFamily: '"Inknut Antiqua", serif', fontWeight: 400 }}>
+                                    <Typography sx={{ color: 'rgba(13, 43, 20, 0.8)', mb: 4, lineHeight: 1.8, fontSize: '1rem', fontFamily: '"Inknut Antiqua", serif', fontWeight: 400 }}>
                                         {featuredPost.excerpt}
                                     </Typography>
 
@@ -348,15 +347,14 @@ const BlogPage = () => {
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            border: `2px solid ${COLORS.primary}`,
+                                            border: `2px solid #0D2B14`,
                                             borderRadius: 50,
                                             overflow: 'hidden',
                                             textDecoration: 'none',
                                             transition: 'all 0.3s ease',
                                             alignSelf: 'flex-start',
                                             '&:hover': {
-                                                borderColor: COLORS.primary,
-                                                bgcolor: 'rgba(26, 92, 42, 0.04)'
+                                                bgcolor: 'rgba(13, 43, 20, 0.04)'
                                             }
                                         }}
                                     >
@@ -368,12 +366,12 @@ const BlogPage = () => {
                                             }}
                                             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                             sx={{
-                                                color: COLORS.primary,
+                                                color: '#0D2B14',
                                                 fontFamily: '"Inknut Antiqua", serif',
                                                 fontWeight: 700,
                                                 fontSize: '0.85rem',
                                                 px: 3,
-                                                lineHeight: '36px',
+                                                lineHeight: '40px',
                                                 whiteSpace: 'nowrap'
                                                 }}
                                                 >
@@ -381,10 +379,10 @@ const BlogPage = () => {
                                                 </Typography>
                                                 <Box
                                                 sx={{
-                                                width: 36,
-                                                height: 36,
+                                                width: 40,
+                                                height: 40,
                                                 flexShrink: 0,
-                                                bgcolor: COLORS.primary,
+                                                bgcolor: '#0D2B14',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
@@ -396,7 +394,7 @@ const BlogPage = () => {
                                                 }}
                                                 transition={{ type: 'spring', stiffness: 600, damping: 15 }}
                                             >
-                                                <ArrowForwardIcon sx={{ color: '#FFFFFF', fontSize: 20 }} />
+                                                <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 20 }} />
                                             </motion.div>
                                         </Box>
                                     </Box>
@@ -415,9 +413,9 @@ const BlogPage = () => {
                             key={`more-insights-${language}`}
                             text={language === 'en' ? 'More Insights' : 'Maelezo Zaidi'}
                             variant="h2"
-                            sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '1.8rem', color: COLORS.secondary }} 
+                            sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '1.8rem', color: '#0D2B14' }} 
                         />
-                        <Divider sx={{ width: 60, height: 4, bgcolor: COLORS.accent, mx: 'auto', border: 'none', mt: 2 }} />
+                        <Divider sx={{ width: 60, height: 4, bgcolor: '#F7A11A', mx: 'auto', border: 'none', mt: 2 }} />
                     </Box>
 
                     {/* Filters & Search */}
@@ -430,12 +428,13 @@ const BlogPage = () => {
                                     onClick={() => setSelectedCategory(cat)}
                                     sx={{
                                         fontFamily: 'Outfit',
-                                        fontWeight: 600,
-                                        bgcolor: selectedCategory === cat ? COLORS.primary : 'transparent',
-                                        color: selectedCategory === cat ? '#FFF' : COLORS.textMuted,
-                                        border: `1px solid ${selectedCategory === cat ? COLORS.primary : 'rgba(0,0,0,0.1)'}`,
+                                        fontWeight: 700,
+                                        borderRadius: 0,
+                                        bgcolor: selectedCategory === cat ? '#0D2B14' : 'transparent',
+                                        color: selectedCategory === cat ? '#F7A11A' : '#0D2B14',
+                                        border: `1.5px solid #0D2B14`,
                                         '&:hover': {
-                                            bgcolor: selectedCategory === cat ? COLORS.primary : 'rgba(0,0,0,0.05)',
+                                            bgcolor: selectedCategory === cat ? '#0D2B14' : 'rgba(13, 43, 20, 0.05)',
                                         }
                                     }}
                                 />
@@ -451,18 +450,18 @@ const BlogPage = () => {
                             sx={{
                                 width: { xs: '100%', md: 300 },
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: 50,
+                                    borderRadius: 0,
                                     bgcolor: '#FFF',
                                     fontFamily: 'Inter',
-                                    '& fieldset': { borderColor: 'rgba(0,0,0,0.1)' },
-                                    '&:hover fieldset': { borderColor: COLORS.accent },
-                                    '&.Mui-focused fieldset': { borderColor: COLORS.primary },
+                                    '& fieldset': { borderColor: '#0D2B14' },
+                                    '&:hover fieldset': { borderColor: '#F7A11A' },
+                                    '&.Mui-focused fieldset': { borderColor: '#0D2B14' },
                                 }
                             }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon sx={{ color: COLORS.textMuted }} />
+                                        <SearchIcon sx={{ color: '#0D2B14' }} />
                                     </InputAdornment>
                                 ),
                             }}

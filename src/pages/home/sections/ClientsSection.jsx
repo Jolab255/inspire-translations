@@ -33,7 +33,14 @@ const ClientsSection = () => {
     ];
 
     return (
-        <Box sx={{ pt: 12, pb: 4, minHeight: { xs: 'auto', md: '60vh' }, bgcolor: '#FFFFFF', display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ 
+            pt: 12, pb: 4, 
+            minHeight: { xs: 'auto', md: '60vh' }, 
+            bgcolor: '#FFFFFF', 
+            display: 'flex', 
+            alignItems: 'center',
+            overflow: 'hidden'
+        }}>
             <Container maxWidth="lg">
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', mb: 10, textAlign: 'left' }}>
                     <FadeInUp>
@@ -124,7 +131,7 @@ const ClientsSection = () => {
                                         fontFamily: 'Outfit',
                                         fontWeight: 800,
                                         fontSize: '0.95rem',
-                                        color: '#1A5C2A',
+                                        color: '#0D2B14',
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.05em'
                                     }}>
@@ -165,7 +172,7 @@ const ClientsSection = () => {
                                 }}
                                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                 sx={{
-                                    color: '#1A5C2A',
+                                    color: '#0D2B14',
                                     fontFamily: '"Inknut Antiqua", serif',
                                     fontWeight: 700,
                                     fontSize: '0.9rem',
@@ -181,7 +188,7 @@ const ClientsSection = () => {
                                     width: 36,
                                     height: 36,
                                     flexShrink: 0,
-                                    bgcolor: '#1A5C2A',
+                                    bgcolor: '#0D2B14',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center'

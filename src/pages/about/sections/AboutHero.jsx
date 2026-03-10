@@ -12,7 +12,7 @@ const AboutHero = ({ c }) => {
             display: 'flex',
             alignItems: 'stretch',
             flexDirection: { xs: 'column', md: 'row' },
-            background: 'linear-gradient(135deg, #1A5C2A 0%, #0D2B14 100%)',
+            background: '#F7A11A',
             position: 'relative'
         }}>
             <Box sx={{
@@ -25,10 +25,25 @@ const AboutHero = ({ c }) => {
                 zIndex: 2
             }}>
                 <Box>
-                    <Typography variant="h1" sx={{ color: '#FFFFFF', fontWeight: 900, mb: 3, fontSize: { xs: '2rem', sm: '2.8rem', md: '4rem' }, lineHeight: 1.1 }}>
+                    <Typography variant="h1" sx={{ 
+                        fontFamily: '"Inknut Antiqua", serif',
+                        color: '#0D2B14', 
+                        fontWeight: 900, 
+                        mb: 3, 
+                        fontSize: { xs: '2.2rem', sm: '3rem', md: '4.5rem' }, 
+                        lineHeight: 1.1 
+                    }}>
                         {c.heroTitle}
                     </Typography>
-                    <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: { xs: '1rem', md: '1.2rem' }, maxWidth: 600, lineHeight: 1.8, mb: 4 }}>
+                    <Typography sx={{ 
+                        fontFamily: '"Inknut Antiqua", serif',
+                        color: 'rgba(13, 43, 20, 0.85)', 
+                        fontSize: { xs: '1rem', md: '1.15rem' }, 
+                        maxWidth: 600, 
+                        lineHeight: 1.8, 
+                        mb: 5, 
+                        fontWeight: 500 
+                    }}>
                         {c.heroDesc}
                     </Typography>
                     <Box
@@ -40,12 +55,12 @@ const AboutHero = ({ c }) => {
                         sx={{
                             display: 'inline-flex',
                             alignItems: 'center',
-                            border: '2px solid #F7A11A',
+                            border: '2px solid #0D2B14',
                             borderRadius: 50,
                             overflow: 'hidden',
                             textDecoration: 'none',
                             transition: 'all 0.3s ease',
-                            '&:hover': { bgcolor: 'rgba(247, 161, 26, 0.04)' }
+                            '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.04)' }
                         }}
                     >
                         <Typography
@@ -56,7 +71,7 @@ const AboutHero = ({ c }) => {
                             }}
                             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                             sx={{
-                                color: '#F7A11A',
+                                color: '#0D2B14',
                                 fontFamily: '"Inknut Antiqua", serif',
                                 fontWeight: 700,
                                 fontSize: '0.8rem',
@@ -67,7 +82,7 @@ const AboutHero = ({ c }) => {
                         >
                             {c.moreBtn}
                         </Typography>
-                        <Box sx={{ width: 44, height: 44, flexShrink: 0, bgcolor: '#F7A11A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box sx={{ width: 44, height: 44, flexShrink: 0, bgcolor: '#0D2B14', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <motion.div
                                 variants={{
                                     rest: { x: 0 },
@@ -75,7 +90,7 @@ const AboutHero = ({ c }) => {
                                 }}
                                 transition={{ type: 'spring', stiffness: 600, damping: 15 }}
                             >
-                                <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 16 }} />
+                                <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 16 }} />
                             </motion.div>
                         </Box>
                     </Box>

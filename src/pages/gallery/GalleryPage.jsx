@@ -33,13 +33,13 @@ const GalleryItem = ({ item, t, onClick, delay }) => {
                 sx={{
                     position: 'relative',
                     width: '100%',
-                    borderRadius: '4px',
+                    borderRadius: 0,
                     overflow: 'hidden',
                     cursor: 'pointer',
                     '&:hover .overlay': { opacity: 1 },
                     '&:hover img': { transform: 'scale(1.08)' },
                     bgcolor: '#f0f0f0',
-                    border: '1px solid rgba(0,0,0,0.05)',
+                    border: '1px solid #0D2B14',
                     lineHeight: 0 // Remove extra space at bottom of image
                 }}
             >
@@ -59,7 +59,7 @@ const GalleryItem = ({ item, t, onClick, delay }) => {
                     sx={{
                         position: 'absolute',
                         inset: 0,
-                        bgcolor: 'rgba(26, 92, 42, 0.85)',
+                        bgcolor: 'rgba(13, 43, 20, 0.9)',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'flex-end',
@@ -74,12 +74,13 @@ const GalleryItem = ({ item, t, onClick, delay }) => {
                         size="small" 
                         sx={{ 
                             bgcolor: '#F7A11A', 
-                            color: '#1A5C2A', 
+                            color: '#0D2B14', 
                             fontWeight: 700, 
                             fontFamily: 'Outfit', 
                             mb: 1.5, 
                             alignSelf: 'flex-start',
-                            fontSize: '0.7rem'
+                            fontSize: '0.7rem',
+                            borderRadius: 0
                         }} 
                     />
                     <Typography 
@@ -145,7 +146,7 @@ const GalleryPage = () => {
                 display: 'flex',
                 alignItems: 'stretch',
                 flexDirection: { xs: 'column', md: 'row' },
-                background: '#1A5C2A',
+                background: '#F7A11A',
                 position: 'relative',
                 overflow: 'hidden'
             }}>
@@ -156,14 +157,14 @@ const GalleryPage = () => {
                     px: { xs: 3, sm: 6, md: 12 },
                     py: { xs: 10, sm: 12, md: 15 },
                     zIndex: 2,
-                    bgcolor: '#1A5C2A',
+                    bgcolor: '#F7A11A',
                     order: { xs: 2, md: 1 }
                 }}>
                     <Box>
                         {/* Animated arrow label */}
                         <Box ref={galleryRef} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2, overflow: 'hidden' }}>
                             <Box sx={{
-                                height: 2, bgcolor: '#F7A11A',
+                                height: 2, bgcolor: '#0D2B14',
                                 width: inView ? 32 : 0,
                                 transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
                             }} />
@@ -173,14 +174,14 @@ const GalleryPage = () => {
                                 opacity: inView ? 1 : 0,
                                 transition: 'opacity 0.4s ease 0.45s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.45s',
                             }}>
-                                <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
+                                <ArrowForwardIcon sx={{ color: '#0D2B14', fontSize: 18 }} />
                             </Box>
                             <Box sx={{
                                 transform: inView ? 'translateY(0)' : 'translateY(8px)',
                                 opacity: inView ? 1 : 0,
                                 transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                             }}>
-                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                                     {c.heroLabel}
                                 </Typography>
                             </Box>
@@ -189,7 +190,7 @@ const GalleryPage = () => {
                             text={c.heroTitle}
                             variant="h1"
                             sx={{ 
-                                color: '#FFFFFF', 
+                                color: '#0D2B14', 
                                 fontWeight: 900, 
                                 mb: 3, 
                                 fontSize: { xs: '2.4rem', sm: '3.2rem', md: '4.2rem' }, 
@@ -197,7 +198,7 @@ const GalleryPage = () => {
                                 fontFamily: '"Inknut Antiqua", serif' 
                             }}
                         />
-                        <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: { xs: '0.9rem', md: '1rem' }, maxWidth: 500, lineHeight: 1.8, fontFamily: '"Inknut Antiqua", serif' }}>
+                        <Typography sx={{ color: 'rgba(13, 43, 20, 0.8)', fontSize: { xs: '0.9rem', md: '1rem' }, maxWidth: 500, lineHeight: 1.8, fontFamily: '"Inknut Antiqua", serif', fontWeight: 500 }}>
                             {c.heroDesc}
                         </Typography>
                     </Box>
@@ -206,7 +207,8 @@ const GalleryPage = () => {
                     width: { xs: '100%', md: '45%' },
                     height: { xs: '300px', md: 'auto' },
                     position: 'relative',
-                    order: { xs: 1, md: 2 }
+                    order: { xs: 1, md: 2 },
+                    borderLeft: { md: '2px solid #0D2B14' }
                 }}>
                     <Box 
                         sx={{ 
@@ -220,8 +222,8 @@ const GalleryPage = () => {
                                 position: 'absolute',
                                 inset: 0,
                                 background: {
-                                    xs: 'linear-gradient(to top, #1A5C2A 0%, transparent 100%)',
-                                    md: 'rgba(26, 92, 42, 0.2)'
+                                    xs: 'linear-gradient(to top, rgba(13, 43, 20, 0.8) 0%, transparent 100%)',
+                                    md: 'rgba(13, 43, 20, 0.2)'
                                 }
                             }
                         }} 
@@ -243,14 +245,13 @@ const GalleryPage = () => {
                                         px: 3,
                                         py: 1,
                                         cursor: 'pointer',
-                                        bgcolor: filter === cat ? '#F7A11A' : 'transparent',
+                                        bgcolor: filter === cat ? '#0D2B14' : 'transparent',
                                         border: '2px solid',
-                                        borderColor: filter === cat ? '#F7A11A' : '#EEEEEE',
-                                        borderRadius: '50px',
+                                        borderColor: '#0D2B14',
+                                        borderRadius: 0,
                                         transition: 'all 0.3s ease',
                                         '&:hover': {
-                                            borderColor: '#F7A11A',
-                                            bgcolor: filter === cat ? '#F7A11A' : 'rgba(247, 161, 26, 0.05)'
+                                            bgcolor: filter === cat ? '#0D2B14' : 'rgba(13, 43, 20, 0.05)'
                                         }
                                     }}
                                 >
@@ -258,7 +259,7 @@ const GalleryPage = () => {
                                         fontFamily: 'Outfit', 
                                         fontWeight: 700, 
                                         fontSize: '0.85rem',
-                                        color: filter === cat ? '#1A5C2A' : '#444444',
+                                        color: filter === cat ? '#FFFFFF' : '#0D2B14',
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.05em'
                                     }}>

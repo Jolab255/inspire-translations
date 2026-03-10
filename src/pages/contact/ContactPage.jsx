@@ -22,6 +22,9 @@ import { uiTranslations } from '../../data/translations/ui';
 import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/common/Animations';
 import { useInView } from 'react-intersection-observer';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 // Import the specific brand image
 import contactHeroImg from '../../assets/images/project_hero.png';
 
@@ -33,6 +36,9 @@ const ContactPage = () => {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
+
+    const handleCloseNotification = () => setNotification({ ...notification, open: false });
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -44,17 +50,13 @@ const ContactPage = () => {
             setError(language === 'en' ? 'Please fill in all required fields.' : 'Tafadhali jaza sehemu zote zinazohitajika.');
             return;
         }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-            setError(language === 'en' ? 'Please enter a valid email address.' : 'Tafadhali weka barua pepe halali.');
-            return;
-        }
 
         setError('');
         setLoading(true);
         
         try {
-            // Setup Formspree integration
-            const response = await fetch('https://formspree.io/f/xvzwzzey', {
+            // Point to the live script on your server to allow localhost testing
+            const response = await fetch('https://www.inspiretranslations.co.tz/send-contact.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -66,12 +68,25 @@ const ContactPage = () => {
             if (response.ok) {
                 setSubmitted(true);
                 setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+                setNotification({ 
+                    open: true, 
+                    message: language === 'en' ? 'Message sent successfully!' : 'Ujumbe umetumwa kikamilifu!', 
+                    severity: 'success' 
+                });
             } else {
-                throw new Error('Form submission failed');
+                const data = await response.json();
+                setNotification({ 
+                    open: true, 
+                    message: data.error || (language === 'en' ? 'Submission failed. Please try again later.' : 'Uwasilishaji umeshindwa. Tafadhali jaribu tena baadaye.'), 
+                    severity: 'error' 
+                });
             }
         } catch (err) {
-            console.error(err);
-            setError(language === 'en' ? 'Network error. Please contact us directly at info@inspiretranslations.co.tz' : 'Hitilafu ya mtandao. Tafadhali wasiliana nasi moja kwa moja kupitia info@inspiretranslations.co.tz');
+            setNotification({ 
+                open: true, 
+                message: language === 'en' ? 'Network error. Please check your connection.' : 'Hitilafu ya mtandao. Tafadhali angalia muunganisho wako.', 
+                severity: 'error' 
+            });
         } finally {
             setLoading(false);
         }
@@ -86,7 +101,7 @@ const ContactPage = () => {
             infoDesc: "Our team responds to all inquiries with absolute precision and professional courtesy.",
             sendMessage: "Send a Message",
             formDesc: "Interested in our services? Fill out the form below for a tailored consultation.",
-            success: "Thank you! Your message has been sent successfully.",
+            success: "Thank you! Your message has been received. A formal response will be sent from info@inspiretranslations.co.tz shortly.",
             fullName: "Full Name",
             email: "Email Address",
             phone: "Phone / WhatsApp",
@@ -104,7 +119,7 @@ const ContactPage = () => {
             infoDesc: "Timu yetu inajibu maswali yote kwa usahihi wa hali ya juu na adabu za kitaalamu.",
             sendMessage: "Tuma Ujumbe",
             formDesc: "Unavutiwa na huduma zetu? Jaza fomu hapa chini kwa ushauri maalum.",
-            success: "Asante! Ujumbe wako umetumwa kwa mafanikio.",
+            success: "Asante! Ujumbe wako umepokelewa. Majibu rasmi yatatumwa kutoka info@inspiretranslations.co.tz hivi karibuni.",
             fullName: "Jina Kamili",
             email: "Barua Pepe",
             phone: "Simu / WhatsApp",
@@ -122,50 +137,50 @@ const ContactPage = () => {
         '& .MuiOutlinedInput-root': {
             borderRadius: 0,
             bgcolor: '#FFFFFF',
-            minHeight: '56px', // Standard height to prevent shrinking
+            minHeight: '56px',
             '& fieldset': {
-                borderColor: '#1A5C2A', // Bold Green Outline
-                borderWidth: '2.5px',
+                borderColor: '#0D2B14',
+                borderWidth: '2px',
             },
             '&:hover fieldset': {
-                borderColor: '#1A5C2A',
-                borderWidth: '3px',
+                borderColor: '#0D2B14',
+                borderWidth: '2px',
             },
             '&.Mui-focused fieldset': {
-                borderColor: '#F7A11A', // Yellow focus for clarity
-                borderWidth: '3px',
+                borderColor: '#0D2B14',
+                borderWidth: '2.5px',
             },
             '& input': {
-                color: '#1A5C2A', // Dark Green Text
+                color: '#0D2B14',
                 fontFamily: 'Outfit',
                 fontWeight: 600,
             },
             '& textarea': {
-                color: '#1A5C2A', // Dark Green Text
+                color: '#0D2B14',
                 fontFamily: 'Outfit',
                 fontWeight: 600,
             },
             '& .MuiSelect-select': {
-                color: '#1A5C2A', // Ensure select text is also green
+                color: '#0D2B14',
                 fontFamily: 'Outfit',
                 fontWeight: 600,
                 display: 'flex',
                 alignItems: 'center',
             },
             '& input::placeholder': {
-                color: 'rgba(26, 92, 42, 0.5)', 
+                color: 'rgba(13, 43, 20, 0.5)', 
             },
             '& textarea::placeholder': {
-                color: 'rgba(26, 92, 42, 0.5)',
+                color: 'rgba(13, 43, 20, 0.5)',
             },
         },
         '& .MuiInputLabel-root': {
             fontFamily: '"Inknut Antiqua", serif',
             fontSize: '0.85rem',
-            color: '#1A5C2A',
+            color: '#0D2B14',
             fontWeight: 700,
             '&.Mui-focused': {
-                color: '#F7A11A',
+                color: '#0D2B14',
             },
         },
     };
@@ -177,22 +192,31 @@ const ContactPage = () => {
                 description={c.heroDesc}
             />
 
-            {/* Authentic Brand Hero - matching the HeroSection style */}
-            <Box sx={{ 
-                position: 'relative', 
-                minHeight: { xs: 'auto', md: '75vh' },
+            {/* Split Hero Design */}
+            <Box sx={{
+                minHeight: { xs: 'auto', md: '65vh' },
                 display: 'flex',
-                alignItems: 'flex-start',
-                background: `linear-gradient(135deg, rgba(26, 92, 42, 0.95) 0%, rgba(15, 58, 26, 0.9) 100%), url(${contactHeroImg}) center/cover no-repeat`,
-                pt: { xs: 20, md: 24 },
-                pb: { xs: 15, md: 24 }
+                alignItems: 'stretch',
+                flexDirection: { xs: 'column', md: 'row' },
+                background: '#F7A11A',
+                position: 'relative',
+                overflow: 'hidden'
             }}>
-                <Container maxWidth="lg">
-                    <Box sx={{ maxWidth: 850 }}>
+                <Box sx={{
+                    width: { xs: '100%', md: '55%' },
+                    display: 'flex',
+                    alignItems: 'center',
+                    px: { xs: 3, sm: 6, md: 12 },
+                    py: { xs: 10, sm: 12, md: 15 },
+                    zIndex: 2,
+                    bgcolor: '#F7A11A',
+                    order: { xs: 2, md: 1 }
+                }}>
+                    <Box>
                         {/* Animated arrow label */}
                         <Box ref={contactRef} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2, overflow: 'hidden' }}>
                             <Box sx={{
-                                height: 2, bgcolor: '#F7A11A',
+                                height: 2, bgcolor: '#0D2B14',
                                 width: inView ? 32 : 0,
                                 transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
                             }} />
@@ -202,14 +226,14 @@ const ContactPage = () => {
                                 opacity: inView ? 1 : 0,
                                 transition: 'opacity 0.4s ease 0.45s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.45s',
                             }}>
-                                <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
+                                <ArrowForwardIcon sx={{ color: '#0D2B14', fontSize: 18 }} />
                             </Box>
                             <Box sx={{
                                 transform: inView ? 'translateY(0)' : 'translateY(8px)',
                                 opacity: inView ? 1 : 0,
                                 transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
                             }}>
-                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                                     {c.heroLabel}
                                 </Typography>
                             </Box>
@@ -219,43 +243,71 @@ const ContactPage = () => {
                             variant="h1"
                             sx={{ 
                                 fontFamily: '"Inknut Antiqua", serif',
-                                fontSize: { xs: '2rem', sm: '2.8rem', md: '3.5rem' },
-                                color: '#FFFFFF',
+                                fontSize: { xs: '2.4rem', sm: '3.2rem', md: '4.2rem' },
+                                color: '#0D2B14',
                                 lineHeight: 1.1,
                                 mb: 3,
-                                fontWeight: 400
+                                fontWeight: 900
                             }}
                         />
                         <Typography sx={{ 
                             fontFamily: '"Inknut Antiqua", serif',
-                            color: 'rgba(255,255,255,0.8)',
-                            fontSize: '0.95rem',
+                            color: 'rgba(13, 43, 20, 0.8)',
+                            fontSize: { xs: '0.9rem', md: '1.1rem' },
                             lineHeight: 1.8,
-                            maxWidth: 600
+                            maxWidth: 550,
+                            fontWeight: 500
                         }}>
                             {c.heroDesc}
                         </Typography>
                     </Box>
-                </Container>
+                </Box>
+                <Box sx={{
+                    width: { xs: '100%', md: '45%' },
+                    height: { xs: '300px', md: 'auto' },
+                    position: 'relative',
+                    order: { xs: 1, md: 2 },
+                    borderLeft: { md: '2px solid #0D2B14' }
+                }}>
+                    <Box 
+                        sx={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            minHeight: '100%',
+                            background: `url(${contactHeroImg}) center/cover no-repeat`,
+                            filter: 'grayscale(0.2) contrast(1.1)',
+                            '&::after': {
+                                content: '""',
+                                position: 'absolute',
+                                inset: 0,
+                                background: {
+                                    xs: 'linear-gradient(to top, rgba(13, 43, 20, 0.8) 0%, transparent 100%)',
+                                    md: 'rgba(13, 43, 20, 0.15)'
+                                }
+                            }
+                        }} 
+                    />
+                </Box>
             </Box>
 
-            {/* Split Content Section - Matching the Hero side-by-side logic */}
+            {/* Split Content Section */}
             <Container maxWidth="lg" sx={{ mt: { xs: 4, md: -12 }, mb: 8, position: 'relative', zIndex: 10 }}>
                 <Grid container spacing={0}>
-                    {/* Left: Contact Details (The Yellow Box) */}
+                    {/* Left: Contact Details (The White Box) */}
                     <Grid item xs={12} md={5}>
                         <Box sx={{ 
-                            bgcolor: '#F7A11A', 
+                            bgcolor: '#FFFFFF', 
                             p: { xs: 4, md: 6 }, 
                             height: '100%',
-                            border: '3px solid #FFFFFF',
+                            border: '3px solid #0D2B14',
                             display: 'flex',
-                            flexDirection: 'column'
+                            flexDirection: 'column',
+                            boxShadow: 'none'
                         }}>
                             <Typography sx={{ 
                                 fontFamily: '"Inknut Antiqua", serif', 
                                 fontWeight: 700, 
-                                color: '#1A5C2A', 
+                                color: '#0D2B14', 
                                 fontSize: '1.8rem',
                                 mb: 2
                             }}>
@@ -263,10 +315,11 @@ const ContactPage = () => {
                             </Typography>
                             <Typography sx={{ 
                                 fontFamily: '"Inknut Antiqua", serif', 
-                                color: '#4A4A4A', 
+                                color: 'rgba(13, 43, 20, 0.7)', 
                                 mb: 6, 
                                 lineHeight: 1.6,
-                                fontSize: '0.9rem'
+                                fontSize: '0.9rem',
+                                fontWeight: 500
                             }}>
                                 {c.infoDesc}
                             </Typography>
@@ -279,10 +332,10 @@ const ContactPage = () => {
                                     { icon: <EmailIcon />, label: 'Email', value: 'info@inspiretranslations.co.tz' }
                                 ].map((item, i) => (
                                     <Box key={i} sx={{ display: 'flex', gap: 2.5, alignItems: 'flex-start' }}>
-                                        <Box sx={{ color: '#1A5C2A', mt: 0.5 }}>{item.icon}</Box>
+                                        <Box sx={{ color: '#F7A11A', mt: 0.5 }}>{item.icon}</Box>
                                         <Box>
-                                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(26, 92, 42, 0.6)' }}>{item.label}</Typography>
-                                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '1rem', fontWeight: 600, color: '#1A5C2A' }}>{item.value}</Typography>
+                                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.5)' }}>{item.label}</Typography>
+                                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '1rem', fontWeight: 600, color: '#0D2B14' }}>{item.value}</Typography>
                                         </Box>
                                     </Box>
                                 ))}
@@ -290,14 +343,15 @@ const ContactPage = () => {
                         </Box>
                     </Grid>
 
-                    {/* Right: The Form (The White Box) */}
+                    {/* Right: The Form (The Yellow Box) */}
                     <Grid item xs={12} md={7}>
                         <Box sx={{ 
-                            bgcolor: '#FFFFFF', 
+                            bgcolor: '#F7A11A', 
                             p: { xs: 4, md: 7 }, 
                             height: '100%',
-                            border: '3px solid #1A5C2A',
-                            borderLeft: { md: 'none' }
+                            border: '3px solid #0D2B14',
+                            borderLeft: { md: 'none' },
+                            boxShadow: '0 20px 60px rgba(13, 43, 20, 0.15)'
                         }}>
                             <AnimatePresence mode="wait">
                                 {submitted ? (
@@ -315,28 +369,24 @@ const ContactPage = () => {
                                             justifyContent: 'center',
                                             height: '100%'
                                         }}>
-                                            <CheckCircleIcon sx={{ fontSize: 80, color: '#1A5C2A', mb: 3, opacity: 0.9 }} />
+                                            <CheckCircleIcon sx={{ fontSize: 80, color: '#0D2B14', mb: 3 }} />
                                             <Typography variant="h4" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', mb: 2 }}>
                                                 {language === 'en' ? 'Success!' : 'Imefanikiwa!'}
                                             </Typography>
-                                            <Typography sx={{ fontFamily: 'Outfit', color: '#4A4A6A', fontSize: '1.1rem', mb: 4, maxWidth: 450, lineHeight: 1.6 }}>
+                                            <Typography sx={{ fontFamily: 'Outfit', color: '#0D2B14', fontSize: '1.1rem', mb: 4, maxWidth: 450, lineHeight: 1.6, fontWeight: 500 }}>
                                                 {c.success}
                                             </Typography>
-                                            <Box sx={{ p: 3, bgcolor: 'rgba(26,92,42,0.04)', border: '1px dashed #1A5C2A', mb: 6 }}>
-                                                <Typography sx={{ color: '#1A5C2A', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                                                    {language === 'en' ? 'Our team will contact you shortly.' : 'Timu yetu itawasiliana nawe hivi karibuni.'}
-                                                </Typography>
-                                            </Box>
                                             <Button 
                                                 onClick={() => setSubmitted(false)} 
-                                                variant="text" 
+                                                variant="contained" 
                                                 sx={{ 
-                                                    color: '#1A5C2A', 
+                                                    bgcolor: '#0D2B14', 
+                                                    color: '#FFFFFF',
                                                     fontWeight: 700, 
-                                                    fontFamily: '"Inknut Antiqua", serif', 
-                                                    fontSize: '1rem', 
-                                                    textDecoration: 'underline',
-                                                    '&:hover': { bgcolor: 'transparent', textDecoration: 'none' }
+                                                    fontFamily: 'Outfit', 
+                                                    borderRadius: 50,
+                                                    px: 4,
+                                                    '&:hover': { bgcolor: '#000' }
                                                 }}
                                             >
                                                 {language === 'en' ? 'Send another message' : 'Tuma ujumbe mwingine'}
@@ -345,20 +395,20 @@ const ContactPage = () => {
                                     </motion.div>
                                 ) : (
                                     <Box component="form" onSubmit={handleSubmit}>
-                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#1A5C2A', fontSize: '1.6rem', mb: 1.5 }}>{c.sendMessage}</Typography>
-                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#4A4A6A', fontSize: '0.9rem', mb: 5 }}>{c.formDesc}</Typography>
+                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '1.6rem', mb: 1.5 }}>{c.sendMessage}</Typography>
+                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: 'rgba(13, 43, 20, 0.8)', fontSize: '0.9rem', mb: 5, fontWeight: 500 }}>{c.formDesc}</Typography>
                                         
                                         {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 0, fontFamily: 'Outfit' }}>{error}</Alert>}
                                         
                                         <Grid container spacing={3}>
                                             <Grid item xs={12} sm={6}><TextField fullWidth name="name" value={form.name} onChange={handleChange} label={c.fullName} required variant="outlined" sx={inputStyles} /></Grid>
                                             <Grid item xs={12} sm={6}><TextField fullWidth name="email" value={form.email} onChange={handleChange} label={c.email} type="email" required variant="outlined" sx={inputStyles} /></Grid>
-                                            <Grid item xs={12} sm={6}>
+                                            <Grid item xs={12} sm={7}>
                                                 <TextField fullWidth name="subject" value={form.subject} onChange={handleChange} label={c.subject} required select variant="outlined" sx={inputStyles}>
                                                     {c.subjects.map((s) => <MenuItem key={s} value={s} sx={{ fontFamily: 'Outfit' }}>{s}</MenuItem>)}
                                                 </TextField>
                                             </Grid>
-                                            <Grid item xs={12} sm={6}><TextField fullWidth name="phone" value={form.phone} onChange={handleChange} label={c.phone} variant="outlined" sx={inputStyles} /></Grid>
+                                            <Grid item xs={12} sm={5}><TextField fullWidth name="phone" value={form.phone} onChange={handleChange} label={c.phone} variant="outlined" sx={inputStyles} /></Grid>
                                             <Grid item xs={12}><TextField fullWidth name="message" value={form.message} onChange={handleChange} label={c.message} required multiline rows={3} variant="outlined" sx={inputStyles} /></Grid>
                                             <Grid item xs={12}>
                                                 {/* Signature Pill Arrow Button */}
@@ -372,32 +422,46 @@ const ContactPage = () => {
                                                     sx={{
                                                         display: 'inline-flex',
                                                         alignItems: 'center',
-                                                        border: '2px solid #1A5C2A',
+                                                        border: '2.5px solid #0D2B14',
                                                         borderRadius: 50,
                                                         overflow: 'hidden',
                                                         bgcolor: 'transparent',
                                                         cursor: 'pointer',
                                                         p: 0,
-                                                        '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.04)' }
+                                                        transition: 'all 0.3s ease',
+                                                        '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.05)' }
                                                     }}
                                                 >
                                                     <Typography
                                                         component={motion.span}
                                                         variants={{ rest: { x: 0 }, hover: { x: 5 } }}
+                                                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                                         sx={{
-                                                            color: '#1A5C2A',
+                                                            color: '#0D2B14',
                                                             fontFamily: '"Inknut Antiqua", serif',
-                                                            fontWeight: 700,
-                                                            fontSize: '0.8rem',
+                                                            fontWeight: 800,
+                                                            fontSize: '0.85rem',
                                                             px: 4,
-                                                            lineHeight: '44px'
+                                                            lineHeight: '48px',
+                                                            whiteSpace: 'nowrap'
                                                         }}
                                                     >
                                                         {loading ? c.sending : c.send}
                                                     </Typography>
-                                                    <Box sx={{ width: 44, height: 44, bgcolor: '#1A5C2A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                        <motion.div variants={{ rest: { x: 0 }, hover: { x: 8 } }}>
-                                                            <ArrowForwardIcon sx={{ color: '#FFFFFF', fontSize: 18 }} />
+                                                    <Box sx={{ 
+                                                        width: 48, 
+                                                        height: 48, 
+                                                        bgcolor: '#0D2B14', 
+                                                        display: 'flex', 
+                                                        alignItems: 'center', 
+                                                        justifyContent: 'center',
+                                                        flexShrink: 0
+                                                    }}>
+                                                        <motion.div 
+                                                            variants={{ rest: { x: 0 }, hover: { x: 8 } }}
+                                                            transition={{ type: 'spring', stiffness: 600, damping: 15 }}
+                                                        >
+                                                            <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 22 }} />
                                                         </motion.div>
                                                     </Box>
                                                 </Box>
@@ -412,6 +476,32 @@ const ContactPage = () => {
             </Container>
 
             <CTASection />
+
+            {/* Pop-up Notifications */}
+            <Snackbar 
+                open={notification.open} 
+                autoHideDuration={6000} 
+                onClose={handleCloseNotification}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <MuiAlert 
+                    onClose={handleCloseNotification} 
+                    severity={notification.severity} 
+                    variant="filled"
+                    sx={{ 
+                        width: '100%', 
+                        bgcolor: notification.severity === 'success' ? '#0D2B14' : '#d32f2f',
+                        color: notification.severity === 'success' ? '#F7A11A' : '#fff',
+                        fontFamily: 'Outfit',
+                        fontWeight: 700,
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        border: notification.severity === 'success' ? '2px solid #F7A11A' : 'none'
+                    }}
+                >
+                    {notification.message}
+                </MuiAlert>
+            </Snackbar>
         </Box>
     );
 };

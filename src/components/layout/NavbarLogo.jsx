@@ -31,8 +31,8 @@ const NavbarLogo = ({ height = 56 }) => {
                 src={logoImg}
                 alt="Inspire Translations"
                 sx={{
-                    height,
-                    minWidth: 160,
+                    height: { xs: Math.min(height, 44), md: height },
+                    minWidth: { xs: 120, md: 160 },
                     maxWidth: 240,
                     width: 'auto',
                     objectFit: 'contain',

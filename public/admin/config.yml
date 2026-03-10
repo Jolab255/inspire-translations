@@ -2,7 +2,7 @@ backend:
   name: github
   repo: Jolab255/inspire-translations
   branch: main
-  base_url: https://inspiretranslations.co.tz
+  base_url: https://www.inspiretranslations.co.tz
   auth_endpoint: admin/auth.php
 
 media_folder: "public/uploads"
@@ -27,8 +27,9 @@ collections:
     label: "Projects"
     folder: "src/content/projects"
     create: true
-    slug: "{{slug}}"
+    slug: "{{slug}}.{{lang}}"
     fields:
+      - { label: "Language", name: "lang", widget: "select", options: ["en", "sw"] }
       - { label: "Type", name: "type", widget: "select", options: ["interpretation", "translation"] }
       - { label: "Title", name: "title", widget: "string", hint: "Max 60 characters. Example: UN Conference Interpretation" }
       - { label: "Client", name: "client", widget: "string", hint: "Example: UNICEF, EAC, World Bank" }

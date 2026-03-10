@@ -8,17 +8,23 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
+html,
 body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #ffffff;
   color: #1A1A2E;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* Custom scrollbar */

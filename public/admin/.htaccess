@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "Restricted Admin Area"
-AuthUserFile /home/jooh/websites/inspire-translations/public/admin/.htpasswd
-Require valid-user

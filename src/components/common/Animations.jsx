@@ -7,7 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 // Standard Fade In Up
 export const FadeInUp = ({ children, delay = 0, threshold = 0.1, ...props }) => {
-    const { ref, inView } = useInView({ triggerOnce: true, threshold });
+    const { ref, inView } = useInView({ triggerOnce: false, threshold });
     return (
         <motion.div
             ref={ref}
@@ -24,8 +24,8 @@ export const FadeInUp = ({ children, delay = 0, threshold = 0.1, ...props }) => 
 
 // Animated text component for typewriter spelling effect
 export const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
-    // Reduced threshold and triggerOnce: true for smoother performance
-    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+    // Reduced threshold and triggerOnce: false for smoother performance
+    const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.1 });
     const words = text.split(' ');
 
     const containerVariants = {

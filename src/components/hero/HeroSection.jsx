@@ -58,7 +58,7 @@ const cardData = [
 
 // Animation helper
 const FadeInUp = ({ children, delay = 0, threshold = 0.15 }) => {
-    const { ref, inView } = useInView({ triggerOnce: true, threshold });
+    const { ref, inView } = useInView({ triggerOnce: false, threshold });
     return (
         <motion.div
             ref={ref}
@@ -73,7 +73,7 @@ const FadeInUp = ({ children, delay = 0, threshold = 0.15 }) => {
 
 // Animated text component for typewriter spelling effect
 const TypewriterText = ({ text, sx, variant = "h2", ...props }) => {
-    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+    const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.1 });
     const letters = Array.from(text);
 
     const containerVariants = {
@@ -166,10 +166,10 @@ const HeroSection = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'linear-gradient(135deg, #1A5C2A 0%, #0F3A1A 100%)',
+                    background: '#F7A11A',
                     pt: { xs: 14, md: 16 },
                     pb: { xs: 8, md: 0 },
-                    overflow: { xs: 'hidden', md: 'visible' }
+                    overflow: 'hidden'
                 }}
             >
                 {/* ── Premium Decorative Glows ── */}
@@ -180,7 +180,7 @@ const HeroSection = () => {
                         right: '-5%',
                         width: '40%',
                         height: '60%',
-                        background: 'radial-gradient(circle, rgba(247,161,26,0.15) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%)',
                         filter: 'blur(80px)',
                         zIndex: 1,
                         pointerEvents: 'none',
@@ -193,7 +193,7 @@ const HeroSection = () => {
                         left: '-5%',
                         width: '30%',
                         height: '50%',
-                        background: 'radial-gradient(circle, rgba(74,222,128,0.1) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
                         filter: 'blur(60px)',
                         zIndex: 1,
                         pointerEvents: 'none',
@@ -211,13 +211,12 @@ const HeroSection = () => {
                                 fontWeight: 400,
                                 fontSize: { xs: '1.6rem', sm: '2.4rem', md: '3.2rem', lg: '4rem' },
                                 lineHeight: 1.1,
-                                color: '#FFFFFF',
+                                color: '#0D2B14',
                                 textAlign: 'left',
-                                textShadow: '0 4px 24px rgba(0,0,0,0.3)',
                             }}
                         >
                             {c.seamless}{' '}
-                            <Box component="span" sx={{ display: 'inline-block', color: '#F7A11A', minWidth: { xs: '120px', sm: '200px' } }}>
+                            <Box component="span" sx={{ display: 'inline-block', color: '#FFFFFF', minWidth: { xs: '120px', sm: '200px' } }}>
                                 <AnimatePresence mode="wait">
                                     <motion.span
                                         key={currentIndex + language}
@@ -253,9 +252,9 @@ const HeroSection = () => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     textDecoration: 'none',
-                                    border: '3px solid #FFFFFF',
+                                    border: 'none',
                                     overflow: 'visible',
-                                    boxShadow: 'none',
+                                    boxShadow: '0 40px 100px rgba(13, 43, 20, 0.12)',
                                 }}
                             >
                                 <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
@@ -281,7 +280,7 @@ const HeroSection = () => {
                                                 sx={{
                                                     fontFamily: '"Inknut Antiqua", serif',
                                                     fontWeight: 700,
-                                                    color: '#1A5C2A',
+                                                    color: '#0D2B14',
                                                     bgcolor: '#FFFFFF',
                                                     textAlign: 'center',
                                                     p: 1.5,
@@ -355,13 +354,13 @@ const HeroSection = () => {
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            border: '2px solid #1A5C2A',
+                                            border: '2px solid #0D2B14',
                                             borderRadius: 50,
                                             overflow: 'hidden',
                                             textDecoration: 'none',
                                             transition: 'all 0.3s ease',
                                             cursor: 'pointer',
-                                            '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.04)' }
+                                            '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.04)' }
                                         }}
                                     >
                                         <Typography
@@ -372,7 +371,7 @@ const HeroSection = () => {
                                             }}
                                             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                             sx={{
-                                                color: '#1A5C2A',
+                                                color: '#0D2B14',
                                                 fontFamily: '"Inknut Antiqua", serif',
                                                 fontWeight: 700,
                                                 fontSize: '0.8rem',
@@ -390,7 +389,7 @@ const HeroSection = () => {
                                                 width: 40,
                                                 height: 40,
                                                 flexShrink: 0,
-                                                bgcolor: '#1A5C2A',
+                                                bgcolor: '#0D2B14',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
@@ -410,7 +409,7 @@ const HeroSection = () => {
                                 </Box>
                             </Box>
 
-                            {/* Right: Shrunk Yellow Box Area */}
+                            {/* Right Box Area */}
                             <Box
                                 sx={{
                                     flex: { md: 1.5, lg: 2 },
@@ -418,7 +417,7 @@ const HeroSection = () => {
                                     mt: { md: 5 },
                                     width: '100%',
                                     height: { xs: 'auto', md: '260px' },
-                                    bgcolor: '#F7A11A',
+                                    bgcolor: '#FFFFFF',
                                     zIndex: 2,
                                     display: 'flex',
                                     flexDirection: { xs: 'column', md: 'row' },
@@ -427,12 +426,12 @@ const HeroSection = () => {
                                     px: { xs: 3, sm: 4, md: 6 },
                                     py: { xs: 5, md: 0 },
                                     borderRadius: 0,
-                                    boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                                    boxShadow: '0 30px 60px rgba(13, 43, 20, 0.12)',
                                     pointerEvents: 'auto'
                                 }}
                             >
-                                {/* Left: Text Content inside Yellow Box */}
-                                <Box sx={{ flex: 2, color: '#1A5C2A', pr: { md: 1 } }}>
+                                {/* Left: Text Content inside Box */}
+                                <Box sx={{ flex: 2, color: '#0D2B14', pr: { md: 1 } }}>
                                     <FadeInUp>
                                         <TypewriterText
                                             key={`prof-sol-${language}`}
@@ -471,14 +470,14 @@ const HeroSection = () => {
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            border: '2px solid #1A5C2A',
+                                            border: '2px solid #0D2B14',
                                             borderRadius: 50,
                                             overflow: 'hidden',
                                             textDecoration: 'none',
                                             transition: 'all 0.3s ease',
                                             '&:hover': {
-                                                borderColor: '#1A5C2A',
-                                                bgcolor: 'rgba(26, 92, 42, 0.04)'
+                                                borderColor: '#0D2B14',
+                                                bgcolor: 'rgba(13, 43, 20, 0.04)'
                                             }
                                         }}
                                     >
@@ -490,7 +489,7 @@ const HeroSection = () => {
                                             }}
                                             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                             sx={{
-                                                color: '#1A5C2A',
+                                                color: '#0D2B14',
                                                 fontFamily: '"Inknut Antiqua", serif',
                                                 fontWeight: 700,
                                                 fontSize: '0.8rem',
@@ -512,7 +511,7 @@ const HeroSection = () => {
                                                 width: 40,
                                                 height: 40,
                                                 flexShrink: 0,
-                                                bgcolor: '#1A5C2A',
+                                                bgcolor: '#0D2B14',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center'

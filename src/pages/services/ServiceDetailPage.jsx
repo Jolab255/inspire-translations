@@ -161,131 +161,144 @@ const ServiceDetailPage = () => {
                 description={t(service.shortDesc)}
             />
 
-            {/* Premium Service Hero */}
-            <Box sx={{ 
-                position: 'relative', 
-                minHeight: { xs: 'auto', md: '100vh' },
+            {/* Split Hero Design */}
+            <Box sx={{
+                minHeight: { xs: 'auto', md: '65vh' },
                 display: 'flex',
-                alignItems: 'center',
-                background: `linear-gradient(135deg, rgba(26, 92, 42, 0.96) 0%, rgba(15, 58, 26, 0.92) 100%), url(${heroImg}) center/cover no-repeat`,
-                pt: { xs: 18, md: 12 },
-                pb: { xs: 6, md: 8 },
+                alignItems: 'stretch',
+                flexDirection: { xs: 'column', md: 'row' },
+                background: '#F7A11A',
+                position: 'relative',
                 overflow: 'hidden'
             }}>
-                <Container maxWidth="lg">
-                    <Box sx={{ 
-                        display: 'flex', 
-                        flexDirection: { xs: 'column', md: 'row' }, 
-                        alignItems: 'center',
-                        gap: { xs: 6, md: 8 }
-                    }}>
-                        <Box sx={{ flex: 1, maxWidth: { md: '60%' } }}>
-                            <Box ref={heroRef} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2, overflow: 'hidden' }}>
-                                <Box sx={{
-                                    height: 2, bgcolor: '#F7A11A',
-                                    width: heroInView ? 32 : 0,
-                                    transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
-                                }} />
-                                <Box sx={{
-                                    display: 'flex', alignItems: 'center',
-                                    transform: heroInView ? 'translateX(0) scale(1)' : 'translateX(-20px) scale(0.6)',
-                                    opacity: heroInView ? 1 : 0,
-                                    transition: 'opacity 0.4s ease 0.45s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.45s',
-                                }}>
-                                    <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
-                                </Box>
-                                <Box sx={{
-                                    transform: heroInView ? 'translateY(0)' : 'translateY(8px)',
-                                    opacity: heroInView ? 1 : 0,
-                                    transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
-                                }}>
-                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#F7A11A', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                                        {language === 'en' ? 'Service Excellence' : 'Ubora wa Huduma'}
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            <TypewriterText 
-                                text={t(service.title)}
-                                variant="h1"
-                                sx={{ 
-                                    fontFamily: '"Inknut Antiqua", serif',
-                                    fontSize: { xs: '2.2rem', sm: '2.8rem', md: '3.8rem' },
-                                    color: '#FFFFFF',
-                                    lineHeight: 1.1,
-                                    mb: 3,
-                                    fontWeight: 400
-                                }}
-                            />
-                            
-                            <Typography sx={{ 
-                                fontFamily: '"Inknut Antiqua", serif',
-                                color: 'rgba(255,255,255,0.85)',
-                                fontSize: { xs: '0.95rem', md: '1.05rem' },
-                                lineHeight: 1.8,
-                                maxWidth: 600,
-                                mb: 4
+                <Box sx={{
+                    width: { xs: '100%', md: '55%' },
+                    display: 'flex',
+                    alignItems: 'center',
+                    px: { xs: 3, sm: 6, md: 12 },
+                    py: { xs: 10, sm: 12, md: 15 },
+                    zIndex: 2,
+                    bgcolor: '#F7A11A',
+                    order: { xs: 2, md: 1 }
+                }}>
+                    <Box>
+                        {/* Animated arrow label */}
+                        <Box ref={heroRef} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2, overflow: 'hidden' }}>
+                            <Box sx={{
+                                height: 2, bgcolor: '#0D2B14',
+                                width: heroInView ? 32 : 0,
+                                transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
+                            }} />
+                            <Box sx={{
+                                display: 'flex', alignItems: 'center',
+                                transform: heroInView ? 'translateX(0) scale(1)' : 'translateX(-20px) scale(0.6)',
+                                opacity: heroInView ? 1 : 0,
+                                transition: 'opacity 0.4s ease 0.45s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.45s',
                             }}>
-                                {t(service.shortDesc)}
-                            </Typography>
-
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, mt: 2, fontFamily: 'Outfit', fontSize: '0.85rem' }}>
-                                <Typography component={RouterLink} to={`/${language}`} sx={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', '&:hover': { color: '#F7A11A' } }}>Home</Typography>
-                                <Typography sx={{ color: 'rgba(255,255,255,0.4)' }}>/</Typography>
-                                <Typography component={RouterLink} to={`/${language}/services`} sx={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', '&:hover': { color: '#F7A11A' } }}>Services</Typography>
-                                <Typography sx={{ color: 'rgba(255,255,255,0.4)' }}>/</Typography>
-                                <Typography sx={{ color: '#F7A11A', fontWeight: 600 }}>{t(service.title)}</Typography>
+                                <ArrowForwardIcon sx={{ color: '#0D2B14', fontSize: 18 }} />
+                            </Box>
+                            <Box sx={{
+                                transform: heroInView ? 'translateY(0)' : 'translateY(8px)',
+                                opacity: heroInView ? 1 : 0,
+                                transition: 'opacity 0.4s ease 0.6s, transform 0.4s ease 0.6s',
+                            }}>
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                                    {language === 'en' ? 'Service Excellence' : 'Ubora wa Huduma'}
+                                </Typography>
                             </Box>
                         </Box>
+                        <TypewriterText 
+                            text={t(service.title)}
+                            variant="h1"
+                            sx={{ 
+                                color: '#0D2B14', 
+                                fontWeight: 900, 
+                                mb: 3, 
+                                fontSize: { xs: '2.4rem', sm: '3.2rem', md: '4.2rem' }, 
+                                lineHeight: 1.1, 
+                                fontFamily: '"Inknut Antiqua", serif' 
+                            }}
+                        />
+                        <Typography sx={{ color: 'rgba(13, 43, 20, 0.8)', fontSize: { xs: '0.9rem', md: '1rem' }, maxWidth: 500, lineHeight: 1.8, fontFamily: '"Inknut Antiqua", serif', fontWeight: 500, mb: 4 }}>
+                            {t(service.shortDesc)}
+                        </Typography>
 
-                        <Box sx={{ 
-                            flex: { xs: '1', md: '0 0 38%' },
-                            width: '100%',
-                            bgcolor: '#F7A11A',
-                            p: { xs: 4, md: 8, lg: 10 },
-                            border: '3px solid #FFFFFF',
-                            boxShadow: '30px 30px 0px rgba(26, 92, 42, 0.3)',
-                            position: 'relative',
-                            zIndex: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center'
-                        }}>
-                            <Typography sx={{ 
-                                fontFamily: '"Inknut Antiqua", serif', 
-                                fontWeight: 700, 
-                                color: '#1A5C2A', 
-                                fontSize: '1.6rem', 
-                                mb: 3,
-                                lineHeight: 1.2
-                            }}>
-                                {c.readyToStart}
-                            </Typography>
-                            <Typography sx={{ 
-                                fontFamily: '"Inknut Antiqua", serif',
-                                color: '#4A4A4A', 
-                                mb: 5, 
-                                fontSize: '0.95rem', 
-                                lineHeight: 1.8 
-                            }}>
-                                {c.readyDesc}
-                            </Typography>
-                            
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 1 }}>
-                                    <Box sx={{ width: 10, height: 10, bgcolor: '#1A5C2A', borderRadius: '50%' }} />
-                                    <Typography sx={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '0.8rem', color: '#1A5C2A', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-                                        {language === 'en' ? 'Official Service Provider' : 'Mtoa Huduma Rasmi'}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Container>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, mt: 2, fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem' }}>
+                            <Typography component={RouterLink} to={`/${language}`} sx={{ color: 'rgba(13, 43, 20, 0.6)', textDecoration: 'none', fontFamily: 'inherit', fontWeight: 500, '&:hover': { color: '#0D2B14' } }}>Home</Typography>
+                            <Typography sx={{ color: 'rgba(13, 43, 20, 0.4)', fontFamily: 'inherit' }}>/</Typography>
+                            <Typography component={RouterLink} to={`/${language}/services`} sx={{ color: 'rgba(13, 43, 20, 0.6)', textDecoration: 'none', fontFamily: 'inherit', fontWeight: 500, '&:hover': { color: '#0D2B14' } }}>Services</Typography>
+                            <Typography sx={{ color: 'rgba(13, 43, 20, 0.4)', fontFamily: 'inherit' }}>/</Typography>
+                            <Typography sx={{ color: '#0D2B14', fontWeight: 700, fontFamily: 'inherit' }}>{t(service.title)}</Typography>
+                        </Box>                    </Box>
+                </Box>
+                <Box sx={{
+                    width: { xs: '100%', md: '45%' },
+                    height: { xs: '300px', md: 'auto' },
+                    position: 'relative',
+                    order: { xs: 1, md: 2 },
+                    borderLeft: { md: '2px solid #0D2B14' }
+                }}>
+                    <Box 
+                        sx={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            minHeight: '100%',
+                            background: `url(${heroImg}) center/cover no-repeat`,
+                            filter: 'grayscale(0.2) contrast(1.1)',
+                            '&::after': {
+                                content: '""',
+                                position: 'absolute',
+                                inset: 0,
+                                background: {
+                                    xs: 'linear-gradient(to top, rgba(13, 43, 20, 0.8) 0%, transparent 100%)',
+                                    md: 'rgba(13, 43, 20, 0.15)'
+                                }
+                            }
+                        }} 
+                    />
+                </Box>
             </Box>
 
+            {/* Initiative CTA Box Section (Floating between hero and details) */}
+            <Container maxWidth="lg" sx={{ mt: -10, mb: 8, position: 'relative', zIndex: 10 }}>
+                <Box sx={{ 
+                    bgcolor: '#FFFFFF', 
+                    p: { xs: 4, md: 6 }, 
+                    border: '3px solid #0D2B14',
+                    boxShadow: 'none',
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    alignItems: 'center',
+                    gap: 4
+                }}>
+                    <Box sx={{ flex: 1 }}>
+                        <Typography sx={{ 
+                            fontFamily: '"Inknut Antiqua", serif', 
+                            fontWeight: 700, 
+                            color: '#0D2B14', 
+                            fontSize: '1.8rem', 
+                            mb: 2
+                        }}>
+                            {c.readyToStart}
+                        </Typography>
+                        <Typography sx={{ 
+                            fontFamily: '"Inknut Antiqua", serif',
+                            color: 'rgba(13, 43, 20, 0.7)', 
+                            fontSize: '0.95rem', 
+                            lineHeight: 1.8,
+                            fontWeight: 500
+                        }}>
+                            {c.readyDesc}
+                        </Typography>
+                    </Box>
+                    <PillButton to={`/${language}/quote`} variant="dark">
+                        {c.requestQuote}
+                    </PillButton>
+                </Box>
+            </Container>
+
             {/* Dedicated Overview Section */}
-            <Box sx={{ py: { xs: 4, md: 6 }, bgcolor: '#F8F9FA', borderBottom: '1px solid #EEEEEE' }}>
+            <Box sx={{ py: { xs: 4, md: 6 }, bgcolor: '#FBFBFB' }}>
                 <Container maxWidth="lg">
                     <FadeInUp>
                         <Box sx={{ width: '100%', textAlign: 'left' }}>
@@ -319,7 +332,7 @@ const ServiceDetailPage = () => {
                                 variant="h3"
                                 sx={{ 
                                     fontFamily: '"Inknut Antiqua", serif', 
-                                    color: '#1A5C2A', 
+                                    color: '#0D2B14', 
                                     fontWeight: 700, 
                                     fontSize: '1.8rem',
                                     mb: 4
@@ -328,11 +341,11 @@ const ServiceDetailPage = () => {
 
                             <Typography sx={{ 
                                 fontFamily: '"Inknut Antiqua", serif',
-                                color: '#4A4A4A', 
+                                color: 'rgba(13, 43, 20, 0.8)', 
                                 lineHeight: 2, 
                                 mb: 3, 
                                 fontSize: '1rem',
-                                fontWeight: 100
+                                fontWeight: 500
                             }}>
                                 {extendedDetails[0]}
                             </Typography>
@@ -342,11 +355,11 @@ const ServiceDetailPage = () => {
                                     {extendedDetails.slice(1).map((para, i) => (
                                         <Typography key={i} sx={{ 
                                             fontFamily: '"Inknut Antiqua", serif',
-                                            color: '#4A4A4A', 
+                                            color: 'rgba(13, 43, 20, 0.8)', 
                                             lineHeight: 2, 
                                             mb: 3, 
                                             fontSize: '1rem',
-                                            fontWeight: 100
+                                            fontWeight: 500
                                         }}>
                                             {para}
                                         </Typography>
@@ -359,7 +372,7 @@ const ServiceDetailPage = () => {
                                     onClick={() => setExpanded(!expanded)}
                                     endIcon={expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                     sx={{ 
-                                        color: '#1A5C2A', 
+                                        color: '#0D2B14', 
                                         fontFamily: '"Inknut Antiqua", serif', 
                                         fontWeight: 700, 
                                         fontSize: '0.85rem',
@@ -417,7 +430,7 @@ const ServiceDetailPage = () => {
                                     variant="h3"
                                     sx={{ 
                                         fontFamily: '"Inknut Antiqua", serif', 
-                                        color: '#1A5C2A', 
+                                        color: '#0D2B14', 
                                         fontWeight: 700, 
                                         fontSize: '2rem',
                                         mb: 4 
@@ -425,18 +438,18 @@ const ServiceDetailPage = () => {
                                 />
                                 <Typography sx={{ 
                                     fontFamily: '"Inknut Antiqua", serif',
-                                    color: '#4A4A4A', 
+                                    color: 'rgba(13, 43, 20, 0.8)', 
                                     lineHeight: 2.2, 
                                     mb: 8, 
                                     fontSize: '1rem',
-                                    fontWeight: 100
+                                    fontWeight: 500
                                 }}>
                                     {c.processDesc}
                                 </Typography>
 
-                                <Box sx={{ p: { xs: 4, md: 6 }, border: '4px solid #1A5C2A', position: 'relative', bgcolor: 'rgba(26, 92, 42, 0.02)' }}>
+                                <Box sx={{ p: { xs: 4, md: 6 }, border: '3px solid #0D2B14', position: 'relative', bgcolor: 'rgba(13, 43, 20, 0.02)' }}>
                                     <Box sx={{ position: 'absolute', top: -18, left: 40, bgcolor: '#FFFFFF', px: 2 }}>
-                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#1A5C2A', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                                             {c.keyFeatures}
                                         </Typography>
                                     </Box>
@@ -450,7 +463,7 @@ const ServiceDetailPage = () => {
                                                     primary={f} 
                                                     primaryTypographyProps={{ 
                                                         fontFamily: '"Inknut Antiqua", serif', 
-                                                        color: '#1A1A2E', 
+                                                        color: '#0D2B14', 
                                                         fontWeight: 600,
                                                         fontSize: '1.1rem'
                                                     }} 
@@ -468,7 +481,7 @@ const ServiceDetailPage = () => {
                                     <Box sx={{ position: 'absolute', top: 20, left: 20, right: -20, bottom: -20, border: '3px solid #F7A11A', zIndex: 0 }} />
                                     <Box
                                         component="img" src={heroImg} alt={t(service.title)}
-                                        sx={{ width: '100%', height: { xs: '350px', md: '550px' }, objectFit: 'cover', display: 'block', position: 'relative', zIndex: 1, filter: 'contrast(1.05) brightness(1.02)' }}
+                                        sx={{ width: '100%', height: { xs: '350px', md: '550px' }, objectFit: 'cover', display: 'block', position: 'relative', zIndex: 1, border: '2px solid #0D2B14' }}
                                     />
                                 </Box>
                             </FadeInUp>
@@ -482,9 +495,9 @@ const ServiceDetailPage = () => {
                 <Container maxWidth="lg">
                     <Box sx={{ 
                         p: { xs: 4, md: 6 }, 
-                        bgcolor: '#F8F9FA', 
-                        border: '1px solid rgba(0,0,0,0.08)',
-                        borderLeft: '8px solid #1A5C2A',
+                        bgcolor: '#FBFBFB', 
+                        border: '2px solid #0D2B14',
+                        borderLeft: '10px solid #0D2B14',
                         display: 'flex',
                         flexDirection: { xs: 'column', md: 'row' },
                         alignItems: { md: 'flex-start' },
@@ -493,7 +506,7 @@ const ServiceDetailPage = () => {
                         <Typography sx={{ 
                             fontFamily: '"Inknut Antiqua", serif', 
                             fontWeight: 700, 
-                            color: '#1A5C2A', 
+                            color: '#0D2B14', 
                             fontSize: '1.4rem',
                             minWidth: '250px'
                         }}>
@@ -506,7 +519,7 @@ const ServiceDetailPage = () => {
                                     <Typography sx={{ 
                                         fontFamily: 'Outfit',
                                         fontWeight: 700,
-                                        color: '#4A4A4A', 
+                                        color: '#0D2B14', 
                                         fontSize: '1rem',
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.05em'
@@ -519,11 +532,6 @@ const ServiceDetailPage = () => {
                     </Box>
                 </Container>
             </Box>
-
-            <FAQSection />
-
-            {/* CTA Section */}
-            <CTASection />
 
             {/* Explore Other Expertise (Seamless Infinite Carousel) */}
             <Box sx={{ py: 15, bgcolor: '#FFFFFF', overflow: 'hidden' }}>
@@ -560,7 +568,7 @@ const ServiceDetailPage = () => {
                             sx={{ 
                                 fontFamily: '"Inknut Antiqua", serif', 
                                 fontWeight: 700, 
-                                color: '#1A5C2A', 
+                                color: '#0D2B14', 
                                 fontSize: { xs: '1.8rem', md: '2.5rem' }
                             }}
                         />
@@ -593,7 +601,7 @@ const ServiceDetailPage = () => {
                                 >
                                     <Box sx={{ 
                                         bgcolor: '#FFFFFF',
-                                        border: '2px solid #1A5C2A',
+                                        border: '2.5px solid #0D2B14',
                                         height: '600px',
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -602,14 +610,14 @@ const ServiceDetailPage = () => {
                                         <Box 
                                             component="img" 
                                             src={serviceImages[s.id] || fallbackHero} 
-                                            sx={{ width: '100%', height: '240px', objectFit: 'cover' }} 
+                                            sx={{ width: '100%', height: '240px', objectFit: 'cover', borderBottom: '2.5px solid #0D2B14' }} 
                                         />
                                         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                                             <Typography sx={{ 
                                                 fontFamily: '"Inknut Antiqua", serif', 
                                                 fontWeight: 700, 
                                                 fontSize: '1.1rem', 
-                                                color: '#1A5C2A',
+                                                color: '#0D2B14',
                                                 mb: 2,
                                                 lineHeight: 1.3,
                                                 height: '2.6em',
@@ -620,10 +628,10 @@ const ServiceDetailPage = () => {
 
                                             <Typography sx={{ 
                                                 fontFamily: '"Inknut Antiqua", serif', 
-                                                fontWeight: 300, 
+                                                fontWeight: 500, 
                                                 fontSize: '0.85rem',
-                                                color: '#4A4A4A',
-                                                mb: 1.5, // Reduced gap further
+                                                color: 'rgba(13, 43, 20, 0.7)',
+                                                mb: 1.5,
                                                 lineHeight: 1.8,
                                                 display: '-webkit-box',
                                                 WebkitLineClamp: 3,
@@ -655,6 +663,11 @@ const ServiceDetailPage = () => {
                     </Box>
                 </Container>
             </Box>
+
+            <FAQSection />
+
+            {/* CTA Section */}
+            <CTASection />
         </Box>
     );
 };

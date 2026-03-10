@@ -23,12 +23,15 @@ import { uiTranslations } from '../../data/translations/ui';
 import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/common/Animations';
 import CTASection from '../../components/common/CTASection';
 
+// Service Images for fallback
+import imgLogistics from '../../assets/images/conference_logistics.png';
+
 const COLORS = {
-    primary: '#1A5C2A',
+    primary: '#0D2B14', // Deep Dark Green
     secondary: '#0D2B14',
-    accent: '#F7A11A',
-    text: '#1A1A2E',
-    textMuted: '#4A4A6A',
+    accent: '#F7A11A', // Boutique Yellow
+    text: '#0D2B14',
+    textMuted: 'rgba(13, 43, 20, 0.7)',
     bgSoft: '#FBFBFB'
 };
 
@@ -41,7 +44,7 @@ const BlogPostPage = () => {
     const post = getPostBySlug(slug, language);
 
     // Resolve post image - directly use string path from CMS or static public path
-    const postImage = post?.image || '';
+    const postImage = post?.image || imgLogistics;
 
     if (!post) return <Navigate to={`/${language}/blog`} replace />;
 
@@ -78,44 +81,45 @@ const BlogPostPage = () => {
                 canonicalUrl={currentUrl}
             />
 
-            {/* Premium Split Hero */}
+            {/* Split Hero Design */}
             <Box sx={{
-                minHeight: { xs: 'auto', md: '60vh' },
+                minHeight: { xs: 'auto', md: '65vh' },
                 display: 'flex',
                 alignItems: 'stretch',
                 flexDirection: { xs: 'column', md: 'row' },
-                background: COLORS.secondary,
+                background: '#F7A11A',
                 position: 'relative',
                 overflow: 'hidden'
             }}>
                 <Box sx={{
-                    width: { xs: '100%', md: '50%' },
+                    width: { xs: '100%', md: '55%' },
                     display: 'flex',
                     alignItems: 'center',
                     px: { xs: 3, sm: 6, md: 12 },
                     py: { xs: 10, sm: 12, md: 15 },
-                    bgcolor: COLORS.secondary,
-                    zIndex: 2
+                    zIndex: 2,
+                    bgcolor: '#F7A11A',
+                    order: { xs: 2, md: 1 }
                 }}>
                     <Box>
-                        <AnimatedPreTitle text={post.category} color={COLORS.accent} />
+                        <AnimatedPreTitle text={post.category} color="#0D2B14" />
                         <TypewriterText 
                             key={`post-hero-${language}-${post.slug}`}
                             text={post.title}
                             variant="h1" 
-                            sx={{ color: '#FFFFFF', fontWeight: 900, mb: 3, fontSize: { xs: '2.2rem', sm: '2.8rem', md: '3.5rem' }, lineHeight: 1.1, fontFamily: '"Inknut Antiqua", serif' }} 
+                            sx={{ color: '#0D2B14', fontWeight: 900, mb: 3, fontSize: { xs: '2.2rem', sm: '2.8rem', md: '3.5rem' }, lineHeight: 1.1, fontFamily: '"Inknut Antiqua", serif' }} 
                         />
-                        <Box sx={{ width: 80, height: 4, bgcolor: COLORS.accent, mb: 4 }} />
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, color: 'rgba(255,255,255,0.7)' }}>
+                        <Box sx={{ width: 80, height: 4, bgcolor: '#0D2B14', mb: 4 }} />
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, color: 'rgba(13, 43, 20, 0.8)' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <CalendarTodayIcon sx={{ fontSize: 16, color: COLORS.accent }} />
-                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 600, fontFamily: 'Outfit' }}>
+                                <CalendarTodayIcon sx={{ fontSize: 16, color: '#0D2B14' }} />
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 700, fontFamily: 'Outfit' }}>
                                     {new Date(post.date).toLocaleDateString(language === 'en' ? 'en-US' : 'sw-TZ', { month: 'long', day: 'numeric', year: 'numeric' })}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <AccessTimeIcon sx={{ fontSize: 16, color: COLORS.accent }} />
-                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 600, fontFamily: 'Outfit' }}>
+                                <AccessTimeIcon sx={{ fontSize: 16, color: '#0D2B14' }} />
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 700, fontFamily: 'Outfit' }}>
                                     {post.readTime} {c.readTime}
                                 </Typography>
                             </Box>
@@ -123,21 +127,26 @@ const BlogPostPage = () => {
                     </Box>
                 </Box>
                 <Box sx={{
-                    width: { xs: '100%', md: '50%' },
-                    minHeight: { xs: '300px', md: 'auto' },
-                    position: 'relative'
+                    width: { xs: '100%', md: '45%' },
+                    height: { xs: '300px', md: 'auto' },
+                    position: 'relative',
+                    order: { xs: 1, md: 2 },
+                    borderLeft: { md: '2px solid #0D2B14' }
                 }}>
                     <Box 
                         sx={{ 
                             width: '100%', 
                             height: '100%', 
+                            minHeight: '100%',
                             background: `url(${postImage}) center/cover no-repeat`,
                             '&::after': {
                                 content: '""',
                                 position: 'absolute',
                                 inset: 0,
-                                background: 'linear-gradient(to right, #0D2B14 0%, transparent 100%)',
-                                display: { xs: 'none', md: 'block' }
+                                background: {
+                                    xs: 'linear-gradient(to top, rgba(13, 43, 20, 0.8) 0%, transparent 100%)',
+                                    md: 'rgba(13, 43, 20, 0.15)'
+                                }
                             }
                         }} 
                     />
@@ -151,15 +160,15 @@ const BlogPostPage = () => {
                         <Box sx={{ 
                             bgcolor: '#FFFFFF', 
                             p: { xs: 4, md: 8, lg: 10 },
-                            boxShadow: '0 50px 100px rgba(0,0,0,0.08)',
-                            border: `1px solid rgba(0,0,0,0.05)`
+                            boxShadow: 'none',
+                            border: `2px solid #0D2B14`
                         }}>
                             <FadeInUp delay={0.2}>
                                 <Box sx={{ 
                                     color: COLORS.secondary, 
                                     lineHeight: 2, 
                                     fontSize: { xs: '1.05rem', md: '1.2rem' },
-                                    fontFamily: 'Outfit, sans-serif', // Using Outfit for professional body text
+                                    fontFamily: 'Outfit, sans-serif', 
                                     '& p': { mb: 4, fontWeight: 400 },
                                     '& h2': { 
                                         fontFamily: '"Inknut Antiqua", serif', 
@@ -181,8 +190,8 @@ const BlogPostPage = () => {
                                     '& blockquote': { 
                                         my: 8, 
                                         p: { xs: 4, md: 8 }, 
-                                        borderLeft: `8px solid ${COLORS.accent}`, 
-                                        bgcolor: COLORS.bgSoft, 
+                                        borderLeft: `8px solid #F7A11A`, 
+                                        bgcolor: 'rgba(13, 43, 20, 0.02)', 
                                         position: 'relative',
                                         '& p': { 
                                             m: 0,
@@ -198,27 +207,27 @@ const BlogPostPage = () => {
                                         maxWidth: '100%', 
                                         height: 'auto', 
                                         my: 6,
-                                        boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
+                                        border: '1px solid #0D2B14'
                                     },
-                                    '& strong': { fontWeight: 700, color: COLORS.primary }
+                                    '& strong': { fontWeight: 700, color: '#0D2B14' }
                                 }}>
                                     <ReactMarkdown>{post.body}</ReactMarkdown>
                                 </Box>
 
                                 {/* Post Footer: Sharing & Actions */}
-                                <Box sx={{ mt: 12, pt: 8, borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
+                                <Box sx={{ mt: 12, pt: 8, borderTop: '1px solid rgba(13, 43, 20, 0.1)', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
                                         <Typography sx={{ fontFamily: 'Outfit', fontWeight: 800, color: COLORS.secondary, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                                             {c.share}
                                         </Typography>
                                         <Box sx={{ display: 'flex', gap: 1.5 }}>
-                                            <IconButton component="a" href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(post.title)}`} target="_blank" sx={{ color: COLORS.primary, bgcolor: 'rgba(26, 92, 42, 0.05)', '&:hover': { bgcolor: COLORS.primary, color: '#fff' } }}>
+                                            <IconButton component="a" href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(post.title)}`} target="_blank" sx={{ color: '#0D2B14', bgcolor: 'rgba(13, 43, 20, 0.05)', '&:hover': { bgcolor: '#0D2B14', color: '#F7A11A' } }}>
                                                 <LinkedInIcon fontSize="small" />
                                             </IconButton>
-                                            <IconButton component="a" href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + ' ' + currentUrl)}`} target="_blank" sx={{ color: COLORS.primary, bgcolor: 'rgba(26, 92, 42, 0.05)', '&:hover': { bgcolor: COLORS.primary, color: '#fff' } }}>
+                                            <IconButton component="a" href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + ' ' + currentUrl)}`} target="_blank" sx={{ color: '#0D2B14', bgcolor: 'rgba(13, 43, 20, 0.05)', '&:hover': { bgcolor: '#0D2B14', color: '#F7A11A' } }}>
                                                 <WhatsAppIcon fontSize="small" />
                                             </IconButton>
-                                            <IconButton onClick={handleCopy} sx={{ color: COLORS.textMuted, bgcolor: 'rgba(0,0,0,0.04)', '&:hover': { bgcolor: COLORS.secondary, color: '#fff' } }}>
+                                            <IconButton onClick={handleCopy} sx={{ color: '#0D2B14', bgcolor: 'rgba(13, 43, 20, 0.05)', '&:hover': { bgcolor: '#0D2B14', color: '#F7A11A' } }}>
                                                 {copied ? <CheckIcon fontSize="small" color="success" /> : <ContentCopyIcon fontSize="small" />}
                                             </IconButton>
                                         </Box>
@@ -233,19 +242,19 @@ const BlogPostPage = () => {
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            border: `2.5px solid ${COLORS.primary}`,
+                                            border: `2.5px solid #0D2B14`,
                                             borderRadius: 50,
                                             overflow: 'hidden',
                                             textDecoration: 'none',
                                             transition: 'all 0.3s ease',
-                                            '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.04)' }
+                                            '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.04)' }
                                         }}
                                     >
                                         <Typography
                                             component={motion.span}
                                             variants={{ rest: { x: 0 }, hover: { x: 5 } }}
                                             sx={{
-                                                color: COLORS.primary,
+                                                color: '#0D2B14',
                                                 fontFamily: '"Inknut Antiqua", serif',
                                                 fontWeight: 700,
                                                 fontSize: '0.85rem',
@@ -256,9 +265,9 @@ const BlogPostPage = () => {
                                         >
                                             {c.getQuote}
                                         </Typography>
-                                        <Box sx={{ width: 44, height: 44, bgcolor: COLORS.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Box sx={{ width: 44, height: 44, bgcolor: '#0D2B14', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                             <motion.div variants={{ rest: { x: 0 }, hover: { x: 8 } }}>
-                                                <ArrowForwardIcon sx={{ color: '#FFFFFF', fontSize: 20 }} />
+                                                <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 20 }} />
                                             </motion.div>
                                         </Box>
                                     </Box>

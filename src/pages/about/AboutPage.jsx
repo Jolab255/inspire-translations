@@ -17,7 +17,7 @@ const AboutPage = () => {
 
     const content = {
         en: {
-            heroTitle: <>We Are <br /><Box component="span" sx={{ color: '#F7A11A' }}>Inspire Translations</Box></>,
+            heroTitle: <>We Are <br /><Box component="span" sx={{ color: '#FFFFFF' }}>Inspire Translations</Box></>,
             heroDesc: "Bridging language barriers with precision, cultural insight, and unwavering professionalism across East Africa and the world.",
             moreBtn: "More About Us",
             ourStory: "Our Story",
@@ -35,14 +35,14 @@ const AboutPage = () => {
             seeMoreTeam: "See more of our team"
         },
         sw: {
-            heroTitle: <>Sisi Ni <br /><Box component="span" sx={{ color: '#F7A11A' }}>Inspire Translations</Box></>,
+            heroTitle: <>Sisi Ni <br /><Box component="span" sx={{ color: '#FFFFFF' }}>Inspire Translations</Box></>,
             heroDesc: "Kuondoa vizuizi vya lugha kwa usahihi, uelewa wa kitamaduni, na weledi usioyumba kote Afrika Mashariki na duniani.",
             moreBtn: "Zaidi Kuhusu Sisi",
             ourStory: "Habari Yetu",
             storyTitle: "Tulizaliwa kutokana na Mapenzi ya Lugha",
             storyP1: "Inspire Translations ilianzishwa kwa imani rahisi lakini yenye nguvu: kwamba mawasiliano ya ufanisi katika lugha na tamaduni mbalimbali ni haki ya msingi kwa kila mtu na shirika.",
             storyP2: "Tukianza kama timu ndogo ya wanaisimu wenye shauku jijini Dar es Salaam, tumekua na kuwa miongoni mwa makampuni ya huduma za lugha yanayoaminika zaidi Tanzania, tukihudumia mashirika ya kimataifa, taasisi za serikali, makampuni ya kimataifa, na biashara ndogo na za kati.",
-            storyP3: "Leo, mtandao wetu wa watafsiri walioidhinishwa, wakalimani, na walimu wa lugha unajumuisha zaidi ya jozi 25 za lugha, tukiwa na rekodi iliyothibitishwa ya ubora na kuridhika kwa wateja.",
+            storyP3: "Leo, mtandao webu wa watafsiri walioidhinishwa, wakalimani, na walimu wa lugha unajumuisha zaidi ya jozi 25 za lugha, tukiwa na rekodi iliyothibitishwa ya ubora na kuridhika kwa wateja.",
             missionTitle: "Dhamira na Maono",
             mission: "Dhamira Yetu",
             missionDesc: "Kutoa huduma za lugha za kipekee zinazowawezesha wateja kuwasiliana kwa ufanisi na kwa heshima katika tamaduni zote.",

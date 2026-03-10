@@ -2,15 +2,20 @@
   RewriteEngine On
   RewriteBase /
   
-  # Redirect to HTTPS (Optional but highly recommended for Yatosha)
-  # RewriteCond %{HTTPS} off
-  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # 1. Force HTTPS and WWW
+  RewriteCond %{HTTPS} off [OR]
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^(.*)$ https://www.inspiretranslations.co.tz/$1 [L,R=301]
 
-  # Don't rewrite for real files or directories
+  # 2. Redirect /admin/ to its own directory index (prevent SPA interference)
+  RewriteRule ^admin$ /admin/ [L,R=301]
+
+  # 3. Don't rewrite for real files (images, css, js, etc.) or directories
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # All other routes go to index.html
+  # 4. Handle SPA routing - send all other requests to index.html
+  # This ensures that /en/contact or /sw/about will load the React app correctly
   RewriteRule ^ index.html [L]
 </IfModule>

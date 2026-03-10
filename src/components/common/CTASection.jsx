@@ -29,7 +29,7 @@ const CTASection = () => {
                 right: '-5%', 
                 width: '40%', 
                 height: '80%', 
-                bgcolor: 'rgba(26, 92, 42, 0.03)', 
+                bgcolor: 'rgba(13, 43, 20, 0.03)', 
                 borderRadius: '50%', 
                 filter: 'blur(100px)',
                 zIndex: 0
@@ -88,10 +88,10 @@ const CTASection = () => {
                                     zIndex: 3,
                                     boxShadow: '0 10px 30px rgba(247,161,26,0.3)'
                                 }}>
-                                    <Typography sx={{ color: '#1A5C2A', fontWeight: 900, fontSize: '1.2rem', fontFamily: 'Outfit', lineHeight: 1 }}>
+                                    <Typography sx={{ color: '#0D2B14', fontWeight: 900, fontSize: '1.2rem', fontFamily: 'Outfit', lineHeight: 1 }}>
                                         25+
                                     </Typography>
-                                    <Typography sx={{ color: '#1A5C2A', fontWeight: 700, fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                                    <Typography sx={{ color: '#0D2B14', fontWeight: 700, fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                                         Languages
                                     </Typography>
                                 </Box>
@@ -108,10 +108,11 @@ const CTASection = () => {
                     }}>
                         <FadeInUp delay={0.2}>
                             <Box sx={{ 
-                                bgcolor: '#1A5C2A',
+                                bgcolor: '#FFFFFF',
                                 p: { xs: 4, sm: 5, md: 6, lg: 7 },
-                                color: '#FFFFFF',
-                                boxShadow: '0 40px 100px rgba(0,0,0,0.2)',
+                                color: '#0D2B14',
+                                border: '2px solid #0D2B14',
+                                boxShadow: 'none',
                                 position: 'relative'
                             }}>
                                 {/* Subtle Brand Watermark */}
@@ -121,7 +122,7 @@ const CTASection = () => {
                                     right: 30, 
                                     fontSize: '4rem', 
                                     fontWeight: 900, 
-                                    color: 'rgba(255,255,255,0.03)', 
+                                    color: 'rgba(13, 43, 20, 0.03)', 
                                     pointerEvents: 'none',
                                     userSelect: 'none',
                                     fontFamily: 'Outfit'
@@ -141,7 +142,7 @@ const CTASection = () => {
                                         fontSize: { xs: '1.6rem', sm: '2rem', md: '2.4rem' }, 
                                         mb: 2,
                                         lineHeight: 1.2,
-                                        color: '#FFFFFF'
+                                        color: '#0D2B14'
                                     }}
                                 />
                                 
@@ -150,7 +151,7 @@ const CTASection = () => {
                                 <Typography sx={{
                                     fontFamily: '"Inknut Antiqua", serif',
                                     fontWeight: 400,
-                                    color: 'rgba(255,255,255,0.85)',
+                                    color: 'rgba(13, 43, 20, 0.8)',
                                     fontSize: { xs: '0.85rem', md: '0.95rem' },
                                     lineHeight: 1.8,
                                     mb: 4,
@@ -169,13 +170,13 @@ const CTASection = () => {
                                     sx={{
                                         display: 'inline-flex',
                                         alignItems: 'center',
-                                        border: '2px solid #F7A11A',
+                                        border: '2px solid #0D2B14',
                                         borderRadius: 50,
                                         overflow: 'hidden',
                                         textDecoration: 'none',
                                         transition: 'all 0.3s ease',
                                         '&:hover': {
-                                            bgcolor: 'rgba(247, 161, 26, 0.08)'
+                                            bgcolor: 'rgba(13, 43, 20, 0.04)'
                                         }
                                     }}
                                 >
@@ -187,12 +188,12 @@ const CTASection = () => {
                                         }}
                                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                         sx={{
-                                            color: '#F7A11A',
+                                            color: '#0D2B14',
                                             fontFamily: '"Inknut Antiqua", serif',
                                             fontWeight: 700,
                                             fontSize: '0.85rem',
                                             px: 3,
-                                            lineHeight: '32px',
+                                            lineHeight: '40px',
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
@@ -200,10 +201,10 @@ const CTASection = () => {
                                     </Typography>
                                     <Box
                                         sx={{
-                                            width: 32,
-                                            height: 32,
+                                            width: 40,
+                                            height: 40,
                                             flexShrink: 0,
-                                            bgcolor: '#F7A11A',
+                                            bgcolor: '#0D2B14',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center'
@@ -216,7 +217,7 @@ const CTASection = () => {
                                             }}
                                             transition={{ type: 'spring', stiffness: 600, damping: 15 }}
                                         >
-                                            <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 24 }} />
+                                            <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 20 }} />
                                         </motion.div>
                                     </Box>
                                 </Box>

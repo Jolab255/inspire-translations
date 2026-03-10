@@ -16,7 +16,7 @@ const PurposeWhiteSection = () => {
 
     return (
         <Box sx={{ pt: { xs: 8, md: 11 }, pb: { xs: 10, md: 22 }, bgcolor: '#FFFFFF', position: 'relative', overflow: 'hidden' }}>
-            <Box sx={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, bgcolor: '#1A5C2A' }} />
+            <Box sx={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, bgcolor: '#0D2B14' }} />
             <Container maxWidth="lg">
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 6, md: 9 }, alignItems: 'center' }}>
 
@@ -64,7 +64,7 @@ const PurposeWhiteSection = () => {
                                     textDecoration: 'none',
                                     transition: 'all 0.3s ease',
                                     '&:hover': {
-                                        borderColor: '#1A5C2A',
+                                        borderColor: '#0D2B14',
                                         bgcolor: 'rgba(26, 92, 42, 0.04)'
                                     }
                                 }}
@@ -77,7 +77,7 @@ const PurposeWhiteSection = () => {
                                     }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                     sx={{
-                                        color: '#1A5C2A',
+                                        color: '#0D2B14',
                                         fontFamily: '"Inknut Antiqua", serif',
                                         fontWeight: 700,
                                         fontSize: '0.85rem',
@@ -99,7 +99,7 @@ const PurposeWhiteSection = () => {
                                         width: 36,
                                         height: 36,
                                         flexShrink: 0,
-                                        bgcolor: '#1A5C2A',
+                                        bgcolor: '#0D2B14',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center'

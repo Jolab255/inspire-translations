@@ -21,7 +21,7 @@ import arrowImg from '../../../assets/images/arrows.png';
 
 const TestimonialsSection = () => {
     const [index, setIndex] = useState(0);
-    const { ref: headerRef, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+    const { ref: headerRef, inView } = useInView({ triggerOnce: false, threshold: 0.1 });
     const { language, t: translate } = useLanguage();
     const ui = uiTranslations[language];
 
@@ -88,10 +88,11 @@ const TestimonialsSection = () => {
                         {/* Text Content Area */}
                         <Box sx={{ 
                             width: { xs: '100%', md: '60%' }, 
-                            bgcolor: '#1A5C2A', 
+                            bgcolor: '#FFFFFF', 
                             p: { xs: 4, md: 6 }, 
                             zIndex: 10,
-                            boxShadow: '0 20px 50px rgba(0,0,0,0.2)'
+                            border: '2px solid #0D2B14',
+                            boxShadow: '0 20px 50px rgba(13, 43, 20, 0.1)'
                         }}>
                             <AnimatePresence mode="wait">
                                 <motion.div
@@ -101,15 +102,15 @@ const TestimonialsSection = () => {
                                     exit={{ opacity: 0, y: -20 }}
                                     transition={{ duration: 0.4 }}
                                 >
-                                    <FormatQuoteIcon sx={{ fontSize: 40, color: 'rgba(247, 161, 26, 0.4)', mb: 2 }} />
-                                    <Typography sx={{ color: '#FFF', fontSize: '1.1rem', fontStyle: 'italic', mb: 4, lineHeight: 1.7 }}>
+                                    <FormatQuoteIcon sx={{ fontSize: 40, color: '#F7A11A', mb: 2 }} />
+                                    <Typography sx={{ color: '#0D2B14', fontSize: '1.1rem', fontStyle: 'italic', mb: 4, lineHeight: 1.7, fontWeight: 500 }}>
                                         "{translate(testimonial.quote)}"
                                     </Typography>
-                                    <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2 }}>
+                                    <Box sx={{ borderTop: '1px solid rgba(13, 43, 20, 0.1)', pt: 2 }}>
                                         <Typography sx={{ color: '#F7A11A', fontWeight: 700, fontSize: '1rem', mb: 0.5 }}>
                                             {testimonial.name}
                                         </Typography>
-                                        <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', textTransform: 'uppercase' }}>
+                                        <Typography sx={{ color: '#0D2B14', opacity: 0.6, fontSize: '0.8rem', textTransform: 'uppercase', fontWeight: 700 }}>
                                             {translate(testimonial.role)} · {testimonial.organization}
                                         </Typography>
                                     </Box>
@@ -155,10 +156,10 @@ const TestimonialsSection = () => {
 
                     {/* Controls */}
                     <Box sx={{ display: 'flex', gap: 2, mt: 6, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                        <IconButton onClick={handlePrev} sx={{ border: '2px solid #1A5C2A', color: '#1A5C2A' }}>
+                        <IconButton onClick={handlePrev} sx={{ border: '2px solid #0D2B14', color: '#0D2B14', '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.05)' } }}>
                             <ArrowForwardIcon sx={{ transform: 'rotate(180deg)' }} />
                         </IconButton>
-                        <IconButton onClick={handleNext} sx={{ border: '2px solid #1A5C2A', color: '#1A5C2A' }}>
+                        <IconButton onClick={handleNext} sx={{ border: '2px solid #0D2B14', color: '#0D2B14', '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.05)' } }}>
                             <ArrowForwardIcon />
                         </IconButton>
                     </Box>

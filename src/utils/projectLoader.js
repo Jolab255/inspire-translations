@@ -18,18 +18,21 @@ const parseMarkdown = (content) => {
     }
 };
 
-export const getAllProjects = () => {
+export const getAllProjects = (lang = 'en') => {
     const projects = [];
     
     for (const path in modules) {
-        const rawContent = modules[path];
-        const { data } = parseMarkdown(rawContent);
-        const id = path.split('/').pop().replace('.md', '');
-        
-        projects.push({
-            ...data,
-            id: id,
-        });
+        const filename = path.split('/').pop();
+        if (filename.endsWith(`.${lang}.md`)) {
+            const rawContent = modules[path];
+            const { data } = parseMarkdown(rawContent);
+            const id = filename.replace(`.${lang}.md`, '');
+            
+            projects.push({
+                ...data,
+                id: id,
+            });
+        }
     }
     
     // Sort by year descending (optional, depending on project structure)

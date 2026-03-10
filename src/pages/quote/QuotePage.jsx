@@ -12,9 +12,11 @@ import StepLabel from '@mui/material/StepLabel';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import SendIcon from '@mui/icons-material/Send';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEOHead from '../../components/seo/SEOHead';
 import CTASection from '../../components/common/CTASection';
@@ -27,13 +29,13 @@ import { TypewriterText, AnimatedPreTitle } from '../../components/common/Animat
 import quoteHeroImg from '../../assets/images/project_hero.png';
 
 const COLORS = {
-    primary: '#1A5C2A',
+    primary: '#0D2B14', // Deep Dark Green
     secondary: '#0D2B14',
-    accent: '#F7A11A',
+    accent: '#F7A11A', // Boutique Yellow
     bg: '#FFFFFF',
     bgSoft: '#FBFBFB',
-    text: '#1A1A2E',
-    textMuted: '#4A4A6A'
+    text: '#0D2B14',
+    textMuted: 'rgba(13, 43, 20, 0.7)'
 };
 
 const QuotePage = () => {
@@ -42,10 +44,14 @@ const QuotePage = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
     const [form, setForm] = useState({
         serviceType: '', sourceLang: '', targetLang: '', documentType: '', wordCount: '',
         deadline: '', description: '', name: '', email: '', phone: '', organization: '',
+        file: null
     });
+
+    const handleCloseNotification = () => setNotification({ ...notification, open: false });
 
     const content = {
         en: {
@@ -56,7 +62,7 @@ const QuotePage = () => {
             stepsTitle: "Quote Process",
             stepsDesc: "Follow these steps to receive a comprehensive proposal.",
             successTitle: "Submission Received",
-            successDesc: (name, email) => <>Thank you, <strong>{name}</strong>. Your request is being analyzed. A formal proposal will be sent to <strong>{email}</strong> shortly.</>,
+            successDesc: (name) => <>Thank you, <strong>{name}</strong>. Your request is being analyzed. A formal proposal will be sent to <strong>info@inspiretranslations.co.tz</strong> shortly.</>,
             successHint: "Average response time: 2.5 hours.",
             labels: {
                 serviceType: "Service Type",
@@ -71,7 +77,10 @@ const QuotePage = () => {
                 email: "Email Address",
                 phone: "Phone / WhatsApp",
                 org: "Organization",
-                review: "Review Your Request"
+                review: "Review Your Request",
+                upload: "Upload Project Files (If any)",
+                fileSelected: "File attached:",
+                noFile: "Click to select file"
             },
             docTypes: ['Legal', 'Business', 'Medical', 'Technical', 'Marketing', 'Academic', 'Other'],
             nav: {
@@ -89,7 +98,7 @@ const QuotePage = () => {
             stepsTitle: "Hatua za Makadirio",
             stepsDesc: "Fuata hatua hizi ili kupokea pendekezo kamili.",
             successTitle: "Ombi Limepokelewa",
-            successDesc: (name, email) => <>Asante, <strong>{name}</strong>. Ombi lako linachambuliwa. Pendekezo rasmi litatumwa kwa <strong>{email}</strong> hivi karibuni.</>,
+            successDesc: (name) => <>Asante, <strong>{name}</strong>. Ombi lako linachambuliwa. Pendekezo rasmi litatumwa kwa <strong>info@inspiretranslations.co.tz</strong> hivi karibuni.</>,
             successHint: "Muda wa wastani: saa 2.5.",
             labels: {
                 serviceType: "Aina ya Huduma",
@@ -104,7 +113,10 @@ const QuotePage = () => {
                 email: "Barua Pepe",
                 phone: "Simu / WhatsApp",
                 org: "Shirika",
-                review: "Kagua Ombi"
+                review: "Kagua Ombi",
+                upload: "Pakia Hati za Mradi (Kama zipo)",
+                fileSelected: "Hati imeunganishwa:",
+                noFile: "Bonyeza kuchagua hati"
             },
             docTypes: ['Kisheria', 'Biashara', 'Matibabu', 'Kiufundi', 'Masoko', 'Kitaaluma', 'Nyingine'],
             nav: {
@@ -137,16 +149,19 @@ const QuotePage = () => {
             '& input': {
                 fontFamily: 'Outfit',
                 fontWeight: 600,
-                py: 1.5
+                py: 1.5,
+                color: COLORS.primary
             },
             '& textarea': {
                 fontFamily: 'Outfit',
                 fontWeight: 600,
+                color: COLORS.primary
             },
             '& .MuiSelect-select': {
                 fontFamily: 'Outfit',
                 fontWeight: 600,
-                py: 1.5
+                py: 1.5,
+                color: COLORS.primary
             },
         },
         '& .MuiInputLabel-root': {
@@ -161,6 +176,7 @@ const QuotePage = () => {
     };
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleFileChange = (e) => setForm({ ...form, file: e.target.files[0] });
 
     const handleNext = () => {
         setActiveStep((s) => s + 1);
@@ -174,16 +190,53 @@ const QuotePage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Prevent submission unless on the final review step
+        if (activeStep !== 2) {
+            handleNext();
+            return;
+        }
+
         setLoading(true);
+
+        const formData = new FormData();
+        Object.keys(form).forEach(key => {
+            if (key === 'file') {
+                if (form[key]) formData.append('attachment', form[key]);
+            } else {
+                formData.append(key, form[key]);
+            }
+        });
+
         try {
-            const response = await fetch('https://formspree.io/f/xvzwzzey', {
+            // Point to the live script on your server to allow localhost testing
+            const response = await fetch('https://www.inspiretranslations.co.tz/send-quote.php', {
                 method: 'POST',
-                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: JSON.stringify(form)
+                headers: { 'Accept': 'application/json' },
+                body: formData
             });
-            if (response.ok) setSubmitted(true);
+            
+            if (response.ok) {
+                setSubmitted(true);
+                setNotification({ 
+                    open: true, 
+                    message: language === 'en' ? 'Proposal request sent successfully!' : 'Ombi la pendekezo limetumwa kikamilifu!', 
+                    severity: 'success' 
+                });
+            } else {
+                const data = await response.json();
+                setNotification({ 
+                    open: true, 
+                    message: data.error || (language === 'en' ? 'Submission failed. Please try again later.' : 'Uwasilishaji umeshindwa. Tafadhali jaribu tena baadaye.'), 
+                    severity: 'error' 
+                });
+            }
         } catch (err) {
-            console.error(err);
+            setNotification({ 
+                open: true, 
+                message: language === 'en' ? 'Network error. Please try again.' : 'Hitilafu ya mtandao. Tafadhali jaribu tena.', 
+                severity: 'error' 
+            });
         } finally {
             setLoading(false);
         }
@@ -198,53 +251,59 @@ const QuotePage = () => {
 
             {/* Premium Split Hero */}
             <Box sx={{
-                minHeight: { xs: 'auto', md: '55vh' },
+                minHeight: { xs: 'auto', md: '65vh' },
                 display: 'flex',
                 alignItems: 'stretch',
                 flexDirection: { xs: 'column', md: 'row' },
-                background: COLORS.secondary,
+                background: '#F7A11A',
                 position: 'relative',
                 overflow: 'hidden'
             }}>
                 <Box sx={{
-                    width: { xs: '100%', md: '50%' },
+                    width: { xs: '100%', md: '55%' },
                     display: 'flex',
                     alignItems: 'center',
                     px: { xs: 3, sm: 6, md: 12 },
-                    py: { xs: 8, sm: 10, md: 12 },
-                    bgcolor: COLORS.secondary,
-                    zIndex: 2
+                    py: { xs: 10, sm: 12, md: 15 },
+                    zIndex: 2,
+                    bgcolor: '#F7A11A',
+                    order: { xs: 2, md: 1 }
                 }}>
                     <Box>
-                        <AnimatedPreTitle text={c.heroLabel} color={COLORS.accent} />
+                        <AnimatedPreTitle text={c.heroLabel} color="#0D2B14" />
                         <TypewriterText 
                             key={`quote-hero-${language}`}
                             text={c.heroTitle}
                             variant="h1" 
-                            sx={{ color: '#FFFFFF', fontWeight: 900, mb: 3, fontSize: { xs: '2.4rem', sm: '3.2rem', md: '4rem' }, lineHeight: 1.1, fontFamily: '"Inknut Antiqua", serif' }} 
+                            sx={{ color: '#0D2B14', fontWeight: 900, mb: 3, fontSize: { xs: '2.4rem', sm: '3.2rem', md: '4rem' }, lineHeight: 1.1, fontFamily: '"Inknut Antiqua", serif' }} 
                         />
-                        <Box sx={{ width: 80, height: 4, bgcolor: COLORS.accent, mb: 4 }} />
-                        <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: { xs: '1rem', md: '1.1rem' }, maxWidth: 500, lineHeight: 1.8, fontFamily: '"Inknut Antiqua", serif' }}>
+                        <Box sx={{ width: 80, height: 4, bgcolor: '#0D2B14', mb: 4 }} />
+                        <Typography sx={{ color: 'rgba(13, 43, 20, 0.8)', fontSize: { xs: '1rem', md: '1.1rem' }, maxWidth: 500, lineHeight: 1.8, fontFamily: '"Inknut Antiqua", serif', fontWeight: 500 }}>
                             {c.heroDesc}
                         </Typography>
                     </Box>
                 </Box>
                 <Box sx={{
-                    width: { xs: '100%', md: '50%' },
-                    minHeight: { xs: '300px', md: 'auto' },
-                    position: 'relative'
+                    width: { xs: '100%', md: '45%' },
+                    height: { xs: '300px', md: 'auto' },
+                    position: 'relative',
+                    order: { xs: 1, md: 2 },
+                    borderLeft: { md: '2px solid #0D2B14' }
                 }}>
                     <Box 
                         sx={{ 
                             width: '100%', 
                             height: '100%', 
+                            minHeight: '100%',
                             background: `url(${quoteHeroImg}) center/cover no-repeat`,
                             '&::after': {
                                 content: '""',
                                 position: 'absolute',
                                 inset: 0,
-                                background: 'linear-gradient(to right, #0D2B14 0%, transparent 100%)',
-                                display: { xs: 'none', md: 'block' }
+                                background: {
+                                    xs: 'linear-gradient(to top, rgba(13, 43, 20, 0.8) 0%, transparent 100%)',
+                                    md: 'linear-gradient(to right, rgba(13, 43, 20, 0.8) 0%, transparent 100%)'
+                                }
                             }
                         }} 
                     />
@@ -258,7 +317,7 @@ const QuotePage = () => {
                     flexDirection: { xs: 'column', md: 'row' },
                     borderRadius: 0,
                     overflow: 'hidden',
-                    boxShadow: '0 50px 100px -20px rgba(0,0,0,0.15)',
+                    boxShadow: 'none',
                     minHeight: { md: '600px' }
                 }}>
                     {/* Left: Progress Sidebar (The Yellow Box) */}
@@ -266,7 +325,7 @@ const QuotePage = () => {
                         flex: { xs: 'none', md: '0 0 35%' },
                         bgcolor: COLORS.accent, 
                         p: { xs: 4, md: 5 }, 
-                        border: '3px solid #FFFFFF',
+                        border: '3px solid #0D2B14',
                         display: 'flex',
                         flexDirection: 'column',
                         borderRadius: 0
@@ -337,7 +396,7 @@ const QuotePage = () => {
                         flex: { xs: 'none', md: '1' },
                         bgcolor: '#FFFFFF', 
                         p: { xs: 4, md: 5 }, 
-                        border: '3px solid #1A5C2A',
+                        border: '3px solid #0D2B14',
                         borderLeft: { md: 'none' },
                         borderRadius: 0,
                         display: 'flex',
@@ -350,14 +409,14 @@ const QuotePage = () => {
                                         <FactCheckIcon sx={{ fontSize: 70, color: COLORS.primary, mb: 3 }} />
                                         <Typography variant="h4" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: COLORS.secondary, mb: 2 }}>{c.successTitle}</Typography>
                                         <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#4A4A6A', fontSize: '1rem', mb: 4, lineHeight: 1.8 }}>
-                                            {c.successDesc(form.name, form.email)}
+                                            {c.successDesc(form.name)}
                                         </Typography>
-                                        <Alert severity="success" sx={{ borderRadius: 0, fontFamily: 'Outfit', bgcolor: 'rgba(26, 92, 42, 0.05)', color: COLORS.primary, border: `1px solid ${COLORS.primary}`, textAlign: 'left' }}>{c.successHint}</Alert>
+                                        <Alert severity="success" sx={{ borderRadius: 0, fontFamily: 'Outfit', bgcolor: 'rgba(13, 43, 20, 0.05)', color: COLORS.primary, border: `1px solid ${COLORS.primary}`, textAlign: 'left' }}>{c.successHint}</Alert>
                                         <Button onClick={() => setSubmitted(false)} sx={{ mt: 5, color: COLORS.primary, fontWeight: 700, fontFamily: '"Inknut Antiqua", serif', textDecoration: 'underline', '&:hover': { bgcolor: 'transparent', textDecoration: 'none' } }}>Initialize New Request</Button>
                                     </Box>
                                 </motion.div>
                             ) : (
-                                <Box component="form" onSubmit={(e) => e.preventDefault()} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                                     <Box sx={{ mb: 4 }}>
                                         <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: COLORS.secondary, fontSize: '1.4rem', mb: 1 }}>
                                             {activeStep === 2 ? c.labels.review : c.steps[activeStep]}
@@ -383,6 +442,40 @@ const QuotePage = () => {
                                                 <TextField fullWidth name="wordCount" value={form.wordCount} onChange={handleChange} label={c.labels.wordCount} type="number" variant="outlined" sx={inputStyles} />
                                                 <TextField fullWidth name="deadline" value={form.deadline} onChange={handleChange} label={c.labels.deadline} type="date" InputLabelProps={{ shrink: true }} variant="outlined" sx={inputStyles} />
                                                 <TextField fullWidth name="description" value={form.description} onChange={handleChange} label={c.labels.description} multiline rows={2} variant="outlined" sx={{ ...inputStyles, gridColumn: { xs: 'span 1', sm: 'span 2' } }} />
+                                                
+                                                {/* Professional File Upload Field */}
+                                                <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 2' }, mt: 1 }}>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.75rem', color: COLORS.primary, fontWeight: 700, mb: 1.5 }}>
+                                                        {c.labels.upload}
+                                                    </Typography>
+                                                    <Button
+                                                        component="label"
+                                                        variant="outlined"
+                                                        startIcon={<CloudUploadIcon />}
+                                                        sx={{
+                                                            width: '100%',
+                                                            height: '56px',
+                                                            borderRadius: 0,
+                                                            border: '2px dashed #0D2B14',
+                                                            color: '#0D2B14',
+                                                            fontFamily: 'Outfit',
+                                                            fontWeight: 600,
+                                                            textTransform: 'none',
+                                                            transition: 'none',
+                                                            '&:hover': {
+                                                                border: '2px dashed #0D2B14',
+                                                                bgcolor: 'transparent'
+                                                            }
+                                                        }}
+                                                    >
+                                                        {form.file ? `${c.labels.fileSelected} ${form.file.name}` : c.labels.noFile}
+                                                        <input
+                                                            type="file"
+                                                            hidden
+                                                            onChange={handleFileChange}
+                                                        />
+                                                    </Button>
+                                                </Box>
                                             </Box>
                                         )}
 
@@ -396,18 +489,38 @@ const QuotePage = () => {
                                         )}
 
                                         {activeStep === 2 && (
-                                            <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: 'rgba(13, 43, 20, 0.02)', border: '1px solid rgba(13, 43, 20, 0.05)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: { xs: 2, sm: 3 } }}>
-                                                <Box sx={{ gridColumn: 'span 2', borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 2 }}>
+                                            <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: 'rgba(13, 43, 20, 0.02)', border: '1.5px solid #0D2B14', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: { xs: 2, sm: 3 } }}>
+                                                <Box sx={{ gridColumn: 'span 2', borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 1.5 }}>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Target Solution</Typography>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{t(services.find(s => s.id === form.serviceType)?.title) || '-'}</Typography>
                                                 </Box>
-                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: { xs: 1, sm: 2 } }}>
-                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Linguistic Pair</Typography>
+                                                
+                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 1.5 }}>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{form.sourceLang} → {form.targetLang}</Typography>
                                                 </Box>
-                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: { xs: 1, sm: 2 } }}>
-                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Point of Contact</Typography>
+
+                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 1.5 }}>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{form.documentType || 'N/A'} ({form.wordCount || '0'} words)</Typography>
+                                                </Box>
+
+                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 1.5 }}>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{form.deadline || '-'}</Typography>
+                                                </Box>
+
+                                                <Box sx={{ borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 1.5 }}>
                                                     <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{form.name}</Typography>
+                                                </Box>
+
+                                                <Box sx={{ gridColumn: 'span 2', borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 1.5 }}>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Project Attachment</Typography>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: form.file ? COLORS.secondary : 'rgba(0,0,0,0.3)' }}>
+                                                        {form.file ? form.file.name : 'No file attached'}
+                                                    </Typography>
+                                                </Box>
+
+                                                <Box sx={{ gridColumn: 'span 2' }}>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Organization</Typography>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>{form.organization || 'Individual Request'}</Typography>
                                                 </Box>
                                             </Box>
                                         )}
@@ -432,6 +545,7 @@ const QuotePage = () => {
                                         {activeStep < 2 ? (
                                             <Box
                                                 component={motion.button}
+                                                type="button"
                                                 onClick={handleNext}
                                                 whileHover="hover"
                                                 initial="rest"
@@ -445,7 +559,7 @@ const QuotePage = () => {
                                                     bgcolor: 'transparent',
                                                     cursor: 'pointer',
                                                     p: 0,
-                                                    '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.04)' }
+                                                    '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.04)' }
                                                 }}
                                             >
                                                 <Typography
@@ -471,7 +585,7 @@ const QuotePage = () => {
                                         ) : (
                                             <Box
                                                 component={motion.button}
-                                                onClick={handleSubmit}
+                                                type="submit"
                                                 disabled={loading}
                                                 whileHover="hover"
                                                 initial="rest"
@@ -518,6 +632,32 @@ const QuotePage = () => {
             </Container>
 
             <CTASection />
+
+            {/* Pop-up Notifications */}
+            <Snackbar 
+                open={notification.open} 
+                autoHideDuration={6000} 
+                onClose={handleCloseNotification}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <MuiAlert 
+                    onClose={handleCloseNotification} 
+                    severity={notification.severity} 
+                    variant="filled"
+                    sx={{ 
+                        width: '100%', 
+                        bgcolor: notification.severity === 'success' ? '#0D2B14' : '#d32f2f',
+                        color: notification.severity === 'success' ? '#F7A11A' : '#fff',
+                        fontFamily: 'Outfit',
+                        fontWeight: 700,
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        border: notification.severity === 'success' ? '2px solid #F7A11A' : 'none'
+                    }}
+                >
+                    {notification.message}
+                </MuiAlert>
+            </Snackbar>
         </Box>
     );
 };

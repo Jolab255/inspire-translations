@@ -3,11 +3,276 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Content Manager | Inspire Translations</title>
+    <title>Management Infrastructure | Inspire Translations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;700&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+      /* 
+         =========================================
+         INSPIRE TRANSLATIONS — ARCHITECTURAL ADMIN
+         =========================================
+      */
+      
+      body {
+        font-family: 'Outfit', sans-serif !important;
+        background-color: #f8fafc !important;
+        color: #1A1A2E !important;
+      }
+
+      /* --- APP SHELL --- */
+      header, 
+      [class*="AppHeader"],
+      [class*="nc-app-header"] {
+        background: linear-gradient(90deg, #0D1B2A 0%, #1A5C2A 100%) !important;
+        border-bottom: 3px solid #F7A11A !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+        height: 70px !important;
+      }
+      
+      [class*="AppHeader"] h1,
+      [class*="nc-app-header"] h1 {
+        font-family: 'Inknut Antiqua', serif !important;
+        font-weight: 700 !important;
+        color: #FFFFFF !important;
+        font-size: 1.1rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.1em !important;
+      }
+
+      /* --- SIDEBAR --- */
+      aside,
+      [class*="Sidebar"],
+      [class*="nc-app-sidebar"] {
+        background-color: #ffffff !important;
+        border-right: 1px solid rgba(26, 92, 42, 0.1) !important;
+        padding-top: 20px !important;
+      }
+      
+      [class*="SidebarLink"] {
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        font-size: 0.75rem !important;
+        border-radius: 0 !important; 
+        margin: 4px 0 !important;
+        color: #4A5568 !important;
+        padding: 14px 25px !important;
+        border-left: 4px solid transparent !important;
+      }
+      
+      [class*="SidebarLink"][class*="active"] {
+        background-color: #F7A11A !important;
+        color: #1A5C2A !important;
+        border-left: 4px solid #1A5C2A !important;
+      }
+
+      /* --- EDITOR PANEL --- */
+      [class*="ControlPane"] {
+        padding: 60px !important;
+        background-color: #ffffff !important;
+        border: 1px solid rgba(26, 92, 42, 0.1) !important;
+        margin: 40px auto !important;
+        border-radius: 0 !important;
+      }
+
+      label {
+        color: #1A5C2A !important;
+        font-family: 'Inknut Antiqua', serif !important;
+        font-weight: 700 !important;
+        font-size: 0.7rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.12em !important;
+        margin-top: 35px !important;
+        border-bottom: 1px solid rgba(247, 161, 26, 0.2) !important;
+        padding-bottom: 8px !important;
+      }
+
+      input, textarea, select, [class*="Widget"] {
+        border: 1px solid rgba(26, 92, 42, 0.15) !important;
+        border-radius: 0 !important;
+        padding: 16px !important;
+        font-family: 'Outfit', sans-serif !important;
+        background: #fcfdfc !important;
+      }
+      
+      input:focus, textarea:focus, [class*="Widget"]:focus-within {
+        border-color: #F7A11A !important;
+        background: #ffffff !important;
+        outline: none !important;
+      }
+
+      /* --- BUTTONS --- */
+      button {
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 900 !important;
+        border-radius: 0 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.1em !important;
+        font-size: 0.7rem !important;
+      }
+
+      [class*="Button-success"] {
+        background-color: #1A5C2A !important;
+        border: 1px solid #1A5C2A !important;
+        padding: 12px 30px !important;
+        color: white !important;
+      }
+
+      /* --- COLLECTION CARDS --- */
+      [class*="Card"] {
+        border-radius: 0 !important;
+        border: 1px solid rgba(26, 92, 42, 0.1) !important;
+        box-shadow: none !important;
+        margin-bottom: 20px !important;
+      }
+
+      /* --- LOGIN SCREEN --- */
+      [class*="LoginContainer"] {
+        background: linear-gradient(135deg, #0D1B2A 0%, #1A5C2A 100%) !important;
+      }
+      [class*="LoginButton"] {
+        background-color: #F7A11A !important;
+        color: #1A5C2A !important;
+        border-radius: 0 !important;
+        font-weight: 900 !important;
+        padding: 16px 40px !important;
+        border: 2px solid #1A5C2A !important;
+      }
+    </style>
   </head>
   <body>
-    <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+    <script>
+      // ENHANCED RICH PREVIEWS
+      CMS.registerPreviewStyle("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@700;800&family=Outfit:wght@300;400;700;900&display=swap");
+      CMS.registerPreviewStyle(`
+        body { 
+          font-family: 'Outfit', sans-serif; 
+          padding: 60px; 
+          color: #1A1A2E; 
+          background: #ffffff;
+        }
+        .preview-header {
+          border-left: 10px solid #F7A11A;
+          padding-left: 30px;
+          margin-bottom: 60px;
+        }
+        .pre-title {
+          font-family: 'Inknut Antiqua', serif;
+          font-weight: 800;
+          color: #1A5C2A;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          margin-bottom: 10px;
+          display: block;
+        }
+        h1 { 
+          font-family: 'Inknut Antiqua', serif; 
+          color: #1A1A2E; 
+          font-size: 3.5rem; 
+          margin: 0;
+          line-height: 1.1;
+          font-weight: 800;
+        }
+        .meta-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 2px;
+          background: rgba(26, 92, 42, 0.1);
+          border: 1px solid rgba(26, 92, 42, 0.1);
+          margin: 40px 0;
+        }
+        .meta-item {
+          background: #ffffff;
+          padding: 20px;
+        }
+        .meta-item label { 
+          color: #1A5C2A; 
+          font-weight: 900; 
+          text-transform: uppercase; 
+          font-size: 0.65rem; 
+          display: block;
+          margin-bottom: 8px;
+          letter-spacing: 0.1em;
+          border: none;
+        }
+        .meta-item span { font-size: 1.1rem; color: #1A1A2E; font-weight: 700; }
+        
+        .content-body {
+          font-size: 1.15rem;
+          line-height: 1.8;
+          color: #4A4A6A;
+          max-width: 800px;
+        }
+        .content-body h2 {
+          font-family: 'Inknut Antiqua', serif;
+          color: #1A5C2A;
+          font-size: 2rem;
+          margin-top: 60px;
+          margin-bottom: 25px;
+        }
+        img { 
+          width: 100%; 
+          border: 1px solid rgba(26, 92, 42, 0.1);
+          padding: 10px;
+          background: #fff;
+          margin: 50px 0;
+        }
+      `);
+
+      var BlogPreview = createClass({
+        render: function() {
+          var entry = this.props.entry;
+          var image = entry.getIn(['data', 'image']);
+          var bg = this.props.getAsset(image);
+          return h('div', {},
+            h('div', {className: 'preview-header'},
+              h('span', {className: 'pre-title'}, entry.getIn(['data', 'category']) || 'Editorial'),
+              h('h1', {}, entry.getIn(['data', 'title']))
+            ),
+            h('div', {className: 'meta-grid'},
+              h('div', {className: 'meta-item'}, h('label', {}, 'Publication Date'), h('span', {}, entry.getIn(['data', 'date']))),
+              h('div', {className: 'meta-item'}, h('label', {}, 'Status'), h('span', {}, 'Infrastructure Ready'))
+            ),
+            bg ? h('img', {src: bg.toString()}) : null,
+            h('div', {className: 'content-body'},
+              h('div', {style: {fontWeight: '700', fontSize: '1.4rem', color: '#1A5C2A', marginBottom: '40px'}}, entry.getIn(['data', 'excerpt'])),
+              this.props.widgetFor('body')
+            )
+          );
+        }
+      });
+
+      var ProjectPreview = createClass({
+        render: function() {
+          var entry = this.props.entry;
+          var image = entry.getIn(['data', 'img']);
+          var bg = this.props.getAsset(image);
+          return h('div', {},
+            h('div', {className: 'preview-header'},
+              h('span', {className: 'pre-title'}, entry.getIn(['data', 'type']) + ' Infrastructure'),
+              h('h1', {}, entry.getIn(['data', 'title']))
+            ),
+            h('div', {className: 'meta-grid'},
+              h('div', {className: 'meta-item'}, h('label', {}, 'Client Partner'), h('span', {}, entry.getIn(['data', 'client']))),
+              h('div', {className: 'meta-item'}, h('label', {}, 'Fiscal Year'), h('span', {}, entry.getIn(['data', 'year']))),
+              h('div', {className: 'meta-item'}, h('label', {}, 'Operational Hub'), h('span', {}, entry.getIn(['data', 'place'])))
+            ),
+            bg ? h('img', {src: bg.toString()}) : null,
+            h('div', {className: 'content-body'},
+              h('h2', {}, 'Project Objective'),
+              h('p', {}, entry.getIn(['data', 'fullDesc']))
+            )
+          );
+        }
+      });
+
+      CMS.registerPreviewTemplate("blog", BlogPreview);
+      CMS.registerPreviewTemplate("projects", ProjectPreview);
+    </script>
   </body>
 </html>

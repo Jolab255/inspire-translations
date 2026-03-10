@@ -26,15 +26,8 @@ import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/com
 import CTASection from '../../components/common/CTASection';
 
 import projectHeroImg from '../../assets/images/project_hero.png';
-import imgInterpretation from '../../assets/images/onsite_interpretation.png';
-import imgTranslation from '../../assets/images/written_translation.png';
 
 import { getAllProjects } from '../../utils/projectLoader';
-
-const allProjects = getAllProjects();
-const interpretationProjects = allProjects.filter(p => p.type === 'interpretation');
-const translationProjects = allProjects.filter(p => p.type === 'translation');
-
 
 const ProjectCard = ({ project, onReadMore }) => {
     return (
@@ -42,10 +35,10 @@ const ProjectCard = ({ project, onReadMore }) => {
             <Card sx={{ 
                 height: '100%', 
                 borderRadius: 0, 
-                border: '1px solid rgba(255,255,255,0.1)', 
+                border: '1.5px solid #0D2B14', 
                 position: 'relative',
                 transition: 'none',
-                bgcolor: '#1A5C2A', // Green background
+                bgcolor: '#F7A11A', // Yellow background
                 '&:hover': {
                     transform: 'none',
                     boxShadow: 'none'
@@ -53,12 +46,12 @@ const ProjectCard = ({ project, onReadMore }) => {
             }}>
                 <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                     {/* Project Title */}
-                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#FFFFFF', fontSize: { xs: '1.05rem', md: '1.15rem' }, mb: 2, lineHeight: 1.4 }}>
+                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', fontSize: { xs: '1.05rem', md: '1.15rem' }, mb: 2, lineHeight: 1.4 }}>
                         {project.title}
                     </Typography>
 
                     {/* Separator Line */}
-                    <Box sx={{ width: '40px', height: 3, bgcolor: '#F7A11A', mb: 3 }} />
+                    <Box sx={{ width: '40px', height: 3, bgcolor: '#0D2B14', mb: 3 }} />
                     
                     {/* 2-box split grid for details and image */}
                     <Box sx={{ 
@@ -70,33 +63,33 @@ const ProjectCard = ({ project, onReadMore }) => {
                     }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <GroupsIcon sx={{ fontSize: 18, color: '#F7A11A' }} />
-                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#F7A11A', fontSize: '0.8rem', fontWeight: 700 }}>
+                                <GroupsIcon sx={{ fontSize: 18, color: '#0D2B14' }} />
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontSize: '0.8rem', fontWeight: 700 }}>
                                     {project.client}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <PlaceIcon sx={{ fontSize: 18, color: 'rgba(255,255,255,0.7)' }} />
-                                <Typography sx={{ fontFamily: 'Outfit', color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem' }}>
+                                <PlaceIcon sx={{ fontSize: 18, color: 'rgba(13, 43, 20, 0.7)' }} />
+                                <Typography sx={{ fontFamily: 'Outfit', color: 'rgba(13, 43, 20, 0.7)', fontSize: '0.85rem' }}>
                                     {project.place}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <CalendarTodayIcon sx={{ fontSize: 18, color: '#FFFFFF' }} />
-                                <Typography sx={{ fontFamily: 'Outfit', color: '#FFFFFF', fontSize: '0.85rem', fontWeight: 700 }}>
+                                <CalendarTodayIcon sx={{ fontSize: 18, color: '#0D2B14' }} />
+                                <Typography sx={{ fontFamily: 'Outfit', color: '#0D2B14', fontSize: '0.85rem', fontWeight: 700 }}>
                                     {project.year}
                                 </Typography>
                             </Box>
                         </Box>
                         
-                        <Box sx={{ width: '100%', height: 120, borderRadius: 0, overflow: 'hidden' }}>
+                        <Box sx={{ width: '100%', height: 120, borderRadius: 0, overflow: 'hidden', border: '1px solid rgba(13, 43, 20, 0.2)' }}>
                             <Box component="img" src={project.img} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </Box>
                     </Box>
 
-                    {/* Description Wrapped in White Background */}
+                    {/* Description Wrapped in Pure White Background */}
                     <Box sx={{ bgcolor: '#FFFFFF', p: 2.5, borderRadius: 0, mb: 3 }}>
-                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#4A4A6A', fontSize: '0.8rem', lineHeight: 1.6, fontWeight: 500 }}>
+                        <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', opacity: 0.9, fontSize: '0.8rem', lineHeight: 1.6, fontWeight: 500 }}>
                             {project.desc}
                         </Typography>
                     </Box>
@@ -111,7 +104,7 @@ const ProjectCard = ({ project, onReadMore }) => {
                         sx={{ 
                             display: 'inline-flex',
                             alignItems: 'center',
-                            border: '1.5px solid #F7A11A',
+                            border: '1.5px solid #0D2B14',
                             borderRadius: 50,
                             overflow: 'hidden',
                             textDecoration: 'none',
@@ -120,7 +113,7 @@ const ProjectCard = ({ project, onReadMore }) => {
                             cursor: 'pointer',
                             p: 0,
                             '&:hover': {
-                                bgcolor: 'rgba(247, 161, 26, 0.04)'
+                                bgcolor: 'rgba(13, 43, 20, 0.08)'
                             }
                         }}
                     >
@@ -132,7 +125,7 @@ const ProjectCard = ({ project, onReadMore }) => {
                             }}
                             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                             sx={{
-                                color: '#F7A11A',
+                                color: '#0D2B14',
                                 fontFamily: '"Inknut Antiqua", serif',
                                 fontWeight: 700,
                                 fontSize: '0.8rem',
@@ -141,14 +134,14 @@ const ProjectCard = ({ project, onReadMore }) => {
                                 whiteSpace: 'nowrap'
                             }}
                         >
-                            Read More
+                            {project.lang === 'sw' ? 'Soma Zaidi' : 'Read More'}
                         </Typography>
                         <Box
                             sx={{
                                 width: 36,
                                 height: 36,
                                 flexShrink: 0,
-                                bgcolor: '#F7A11A',
+                                bgcolor: '#0D2B14',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center'
@@ -161,7 +154,7 @@ const ProjectCard = ({ project, onReadMore }) => {
                                 }}
                                 transition={{ type: 'spring', stiffness: 600, damping: 15 }}
                             >
-                                <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 18 }} />
+                                <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 18 }} />
                             </motion.div>
                         </Box>
                     </Box>
@@ -193,17 +186,16 @@ const ProjectModal = ({ project, open, onClose }) => {
                 outline: 'none',
                 '&::-webkit-scrollbar': { width: '6px' },
                 '&::-webkit-scrollbar-track': { bgcolor: '#F1F1F1' },
-                '&::-webkit-scrollbar-thumb': { bgcolor: '#1A5C2A' }
+                '&::-webkit-scrollbar-thumb': { bgcolor: '#0D2B14' }
             }}>
                 {/* Sticky Close Header */}
                 <Box sx={{ position: 'sticky', top: 0, zIndex: 100, display: 'flex', justifyContent: 'flex-end', p: 1, pointerEvents: 'none' }}>
                     <IconButton onClick={onClose} sx={{ 
                         pointerEvents: 'auto',
-                        bgcolor: 'rgba(255,255,255,0.9)', 
-                        backdropFilter: 'blur(10px)',
-                        color: '#0D2B14',
+                        bgcolor: '#0D2B14', 
+                        color: '#F7A11A',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                        '&:hover': { bgcolor: '#F7A11A', color: '#FFF' } 
+                        '&:hover': { bgcolor: '#000', color: '#FFF' } 
                     }}>
                         <CloseIcon />
                     </IconButton>
@@ -221,8 +213,8 @@ const ProjectModal = ({ project, open, onClose }) => {
                             <Chip 
                                 label={project.year} 
                                 sx={{ 
-                                    bgcolor: 'rgba(26, 92, 42, 0.1)', 
-                                    color: '#1A5C2A', 
+                                    bgcolor: 'rgba(13, 43, 20, 0.1)', 
+                                    color: '#0D2B14', 
                                     fontWeight: 800, 
                                     fontFamily: 'Outfit',
                                     borderRadius: 0,
@@ -231,7 +223,7 @@ const ProjectModal = ({ project, open, onClose }) => {
                             />
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, borderLeft: '2px solid rgba(0,0,0,0.1)' }}>
                                 <PlaceIcon sx={{ color: '#F7A11A', fontSize: 20 }} />
-                                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 600, color: '#4A4A6A' }}>{project.place}</Typography>
+                                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 600, color: '#0D2B14' }}>{project.place}</Typography>
                             </Box>
                         </Box>
 
@@ -247,20 +239,21 @@ const ProjectModal = ({ project, open, onClose }) => {
                         </Typography>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 6, p: 3, bgcolor: '#F8F9FA', borderLeft: '4px solid #F7A11A' }}>
-                            <GroupsIcon sx={{ color: '#1A5C2A', fontSize: 28 }} />
+                            <GroupsIcon sx={{ color: '#0D2B14', fontSize: 28 }} />
                             <Box>
-                                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, color: '#9E9E9E', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Client</Typography>
-                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#1A5C2A', fontWeight: 700, fontSize: '1.1rem' }}>{project.client}</Typography>
+                                <Typography sx={{ fontFamily: 'Outfit', fontWeight: 500, color: '#9E9E9E', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{project.lang === 'sw' ? 'Mteja' : 'Client'}</Typography>
+                                <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', color: '#0D2B14', fontWeight: 700, fontSize: '1.1rem' }}>{project.client}</Typography>
                             </Box>
                         </Box>
 
                         <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, color: '#0D2B14', mb: 2, fontSize: '1.1rem' }}>
-                            Project Scope & Impact
+                            {project.lang === 'sw' ? 'Upeo wa Mradi na Athari' : 'Project Scope & Impact'}
                         </Typography>
                         
                         <Typography sx={{ 
                             fontFamily: 'Outfit', 
-                            color: '#4A4A6A', 
+                            color: '#0D2B14', 
+                            opacity: 0.8,
                             lineHeight: 2, 
                             fontSize: '1.05rem',
                             mb: 4,
@@ -274,17 +267,17 @@ const ProjectModal = ({ project, open, onClose }) => {
                                 onClick={onClose}
                                 variant="contained" 
                                 sx={{ 
-                                    bgcolor: '#1A5C2A', 
+                                    bgcolor: '#0D2B14', 
                                     color: '#FFF', 
                                     px: 6, 
                                     py: 1.5, 
                                     borderRadius: 50, 
                                     fontFamily: 'Outfit', 
                                     fontWeight: 700,
-                                    '&:hover': { bgcolor: '#0D2B14' }
+                                    '&:hover': { bgcolor: '#000' }
                                 }}
                             >
-                                Close Project
+                                {project.lang === 'sw' ? 'Funga Mradi' : 'Close Project'}
                             </Button>
                         </Box>
                     </Box>
@@ -296,9 +289,12 @@ const ProjectModal = ({ project, open, onClose }) => {
 
 const ProjectsPage = () => {
     const { language } = useLanguage();
-    const ui = uiTranslations[language];
     const [selectedProject, setSelectedProject] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const allProjects = getAllProjects(language);
+    const interpretationProjects = allProjects.filter(p => p.type === 'interpretation');
+    const translationProjects = allProjects.filter(p => p.type === 'translation');
 
     const handleReadMore = (project) => {
         setSelectedProject(project);
@@ -333,7 +329,7 @@ const ProjectsPage = () => {
                 description={language === 'en' ? "Explore our successful interpretation and translation projects." : "Chunguza miradi yetu ya ukalimani na tafsiri iliyofanikiwa."}
             />
 
-            {/* Page Hero - Full-Width Green Gradient with Floating White Content Box */}
+            {/* Page Hero - Full-Width Yellow Background with Floating White Content Box */}
             <Box sx={{
                 height: { xs: 'auto', md: '100vh' },
                 minHeight: { xs: '600px', md: '100vh' },
@@ -341,7 +337,7 @@ const ProjectsPage = () => {
                 pb: 0,
                 display: 'flex',
                 alignItems: 'stretch',
-                background: 'linear-gradient(135deg, #1A5C2A 0%, #0D2B14 100%)', // Green Theme
+                background: '#F7A11A', // Yellow Theme
                 position: 'relative',
                 overflow: 'hidden'
             }}>
@@ -357,13 +353,14 @@ const ProjectsPage = () => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     boxShadow: '20px 0 60px rgba(0,0,0,0.1)',
-                    borderRadius: 0
+                    borderRadius: 0,
+                    borderRight: '2px solid #0D2B14'
                 }}>
                     <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
                         <Typography variant="h1" sx={{ color: '#0D2B14', fontWeight: 900, mb: 3, fontSize: { xs: '2.2rem', sm: '2.8rem', md: '3.5rem' }, lineHeight: 1.1, fontFamily: '"Inknut Antiqua", serif' }}>
                             {c.heroTitle}
                         </Typography>
-                        <Typography sx={{ color: '#4A4A6A', fontSize: '1rem', lineHeight: 1.8, mb: 5, fontFamily: '"Inknut Antiqua", serif' }}>
+                        <Typography sx={{ color: 'rgba(13, 43, 20, 0.8)', fontSize: '1rem', lineHeight: 1.8, mb: 5, fontFamily: '"Inknut Antiqua", serif', fontWeight: 500 }}>
                             {c.heroDesc}
                         </Typography>
                         
@@ -377,12 +374,12 @@ const ProjectsPage = () => {
                                 sx={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    border: '1.5px solid #F7A11A',
+                                    border: '2px solid #0D2B14',
                                     borderRadius: 50,
                                     overflow: 'hidden',
                                     textDecoration: 'none',
                                     transition: 'all 0.3s ease',
-                                    '&:hover': { bgcolor: 'rgba(247, 161, 26, 0.04)' }
+                                    '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.04)' }
                                 }}
                             >
                                 <Typography
@@ -393,18 +390,18 @@ const ProjectsPage = () => {
                                     }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                     sx={{
-                                        color: '#F7A11A',
+                                        color: '#0D2B14',
                                         fontFamily: '"Inknut Antiqua", serif',
                                         fontWeight: 700,
                                         fontSize: '0.85rem',
                                         px: 4,
-                                        lineHeight: '36px',
+                                        lineHeight: '40px',
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
                                     {c.moreBtn}
                                 </Typography>
-                                <Box sx={{ width: 36, height: 36, flexShrink: 0, bgcolor: '#F7A11A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Box sx={{ width: 40, height: 40, flexShrink: 0, bgcolor: '#0D2B14', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <motion.div
                                         variants={{
                                             rest: { x: 0 },
@@ -412,7 +409,7 @@ const ProjectsPage = () => {
                                         }}
                                         transition={{ type: 'spring', stiffness: 600, damping: 15 }}
                                     >
-                                        <ArrowForwardIcon sx={{ color: '#1A5C2A', fontSize: 24 }} />
+                                        <ArrowForwardIcon sx={{ color: '#F7A11A', fontSize: 20 }} />
                                     </motion.div>
                                 </Box>
                             </Box>
@@ -424,14 +421,14 @@ const ProjectsPage = () => {
                                 variant="outlined" 
                                 startIcon={<DownloadIcon />}
                                 sx={{ 
-                                    borderColor: '#1A5C2A', 
-                                    color: '#1A5C2A',
+                                    borderColor: '#0D2B14', 
+                                    color: '#0D2B14',
                                     borderRadius: 50,
                                     px: 4,
                                     fontFamily: 'Outfit',
                                     fontWeight: 700,
                                     textTransform: 'none',
-                                    '&:hover': { bgcolor: 'rgba(26, 92, 42, 0.04)', borderColor: '#1A5C2A' }
+                                    '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.04)', borderColor: '#0D2B14' }
                                 }}
                             >
                                 {c.downloadBtn}
@@ -487,7 +484,7 @@ const ProjectsPage = () => {
 
                     {/* Translation Section */}
                     <Box>
-                        <AnimatedPreTitle text="Certified Works" color="#1A5C2A" />
+                        <AnimatedPreTitle text="Certified Works" color="#F7A11A" />
                         <TypewriterText text={c.translation} variant="h2" sx={{ fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.8rem' }, color: '#0D2B14', mb: 8 }} />
                         
                         {/* 2-Column Grid for Cards */}
