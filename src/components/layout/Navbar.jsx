@@ -116,13 +116,13 @@ const Navbar = () => {
                 top: 0,
                 zIndex: 1100,
                 width: '100%',
-                bgcolor: scrolled ? 'rgba(255,255,255,0.98)' : 'transparent',
+                bgcolor: scrolled ? 'rgba(255,255,255,0.98)' : '#0D2B14',
                 backdropFilter: scrolled ? 'blur(20px)' : 'none',
                 boxShadow: scrolled ? '0 4px 32px rgba(0,0,0,0.1)' : 'none',
                 transition: 'background-color 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease',
             }}>
                 {/* ── Main AppBar ── */}
-                <AppBar position="static" elevation={0} sx={{ bgcolor: 'transparent', color: '#0D2B14', transition: 'color 0.4s ease' }}>
+                <AppBar position="static" elevation={0} sx={{ bgcolor: 'transparent', color: scrolled ? '#0D2B14' : '#FFFFFF', transition: 'color 0.4s ease' }}>
                     <Toolbar disableGutters sx={{ 
                         maxWidth: 1280, 
                         width: '100%', 
@@ -132,33 +132,33 @@ const Navbar = () => {
                         minHeight: { xs: 70, md: 90 }, 
                         overflow: 'visible' 
                     }}>
-                        <NavbarLogo height={64} />
+                        <NavbarLogo height={64} scrolled={scrolled} />
                         <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0, flexGrow: 1, justifyContent: 'center', overflow: 'visible' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(13, 43, 20, 0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(13, 43, 20, 0.15)', borderRadius: '100px', px: 1.5, py: 0.5, transition: 'all 0.35s ease' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', border: scrolled ? '1px solid rgba(13, 43, 20, 0.15)' : '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '100px', px: 1.5, py: 0.5, transition: 'all 0.35s ease' }}>
                                 {navLinks.map((item) => (
                                     <Box key={item.path} sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                                         <Button
                                             onClick={item.path === '/services' ? () => setServicesDropOpen(!servicesDropOpen) : undefined}
                                             component={item.path === '/services' ? 'button' : RouterLink}
                                             to={item.path === '/services' ? undefined : `/${language}${item.path === '/' ? '' : item.path}`}
-                                            startIcon={isActive(item.path) ? <Box sx={{ color: '#0D2B14', display: 'flex', fontSize: 19 }}>{navIcons[item.path]}</Box> : null}
-                                            endIcon={item.path === '/services' ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none' }} /> : null}
+                                            startIcon={isActive(item.path) ? <Box sx={{ color: scrolled ? '#0D2B14' : '#FFFFFF', display: 'flex', fontSize: 19 }}>{navIcons[item.path]}</Box> : null}
+                                            endIcon={item.path === '/services' ? <ExpandMoreIcon sx={{ fontSize: '16px !important', ml: -0.5, opacity: 0.5, transition: 'transform 0.25s', transform: servicesDropOpen ? 'rotate(180deg)' : 'none', color: scrolled ? 'inherit' : '#FFFFFF' }} /> : null}
                                             sx={{
-                                                color: '#0D2B14',
+                                                color: scrolled ? '#0D2B14' : '#FFFFFF',
                                                 fontWeight: isActive(item.path) ? 700 : 500,
                                                 fontFamily: '"Inknut Antiqua", serif',
                                                 fontSize: '0.75rem',
                                                 letterSpacing: '0.01em',
                                                 px: 2, py: 0.6, borderRadius: '100px', textTransform: 'none',
                                                 border: isActive(item.path) 
-                                                    ? '1px solid #0D2B14'
+                                                    ? (scrolled ? '1px solid #0D2B14' : '1px solid #FFFFFF')
                                                     : '1px solid transparent',
                                                 bgcolor: isActive(item.path)
-                                                    ? 'rgba(13, 43, 20, 0.08)'
+                                                    ? (scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(255, 255, 255, 0.15)')
                                                     : 'transparent',
                                                 '&:hover': { 
-                                                    color: '#0D2B14', 
-                                                    bgcolor: 'rgba(13, 43, 20, 0.1)',
+                                                    color: scrolled ? '#0D2B14' : '#FFFFFF', 
+                                                    bgcolor: scrolled ? 'rgba(13, 43, 20, 0.1)' : 'rgba(255, 255, 255, 0.2)',
                                                     boxShadow: 'none',
                                                     transform: 'none'
                                                 },
@@ -180,17 +180,17 @@ const Navbar = () => {
                                     display: 'inline-flex', 
                                     alignItems: 'center', 
                                     textDecoration: 'none', 
-                                    border: '1px solid #0D2B14', 
+                                    border: scrolled ? '1px solid #0D2B14' : '1px solid #FFFFFF', 
                                     borderRadius: '50px', 
                                     overflow: 'hidden', 
                                     transition: 'all 0.35s ease', 
-                                    '&:hover': { bgcolor: 'rgba(13, 43, 20, 0.08)' } 
+                                    '&:hover': { bgcolor: scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(255, 255, 255, 0.1)' } 
                                 }}
                             >
-                                <Typography sx={{ color: '#0D2B14', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.75rem', px: 2, py: 0.6 }}>
+                                <Typography sx={{ color: scrolled ? '#0D2B14' : '#FFFFFF', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, fontSize: '0.75rem', px: 2, py: 0.6 }}>
                                     {ui.getAQuote}
                                 </Typography>
-                                <Box sx={{ bgcolor: '#F7A11A', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid #0D2B14' }}>
+                                <Box sx={{ bgcolor: '#F7A11A', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: scrolled ? '1px solid #0D2B14' : '1px solid #FFFFFF' }}>
                                     <RequestQuoteIcon sx={{ color: '#0D2B14', fontSize: 18 }} />
                                 </Box>
                             </Box>
@@ -202,19 +202,19 @@ const Navbar = () => {
                                 sx={{ 
                                     minWidth: 'auto', 
                                     ml: 1.5,
-                                    color: '#0D2B14', 
+                                    color: scrolled ? '#0D2B14' : '#FFFFFF', 
                                     fontFamily: 'Outfit', 
                                     fontWeight: 700, 
                                     fontSize: '0.8rem', 
                                     px: 1.5,
                                     py: 0.6,
                                     borderRadius: '50px',
-                                    border: '1.5px solid #0D2B14',
+                                    border: scrolled ? '1.5px solid #0D2B14' : '1.5px solid #FFFFFF',
                                     transition: 'all 0.3s ease',
                                     '&:hover': { 
-                                        color: '#0D2B14', 
-                                        borderColor: '#0D2B14', 
-                                        bgcolor: 'rgba(13, 43, 20, 0.08)' 
+                                        color: scrolled ? '#0D2B14' : '#FFFFFF', 
+                                        borderColor: scrolled ? '#0D2B14' : '#FFFFFF', 
+                                        bgcolor: scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(255, 255, 255, 0.1)' 
                                     } 
                                 }}
                             >
@@ -233,14 +233,14 @@ const Navbar = () => {
                                     width: 32,
                                     height: 32,
                                     borderRadius: '50%',
-                                    border: '1px solid rgba(13, 43, 20, 0.2)',
-                                    color: '#0D2B14',
+                                    border: scrolled ? '1px solid rgba(13, 43, 20, 0.2)' : '1px solid rgba(255, 255, 255, 0.3)',
+                                    color: scrolled ? '#0D2B14' : '#FFFFFF',
                                     transition: 'all 0.3s ease',
                                     '&:hover': {
-                                        color: '#0D2B14',
-                                        borderColor: '#0D2B14',
+                                        color: scrolled ? '#0D2B14' : '#FFFFFF',
+                                        borderColor: scrolled ? '#0D2B14' : '#FFFFFF',
                                         transform: 'scale(1.1)',
-                                        bgcolor: 'rgba(13, 43, 20, 0.08)'
+                                        bgcolor: scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(255, 255, 255, 0.1)'
                                     }
                                 }}
                                 title="Admin Dashboard"
@@ -250,7 +250,7 @@ const Navbar = () => {
                         </Box>
 
                         <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: { xs: 0.5, sm: 1 }, ml: 'auto' }}>
-                            <Button component={RouterLink} to={`/${language}/quote`} size="small" variant="contained" sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#0D2B14', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, px: { xs: 1.5, sm: 2 }, py: 0.5, minWidth: 'auto', fontSize: { xs: '0.65rem', sm: '0.7rem' }, borderRadius: 50, border: '1px solid #0D2B14' }}>{ui.quote}</Button>
+                            <Button component={RouterLink} to={`/${language}/quote`} size="small" variant="contained" sx={{ background: 'linear-gradient(135deg, #F7A11A, #D4880E)', color: '#0D2B14', fontFamily: '"Inknut Antiqua", serif', fontWeight: 700, px: { xs: 1.5, sm: 2 }, py: 0.5, minWidth: 'auto', fontSize: { xs: '0.65rem', sm: '0.7rem' }, borderRadius: 50, border: scrolled ? '1px solid #0D2B14' : '1px solid #FFFFFF' }}>{ui.quote}</Button>
                             
                             {/* Mobile Language Toggle */}
                             <Button 
@@ -258,18 +258,18 @@ const Navbar = () => {
                                 size="small" 
                                 sx={{ 
                                     minWidth: 'auto', 
-                                    color: '#0D2B14', 
+                                    color: scrolled ? '#0D2B14' : '#FFFFFF', 
                                     fontFamily: 'Outfit', 
                                     fontWeight: 700, 
                                     fontSize: { xs: '0.7rem', sm: '0.75rem' }, 
                                     px: { xs: 0.5, sm: 1 },
-                                    '&:hover': { bgcolor: 'transparent', color: '#0D2B14' } 
+                                    '&:hover': { bgcolor: 'transparent', color: scrolled ? '#0D2B14' : '#FFFFFF' } 
                                 }}
                             >
                                 {language === 'en' ? 'SW' : 'EN'}
                             </Button>
 
-                            <IconButton onClick={() => setDrawerOpen(true)} size="small" sx={{ color: '#0D2B14', bgcolor: 'rgba(13, 43, 20, 0.08)', borderRadius: 2, p: { xs: 0.5, sm: 1 } }}><MenuIcon fontSize="small" /></IconButton>
+                            <IconButton onClick={() => setDrawerOpen(true)} size="small" sx={{ color: scrolled ? '#0D2B14' : '#FFFFFF', bgcolor: scrolled ? 'rgba(13, 43, 20, 0.08)' : 'rgba(255, 255, 255, 0.1)', borderRadius: 2, p: { xs: 0.5, sm: 1 } }}><MenuIcon fontSize="small" /></IconButton>
                         </Box>
                     </Toolbar>
                 </AppBar >

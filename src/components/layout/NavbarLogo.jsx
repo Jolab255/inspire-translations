@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import logoImg from '../../assets/logos/Inspire_Translations_Logo.png';
 
-const NavbarLogo = ({ height = 56 }) => {
+const NavbarLogo = ({ height = 56, scrolled = false }) => {
     const { language } = useLanguage();
     return (
         <Box
@@ -17,10 +17,10 @@ const NavbarLogo = ({ height = 56 }) => {
                 mr: { xs: 2, md: 4 },
                 mt: 0,
                 flexShrink: 0,
-                p: 0.25,
-                bgcolor: '#FFFFFF',
-                borderRadius: 0,
-                transition: 'transform 0.3s ease',
+                p: { xs: 0.5, md: 0.8 }, // Restored and slightly increased for better look
+                bgcolor: '#FFFFFF', // Restored white background
+                borderRadius: '4px', // Slight rounding for a cleaner look on dark green
+                transition: 'all 0.3s ease',
                 '&:hover': {
                     transform: 'scale(1.02)'
                 }

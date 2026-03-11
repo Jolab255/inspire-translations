@@ -48,7 +48,7 @@ const QuotePage = () => {
     const [form, setForm] = useState({
         serviceType: '', sourceLang: '', targetLang: '', documentType: '', wordCount: '',
         deadline: '', description: '', name: '', email: '', phone: '', organization: '',
-        file: null
+        files: []
     });
 
     const handleCloseNotification = () => setNotification({ ...notification, open: false });
@@ -79,8 +79,8 @@ const QuotePage = () => {
                 org: "Organization",
                 review: "Review Your Request",
                 upload: "Upload Project Files (If any)",
-                fileSelected: "File attached:",
-                noFile: "Click to select file"
+                filesSelected: (count) => `${count} file(s) attached:`,
+                noFile: "Click to select files (Multiple allowed)"
             },
             docTypes: ['Legal', 'Business', 'Medical', 'Technical', 'Marketing', 'Academic', 'Other'],
             nav: {
@@ -115,8 +115,8 @@ const QuotePage = () => {
                 org: "Shirika",
                 review: "Kagua Ombi",
                 upload: "Pakia Hati za Mradi (Kama zipo)",
-                fileSelected: "Hati imeunganishwa:",
-                noFile: "Bonyeza kuchagua hati"
+                filesSelected: (count) => `Hati ${count} zimeunganishwa:`,
+                noFile: "Bonyeza kuchagua hati (Nyingi zinaruhusiwa)"
             },
             docTypes: ['Kisheria', 'Biashara', 'Matibabu', 'Kiufundi', 'Masoko', 'Kitaaluma', 'Nyingine'],
             nav: {
@@ -176,7 +176,7 @@ const QuotePage = () => {
     };
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-    const handleFileChange = (e) => setForm({ ...form, file: e.target.files[0] });
+    const handleFileChange = (e) => setForm({ ...form, files: Array.from(e.target.files) });
 
     const handleNext = () => {
         setActiveStep((s) => s + 1);
@@ -201,15 +201,17 @@ const QuotePage = () => {
 
         const formData = new FormData();
         Object.keys(form).forEach(key => {
-            if (key === 'file') {
-                if (form[key]) formData.append('attachment', form[key]);
+            if (key === 'files') {
+                form.files.forEach(file => {
+                    formData.append('attachment[]', file);
+                });
             } else {
                 formData.append(key, form[key]);
             }
         });
 
         try {
-            // Point to the live script on your server to allow localhost testing
+            // Point to the live script on your server
             const response = await fetch('https://www.inspiretranslations.co.tz/send-quote.php', {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' },
@@ -264,7 +266,7 @@ const QuotePage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     px: { xs: 3, sm: 6, md: 12 },
-                    py: { xs: 10, sm: 12, md: 15 },
+                    py: { xs: 18, sm: 22, md: 26 },
                     zIndex: 2,
                     bgcolor: '#F7A11A',
                     order: { xs: 2, md: 1 }
@@ -468,13 +470,25 @@ const QuotePage = () => {
                                                             }
                                                         }}
                                                     >
-                                                        {form.file ? `${c.labels.fileSelected} ${form.file.name}` : c.labels.noFile}
+                                                        {form.files.length > 0 
+                                                            ? c.labels.filesSelected(form.files.length) 
+                                                            : c.labels.noFile}
                                                         <input
                                                             type="file"
+                                                            multiple
                                                             hidden
                                                             onChange={handleFileChange}
                                                         />
                                                     </Button>
+                                                    {form.files.length > 0 && (
+                                                        <Box sx={{ mt: 1, px: 1 }}>
+                                                            {form.files.map((f, i) => (
+                                                                <Typography key={i} sx={{ fontSize: '0.7rem', color: COLORS.textMuted, fontFamily: 'Outfit' }}>
+                                                                    • {f.name}
+                                                                </Typography>
+                                                            ))}
+                                                        </Box>
+                                                    )}
                                                 </Box>
                                             </Box>
                                         )}
@@ -512,10 +526,20 @@ const QuotePage = () => {
                                                 </Box>
 
                                                 <Box sx={{ gridColumn: 'span 2', borderBottom: '1px solid rgba(0,0,0,0.05)', pb: 1.5 }}>
-                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Project Attachment</Typography>
-                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: form.file ? COLORS.secondary : 'rgba(0,0,0,0.3)' }}>
-                                                        {form.file ? form.file.name : 'No file attached'}
-                                                    </Typography>
+                                                    <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'rgba(13, 43, 20, 0.4)', mb: 0.5 }}>Project Attachments</Typography>
+                                                    <Box>
+                                                        {form.files.length > 0 ? (
+                                                            form.files.map((f, i) => (
+                                                                <Typography key={i} sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: COLORS.secondary }}>
+                                                                    {f.name}
+                                                                </Typography>
+                                                            ))
+                                                        ) : (
+                                                            <Typography sx={{ fontFamily: '"Inknut Antiqua", serif', fontSize: '0.85rem', fontWeight: 600, color: 'rgba(0,0,0,0.3)' }}>
+                                                                No files attached
+                                                            </Typography>
+                                                        )}
+                                                    </Box>
                                                 </Box>
 
                                                 <Box sx={{ gridColumn: 'span 2' }}>

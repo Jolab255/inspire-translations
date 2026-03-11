@@ -59,13 +59,7 @@ const LangRedirect = () => {
   return <Navigate to={`/${language}`} replace />;
 };
 
-// Hard redirect for Admin to bypass SPA routing
-const AdminRedirect = () => {
-  useEffect(() => {
-    window.location.href = '/admin/index.html';
-  }, []);
-  return null;
-};
+const AdminDashboard = lazy(() => import('./cms/AdminDashboard'));
 
 // Layout Wrapper to sync lang param with context
 const LangWrapper = ({ children }) => {
@@ -89,7 +83,10 @@ const LangWrapper = ({ children }) => {
   );
 };
 
-const App = () => {
+const AppContent = () => {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   useEffect(() => {
     const loader = document.getElementById('initial-loader');
     if (loader) {
@@ -105,37 +102,47 @@ const App = () => {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
-        <ScrollToTop />
-        <LanguageProvider>
-          <Navbar />
-          <RouteTransition>
-            <main>
-              <Routes>
-                <Route path="/" element={<LangRedirect />} />
-                <Route path="/admin" element={<AdminRedirect />} />
-                <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
-                <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
-                <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
-                <Route path="/:lang/services/:slug" element={<LangWrapper><ServiceDetail /></LangWrapper>} />
-                <Route path="/:lang/projects" element={<LangWrapper><ProjectsPage /></LangWrapper>} />
-                <Route path="/:lang/gallery" element={<LangWrapper><GalleryPage /></LangWrapper>} />
-                <Route path="/:lang/blog" element={<LangWrapper><BlogPage /></LangWrapper>} />
-                <Route path="/:lang/blog/:slug" element={<LangWrapper><BlogPostPage /></LangWrapper>} />
-                <Route path="/:lang/contact" element={<LangWrapper><ContactPage /></LangWrapper>} />
-                <Route path="/:lang/quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
-                <Route path="/:lang/privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
-                <Route path="/:lang/terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
-                <Route path="/:lang/*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
-                <Route path="*" element={<Navigate to="/en/404" replace />} />
-              </Routes>
-            </main>
-          </RouteTransition>
+    <LanguageProvider>
+      {!isAdmin && <Navbar />}
+      <RouteTransition>
+        <main>
+          <Routes>
+            <Route path="/" element={<LangRedirect />} />
+            <Route path="/admin/*" element={<Suspense fallback={<PageSkeleton />}><AdminDashboard /></Suspense>} />
+            <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
+            <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
+            <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
+            <Route path="/:lang/services/:slug" element={<LangWrapper><ServiceDetail /></LangWrapper>} />
+            <Route path="/:lang/projects" element={<LangWrapper><ProjectsPage /></LangWrapper>} />
+            <Route path="/:lang/gallery" element={<LangWrapper><GalleryPage /></LangWrapper>} />
+            <Route path="/:lang/blog" element={<LangWrapper><BlogPage /></LangWrapper>} />
+            <Route path="/:lang/blog/:slug" element={<LangWrapper><BlogPostPage /></LangWrapper>} />
+            <Route path="/:lang/contact" element={<LangWrapper><ContactPage /></LangWrapper>} />
+            <Route path="/:lang/quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
+            <Route path="/:lang/privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
+            <Route path="/:lang/terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
+            <Route path="/:lang/*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
+            <Route path="*" element={<Navigate to="/en/404" replace />} />
+          </Routes>
+        </main>
+      </RouteTransition>
+      {!isAdmin && (
+        <>
           <Footer />
           <WhatsAppFab />
           <CookieConsent />
-        </LanguageProvider>
+        </>
+      )}
+    </LanguageProvider>
+  );
+};
+
+const App = () => {
+  return (
+    <ErrorBoundary>
+      <BrowserRouter>
+        <ScrollToTop />
+        <AppContent />
       </BrowserRouter>
     </ErrorBoundary>
   );

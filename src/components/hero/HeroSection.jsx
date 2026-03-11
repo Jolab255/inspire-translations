@@ -167,7 +167,7 @@ const HeroSection = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     background: '#F7A11A',
-                    pt: { xs: 14, md: 16 },
+                    pt: { xs: 16, md: 20 },
                     pb: { xs: 8, md: 0 },
                     overflow: 'hidden'
                 }}

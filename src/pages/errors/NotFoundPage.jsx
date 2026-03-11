@@ -46,7 +46,8 @@ const NotFoundPage = () => {
                     textAlign: 'center',
                     position: 'relative',
                     overflow: 'hidden',
-                    py: 8,
+                    pt: { xs: 20, md: 28 },
+                    pb: 8,
                 }}
             >
                 {/* Decorative Elements */}

@@ -207,7 +207,7 @@ const ContactPage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     px: { xs: 3, sm: 6, md: 12 },
-                    py: { xs: 10, sm: 12, md: 15 },
+                    py: { xs: 18, sm: 22, md: 26 },
                     zIndex: 2,
                     bgcolor: '#F7A11A',
                     order: { xs: 2, md: 1 }

@@ -10,7 +10,7 @@ import { uiTranslations } from '../../data/translations/ui';
 
 const LegalPage = ({ title, badge, intro, children, language }) => (
     <>
-        <Box sx={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #1A2E40 100%)', py: { xs: 8, md: 11 }, textAlign: 'center' }}>
+        <Box sx={{ background: 'linear-gradient(135deg, #0D1B2A 0%, #1A2E40 100%)', py: { xs: 24, md: 28 }, textAlign: 'center' }}>
             <Container maxWidth="md">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
                     <Chip label={badge} sx={{ bgcolor: 'rgba(247,161,26,0.15)', color: '#F7A11A', border: '1px solid rgba(247,161,26,0.3)', fontFamily: 'Outfit', fontWeight: 600, mb: 3 }} />

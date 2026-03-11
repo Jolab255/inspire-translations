@@ -333,7 +333,7 @@ const ProjectsPage = () => {
             <Box sx={{
                 height: { xs: 'auto', md: '100vh' },
                 minHeight: { xs: '600px', md: '100vh' },
-                pt: { xs: '70px', md: '84px' }, // Header offset
+                pt: { xs: '120px', md: '160px' }, // Reduced header offset
                 pb: 0,
                 display: 'flex',
                 alignItems: 'stretch',

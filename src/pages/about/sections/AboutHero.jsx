@@ -20,7 +20,7 @@ const AboutHero = ({ c }) => {
                 display: 'flex',
                 alignItems: 'center',
                 px: { xs: 3, sm: 6, md: 12 },
-                py: { xs: 12, sm: 16, md: 20 },
+                py: { xs: 14, sm: 18, md: 22 },
                 position: 'relative',
                 zIndex: 2
             }}>
