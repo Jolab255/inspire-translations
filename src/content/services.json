@@ -393,8 +393,8 @@
     {
       "id": "sign-language",
       "title": {
-        "en": "Sign Language Interpretation",
-        "sw": "Ukalimani wa Lugha ya Alama"
+        "en": "Sign Language Interpretation services",
+        "sw": "Huduma za Ukalimani wa Lugha ya Alama"
       },
       "shortDesc": {
         "en": "Committed to inclusivity, we provide professional sign language interpreters for conferences and corporate settings.",
@@ -404,7 +404,7 @@
         "en": "Ensuring equal access to communication for all in medical, educational, and corporate consultation.",
         "sw": "Kuhakikisha upatikanaji sawa wa mawasiliano kwa wote katika ushauri wa matibabu, elimu, na kampuni."
       },
-      "icon": "🤟",
+      "icon": "",
       "img": "/assets/images/customer_care.png",
       "color": "#1A5C2A",
       "features": {
