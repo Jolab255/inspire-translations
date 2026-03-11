@@ -137,21 +137,29 @@ const ServicesManager = () => {
     };
 
     const handleSaveService = async () => {
-        if (!formData.id) {
-            setSaveStatus({ type: 'error', message: 'Service ID is required.' });
+        let finalFormData = { ...formData };
+        
+        // Auto-generate ID if empty (for new services)
+        if (!finalFormData.id && finalFormData.title.en) {
+            finalFormData.id = finalFormData.title.en.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+        }
+
+        if (!finalFormData.id) {
+            setSaveStatus({ type: 'error', message: 'Service ID or English Title is required.' });
             return;
         }
+
         setLoading(true);
         try {
             let newServices;
             if (selectedItem) {
-                newServices = servicesData.services.map(s => s.id === selectedItem.id ? formData : s);
+                newServices = servicesData.services.map(s => s.id === selectedItem.id ? finalFormData : s);
             } else {
-                newServices = [...servicesData.services, formData];
+                newServices = [...servicesData.services, finalFormData];
             }
 
             const newData = { services: newServices };
-            await saveJsonContent(SERVICES_PATH, newData, fileSha, `Services Update: ${formData.title.en}`);
+            await saveJsonContent(SERVICES_PATH, newData, fileSha, `Services Update: ${finalFormData.title.en}`);
             
             setServicesData(newData);
             setEditDialogOpen(false);

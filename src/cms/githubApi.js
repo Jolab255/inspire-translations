@@ -3,7 +3,7 @@ import yaml from 'js-yaml';
 
 const REPO_OWNER = 'Jolab255';
 const REPO_NAME = 'inspire-translations';
-const BRANCH = 'main';
+const BRANCH = 'boutique-minimalist';
 
 // Helper to get authenticated Octokit instance
 const getOctokit = () => {
@@ -138,6 +138,24 @@ export const uploadMedia = async (file) => {
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
+};
+
+/**
+ * Fetch the latest deployment workflow runs
+ */
+export const getDeploymentStatus = async () => {
+    const octokit = getOctokit();
+    try {
+        const response = await octokit.actions.listWorkflowRunsForRepo({
+            owner: REPO_OWNER,
+            repo: REPO_NAME,
+            per_page: 1
+        });
+        return response.data.workflow_runs[0];
+    } catch (error) {
+        console.error("Error fetching deployment status:", error);
+        return null;
+    }
 };
 
 /**

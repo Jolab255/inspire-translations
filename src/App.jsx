@@ -100,6 +100,7 @@ const AppContent = () => {
         <main>
           <Routes>
             {/* CMS Route */}
+            <Route path="/admin" element={<Navigate to="/admin/blog" replace />} />
             <Route path="/admin/*" element={<Suspense fallback={<PageSkeleton />}><AdminDashboard /></Suspense>} />
             
             {/* Root redirect */}
