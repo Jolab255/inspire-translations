@@ -15,7 +15,10 @@
         "sw": "Watafsiri wetu wataalamu wanahakikisha usahihi na uhusiano wa kitamaduni kwa mikataba ya kisheria, ripoti za biashara, vifaa vya masoko, na zaidi."
       },
       "icon": "",
-      "img": "/assets/images/written_translation.png",
+      "img": {
+        "en": "/assets/images/written_translation.png",
+        "sw": "/assets/images/written_translation.png"
+      },
       "color": "#F7A11A",
       "features": {
         "en": [
@@ -45,7 +48,10 @@
         "sw": "Wakalimani wetu wanawezesha mawasiliano yasiyo na mshono, wakihakikisha kuwa lugha si kizuizi cha mafanikio."
       },
       "icon": "",
-      "img": "/assets/images/onsite_interpretation.png",
+      "img": {
+        "en": "/assets/images/onsite_interpretation.png",
+        "sw": "/assets/images/onsite_interpretation.png"
+      },
       "color": "#1A5C2A",
       "features": {
         "en": [
@@ -75,7 +81,10 @@
         "sw": "Ni bora kwa mikutano ya mtandaoni, ushirikiano wa kimataifa, na hafla za mtandaoni."
       },
       "icon": "",
-      "img": "/assets/images/remote_interpretation.png",
+      "img": {
+        "en": "/assets/images/remote_interpretation.png",
+        "sw": "/assets/images/remote_interpretation.png"
+      },
       "color": "#F7A11A",
       "features": {
         "en": [
@@ -105,7 +114,10 @@
         "sw": "Madarasa yetu yanazingatia ujuzi wa vitendo wa mawasiliano, yakifanya ujifunzaji wa lugha kuwa wa kuvutia na wenye ufanisi."
       },
       "icon": "",
-      "img": "/assets/images/language_classes.png",
+      "img": {
+        "en": "/assets/images/language_classes.png",
+        "sw": "/assets/images/language_classes.png"
+      },
       "color": "#1A5C2A",
       "features": {
         "en": [
@@ -135,7 +147,10 @@
         "sw": "Tuachie tushughulikie maelezo yote ili uweze kuzingatia mafanikio ya hafla yako."
       },
       "icon": "",
-      "img": "/assets/images/conference_logistics.png",
+      "img": {
+        "en": "/assets/images/conference_logistics.png",
+        "sw": "/assets/images/conference_logistics.png"
+      },
       "color": "#F7A11A",
       "features": {
         "en": [
@@ -165,7 +180,10 @@
         "sw": "Boresha uzoefu wa hadhira yako ya lugha nyingi kwa vifaa vya kitaalamu vya sauti."
       },
       "icon": "",
-      "img": "/assets/images/equipment_rental.png",
+      "img": {
+        "en": "/assets/images/equipment_rental.png",
+        "sw": "/assets/images/equipment_rental.png"
+      },
       "color": "#1A5C2A",
       "features": {
         "en": [
@@ -195,7 +213,10 @@
         "sw": "Wataalamu wetu waliofunzwa wanashughulikia vifaa kwa ufanisi, wakifanya hafla yako iendelee vizuri."
       },
       "icon": "",
-      "img": "/assets/images/about_us_hero.png",
+      "img": {
+        "en": "/assets/images/about_us_hero.png",
+        "sw": "/assets/images/about_us_hero.png"
+      },
       "color": "#F7A11A",
       "features": {
         "en": [
@@ -225,7 +246,10 @@
         "sw": "Hakikisha ujumbe wako unapata mwitikio mzuri kwa hadhira mbalimbali duniani kote."
       },
       "icon": "",
-      "img": "/assets/images/about_us_photo.png",
+      "img": {
+        "en": "/assets/images/about_us_photo.png",
+        "sw": "/assets/images/about_us_photo.png"
+      },
       "color": "#1A5C2A",
       "features": {
         "en": [
@@ -255,7 +279,10 @@
         "sw": "Endana na maono ya kampuni yako na uongeze kuonekana kwa hafla yako."
       },
       "icon": "",
-      "img": "/assets/images/project_hero.png",
+      "img": {
+        "en": "/assets/images/project_hero.png",
+        "sw": "/assets/images/project_hero.png"
+      },
       "color": "#F7A11A",
       "features": {
         "en": [
@@ -285,7 +312,10 @@
         "sw": "Hakikisha mawasiliano mazuri na athari ya picha katika hafla yako."
       },
       "icon": "",
-      "img": "/assets/images/onsite_interpretation.png",
+      "img": {
+        "en": "/assets/images/onsite_interpretation.png",
+        "sw": "/assets/images/onsite_interpretation.png"
+      },
       "color": "#1A5C2A",
       "features": {
         "en": [
@@ -315,7 +345,10 @@
         "sw": "Wataalamu wetu wanahakikisha kuwa video zako, moduli za e-learning, na matangazo yanawasiliana na hadhira ya kimataifa."
       },
       "icon": "",
-      "img": "/assets/images/hero_woman_bg.png",
+      "img": {
+        "en": "/assets/images/hero_woman_bg.png",
+        "sw": "/assets/images/hero_woman_bg.png"
+      },
       "color": "#F7A11A",
       "features": {
         "en": [
@@ -344,8 +377,11 @@
         "en": "High-quality transcriptions for corporate meetings, legal proceedings, interviews, and more.",
         "sw": "Unukuzi wa hali ya juu kwa mikutano ya kampuni, mashauri ya kisheria, mahojiano, na zaidi."
       },
-      "icon": "⌨️",
-      "img": "/assets/images/written_translation.png",
+      "icon": "",
+      "img": {
+        "en": "/assets/images/written_translation.png",
+        "sw": "/assets/images/written_translation.png"
+      },
       "color": "#1A5C2A",
       "features": {
         "en": [
@@ -375,7 +411,10 @@
         "sw": "Mpangilio wa kitaalamu na uwiano wa picha katika lugha zote."
       },
       "icon": "",
-      "img": "/uploads/1773270494794-ChatGPT-Image-Mar-8,-2026,-03_10_29-AM.png",
+      "img": {
+        "en": "/uploads/1773270494794-ChatGPT-Image-Mar-8,-2026,-03_10_29-AM.png",
+        "sw": "/uploads/1773270494794-ChatGPT-Image-Mar-8,-2026,-03_10_29-AM.png"
+      },
       "color": "#F7A11A",
       "features": {
         "en": [
@@ -405,7 +444,10 @@
         "sw": "Kuhakikisha upatikanaji sawa wa mawasiliano kwa wote katika ushauri wa matibabu, elimu, na kampuni."
       },
       "icon": "",
-      "img": "/assets/images/customer_care.png",
+      "img": {
+        "en": "/assets/images/customer_care.png",
+        "sw": "/assets/images/customer_care.png"
+      },
       "color": "#1A5C2A",
       "features": {
         "en": [
