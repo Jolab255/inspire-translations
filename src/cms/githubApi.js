@@ -91,6 +91,24 @@ export const saveFileContent = async (path, frontmatterData, bodyContent, sha, c
 };
 
 /**
+ * Save a JSON file
+ */
+export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
+    const octokit = getOctokit();
+    const newContent = JSON.stringify(jsonData, null, 2);
+    
+    await octokit.repos.createOrUpdateFileContents({
+        owner: REPO_OWNER,
+        repo: REPO_NAME,
+        path: path,
+        message: commitMessage || `CMS Update: ${path}`,
+        content: utf8ToBase64(newContent),
+        branch: BRANCH,
+        sha: sha
+    });
+};
+
+/**
  * Upload an image to the repository
  */
 export const uploadMedia = async (file) => {

@@ -107,21 +107,32 @@ const AppContent = () => {
       <RouteTransition>
         <main>
           <Routes>
-            <Route path="/" element={<LangRedirect />} />
+            {/* CMS Route - prioritized */}
             <Route path="/admin/*" element={<Suspense fallback={<PageSkeleton />}><AdminDashboard /></Suspense>} />
-            <Route path="/:lang" element={<LangWrapper><HomePage /></LangWrapper>} />
-            <Route path="/:lang/about" element={<LangWrapper><AboutPage /></LangWrapper>} />
-            <Route path="/:lang/services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
-            <Route path="/:lang/services/:slug" element={<LangWrapper><ServiceDetail /></LangWrapper>} />
-            <Route path="/:lang/projects" element={<LangWrapper><ProjectsPage /></LangWrapper>} />
-            <Route path="/:lang/gallery" element={<LangWrapper><GalleryPage /></LangWrapper>} />
-            <Route path="/:lang/blog" element={<LangWrapper><BlogPage /></LangWrapper>} />
-            <Route path="/:lang/blog/:slug" element={<LangWrapper><BlogPostPage /></LangWrapper>} />
-            <Route path="/:lang/contact" element={<LangWrapper><ContactPage /></LangWrapper>} />
-            <Route path="/:lang/quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
-            <Route path="/:lang/privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
-            <Route path="/:lang/terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
-            <Route path="/:lang/*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
+            
+            {/* Root redirect */}
+            <Route path="/" element={<LangRedirect />} />
+
+            {/* Language specific routes - using explicit prefixes to avoid conflicts */}
+            {['en', 'sw'].map(l => (
+              <Route key={l} path={`/${l}`}>
+                <Route index element={<LangWrapper><HomePage /></LangWrapper>} />
+                <Route path="about" element={<LangWrapper><AboutPage /></LangWrapper>} />
+                <Route path="services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
+                <Route path="services/:slug" element={<LangWrapper><ServiceDetail /></LangWrapper>} />
+                <Route path="projects" element={<LangWrapper><ProjectsPage /></LangWrapper>} />
+                <Route path="gallery" element={<LangWrapper><GalleryPage /></LangWrapper>} />
+                <Route path="blog" element={<LangWrapper><BlogPage /></LangWrapper>} />
+                <Route path="blog/:slug" element={<LangWrapper><BlogPostPage /></LangWrapper>} />
+                <Route path="contact" element={<LangWrapper><ContactPage /></LangWrapper>} />
+                <Route path="quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
+                <Route path="privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
+                <Route path="terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
+                <Route path="*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
+              </Route>
+            ))}
+
+            {/* Fallback for everything else */}
             <Route path="*" element={<Navigate to="/en/404" replace />} />
           </Routes>
         </main>
