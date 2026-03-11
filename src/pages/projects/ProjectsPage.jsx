@@ -437,7 +437,7 @@ const ProjectsPage = () => {
                     </motion.div>
                 </Box>
 
-                {/* Right Side: project_hero Image */}
+                {/* Right Side: Dynamic Project Image */}
                 <Box sx={{
                     flexGrow: 1,
                     display: { xs: 'none', md: 'flex' },
@@ -451,7 +451,7 @@ const ProjectsPage = () => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        src={projectHeroImg}
+                        src={allProjects[0]?.img || projectHeroImg}
                         alt="Project Hero"
                         sx={{
                             maxWidth: '90%',

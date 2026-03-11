@@ -216,7 +216,7 @@ const GalleryPage = () => {
                             width: '100%', 
                             height: '100%', 
                             minHeight: '100%',
-                            background: `url('/assets/images/ARSO_TC 67 & TC 68 meetings.png') center/cover no-repeat`,
+                            background: `url(${galleryItemsData[0]?.src || '/assets/images/ARSO_TC 67 & TC 68 meetings.png'}) center/cover no-repeat`,
                             filter: 'grayscale(0.3) contrast(1.1)',
                             '&::after': {
                                 content: '""',
