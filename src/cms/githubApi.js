@@ -70,13 +70,33 @@ export const getFileContent = async (path) => {
 };
 
 /**
+ * Internal helper to get the latest SHA for a file
+ */
+const getLatestSha = async (path) => {
+    const octokit = getOctokit();
+    try {
+        const response = await octokit.repos.getContent({
+            owner: REPO_OWNER,
+            repo: REPO_NAME,
+            path: path,
+            ref: BRANCH
+        });
+        return response.data.sha;
+    } catch (error) {
+        return null; // File might not exist yet
+    }
+};
+
+/**
  * Save (create or update) a markdown file
- * Returns the new SHA
+ * Now automatically fetches the latest SHA to prevent conflicts
  */
 export const saveFileContent = async (path, frontmatterData, bodyContent, sha, commitMessage) => {
     const octokit = getOctokit();
     
-    // Reconstruct the file with Frontmatter
+    // Auto-fetch fresh SHA right before save to prevent "Conflict" errors
+    const freshSha = await getLatestSha(path);
+    
     const yamlString = yaml.dump(frontmatterData);
     const newContent = `---\n${yamlString}---\n\n${bodyContent}`;
     
@@ -87,18 +107,21 @@ export const saveFileContent = async (path, frontmatterData, bodyContent, sha, c
         message: commitMessage || `CMS Update: ${path}`,
         content: utf8ToBase64(newContent),
         branch: BRANCH,
-        sha: sha
+        sha: freshSha || sha // Use fresh one primarily
     });
     return response.data.content.sha;
 };
 
 /**
  * Save a JSON file
- * Returns the new SHA
+ * Now automatically fetches the latest SHA to prevent conflicts
  */
 export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
     const octokit = getOctokit();
     const newContent = JSON.stringify(jsonData, null, 2);
+    
+    // Auto-fetch fresh SHA right before save
+    const freshSha = await getLatestSha(path);
     
     try {
         const response = await octokit.repos.createOrUpdateFileContents({
@@ -108,13 +131,13 @@ export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
             message: commitMessage || `CMS Update: ${path}`,
             content: utf8ToBase64(newContent),
             branch: BRANCH,
-            sha: sha
+            sha: freshSha || sha
         });
         return response.data.content.sha;
     } catch (error) {
         console.error("GitHub JSON Save Error:", error);
         if (error.status === 409) {
-            throw new Error("Conflict: The file has been modified on GitHub. Please refresh the page to sync.");
+            throw new Error("Conflict: GitHub reported a newer version. We tried to auto-sync but it failed. Please refresh and try again.");
         }
         throw error;
     }
