@@ -94,14 +94,18 @@ const GalleryManager = ({ onSync }) => {
             }
 
             const newData = { items: newItems };
-            await saveJsonContent(GALLERY_PATH, newData, fileSha, `Gallery Update: ${formData.title_en}`);
+            const newSha = await saveJsonContent(GALLERY_PATH, newData, fileSha, `Gallery Update: ${formData.title_en}`);
             
+            // CRITICAL: Update the SHA immediately for the next possible save
+            setFileSha(newSha);
             setGalleryData(newData);
             setEditDialogOpen(false);
             showNotification('Gallery updated successfully! Live in a few minutes.', 'success');
-            loadGallery(); 
+            await loadGallery(); 
         } catch (err) {
-            showNotification('Save failed. Check permissions.', 'error');
+            console.error("Save error:", err);
+            const msg = err.message || 'Save failed. Check permissions.';
+            showNotification(msg, 'error');
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -119,7 +123,7 @@ const GalleryManager = ({ onSync }) => {
             setGalleryData(newData);
             setDeleteDialogOpen(false);
             showNotification('Media removed successfully.', 'success');
-            loadGallery();
+            await loadGallery();
         } catch (err) {
             showNotification('Delete failed.', 'error');
         } finally { 
@@ -139,8 +143,6 @@ const GalleryManager = ({ onSync }) => {
                 </Box>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpenEdit()} sx={{ bgcolor: '#1A5C2A', borderRadius: 0, fontWeight: 800 }}>Add Media</Button>
             </Box>
-
-            {saveStatus && <Alert severity={saveStatus.type} sx={{ mb: 4, borderRadius: 0 }}>{saveStatus.message}</Alert>}
 
             <Grid container spacing={2}>
                 {galleryData.items.map(item => (

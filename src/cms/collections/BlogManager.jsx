@@ -164,19 +164,28 @@ const BlogManager = ({ onSync }) => {
         try {
             const slug = formData.common.slug || formData.en.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
             
-            await saveFileContent(
+            const enSha = await saveFileContent(
                 `src/content/blog/${slug}.en.md`,
                 { lang: 'en', title: formData.en.title, category: formData.common.category, date: formData.common.date, image: formData.common.image, excerpt: formData.en.excerpt },
                 formData.en.body,
                 selectedArticle.en?.sha
             );
 
-            await saveFileContent(
+            const swSha = await saveFileContent(
                 `src/content/blog/${slug}.sw.md`,
                 { lang: 'sw', title: formData.sw.title, category: formData.common.category, date: formData.common.date, image: formData.common.image, excerpt: formData.sw.excerpt },
                 formData.sw.body,
                 selectedArticle.sw?.sha
             );
+
+            // Update local state with new SHAs immediately to prevent conflicts
+            if (!selectedArticle.isNew) {
+                setSelectedArticle({
+                    ...selectedArticle,
+                    en: { ...selectedArticle.en, sha: enSha },
+                    sw: { ...selectedArticle.sw, sha: swSha }
+                });
+            }
 
             showNotification('Bilingual Article published successfully! Live in a few minutes.', 'success');
             await loadArticles();
@@ -199,7 +208,7 @@ const BlogManager = ({ onSync }) => {
             setDeleteDialogOpen(false);
             setSelectedArticle(null);
             showNotification('Article pair deleted successfully.', 'success');
-            loadArticles();
+            await loadArticles();
         } catch (err) { 
             showNotification('Deletion failed.', 'error'); 
         } finally { 
@@ -293,8 +302,6 @@ const BlogManager = ({ onSync }) => {
                             <Button variant="contained" onClick={handleSave} disabled={loading} sx={{ bgcolor: '#1A5C2A', borderRadius: 0, fontWeight: 900, px: 4 }}>{loading ? 'Processing...' : 'Publish Both Versions'}</Button>
                         </Box>
                     </Box>
-
-                    {saveStatus && <Alert severity={saveStatus.type} sx={{ mb: 4, borderRadius: 0, fontWeight: 700 }}>{saveStatus.message}</Alert>}
 
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={8}>

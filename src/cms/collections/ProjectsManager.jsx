@@ -60,15 +60,24 @@ const ProjectsManager = ({ onSync }) => {
     useEffect(() => { loadProjects(); }, []);
 
     const loadProjects = async () => {
+        console.log("ProjectsManager: Starting loadProjects...");
         setLoading(true);
         if (onSync) onSync(true);
         try {
             const list = await getFilesList('src/content/projects');
+            console.log("ProjectsManager: getFilesList returned:", list);
+            
+            if (!list || list.length === 0) {
+                console.warn("ProjectsManager: Received empty list from getFilesList");
+            }
+
             const mdFiles = list.filter(f => f.name.endsWith('.md'));
+            console.log("ProjectsManager: MD files found:", mdFiles.length);
             
             const allFilesData = await Promise.all(mdFiles.map(async (file) => {
                 try {
                     const content = await getFileContent(file.path);
+                    console.log(`ProjectsManager: Loaded content for ${file.name}`);
                     const parts = file.name.split('.');
                     const lang = parts[parts.length - 2];
                     const slug = parts.slice(0, -2).join('.');
@@ -179,19 +188,28 @@ const ProjectsManager = ({ onSync }) => {
                 img: formData.common.img
             };
 
-            await saveFileContent(
+            const enSha = await saveFileContent(
                 `src/content/projects/${slug}.en.md`,
                 { lang: 'en', ...commonData, title: formData.en.title, desc: formData.en.desc, fullDesc: formData.en.fullDesc },
                 '',
                 selectedProject.en?.sha
             );
 
-            await saveFileContent(
+            const swSha = await saveFileContent(
                 `src/content/projects/${slug}.sw.md`,
                 { lang: 'sw', ...commonData, title: formData.sw.title, desc: formData.sw.desc, fullDesc: formData.sw.fullDesc },
                 '',
                 selectedProject.sw?.sha
             );
+
+            // Update local state with new SHAs immediately
+            if (!selectedProject.isNew) {
+                setSelectedProject({
+                    ...selectedProject,
+                    en: { ...selectedProject.en, sha: enSha },
+                    sw: { ...selectedProject.sw, sha: swSha }
+                });
+            }
 
             showNotification('Bilingual Project published successfully! Live in a few minutes.', 'success');
             await loadProjects();
@@ -214,7 +232,7 @@ const ProjectsManager = ({ onSync }) => {
             setDeleteDialogOpen(false);
             setSelectedProject(null);
             showNotification('Project pair removed successfully.', 'success');
-            loadProjects();
+            await loadProjects();
         } catch (err) { 
             showNotification('Deletion failed.', 'error'); 
         } finally { 
@@ -301,8 +319,6 @@ const ProjectsManager = ({ onSync }) => {
                             <Button variant="contained" onClick={handleSave} disabled={loading} sx={{ bgcolor: '#1A5C2A', borderRadius: 0, fontWeight: 900, px: 4 }}>{loading ? 'Processing...' : 'Publish Project'}</Button>
                         </Box>
                     </Box>
-
-                    {saveStatus && <Alert severity={saveStatus.type} sx={{ mb: 4, borderRadius: 0, fontWeight: 700 }}>{saveStatus.message}</Alert>}
 
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={8}>

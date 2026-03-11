@@ -12,43 +12,64 @@ const getOctokit = () => {
     return new Octokit({ auth: token });
 };
 
-// Helper to encode/decode Base64 handling UTF-8 properly
+// Helper to encode/decode Base64 handling UTF-8 properly using modern APIs
 const utf8ToBase64 = (str) => {
-    return window.btoa(unescape(encodeURIComponent(str)));
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
 };
+
 const base64ToUtf8 = (str) => {
-    return decodeURIComponent(escape(window.atob(str)));
+    const binary = window.atob(str);
+    const len = binary.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    return new TextDecoder().decode(bytes);
 };
 
 /**
  * Fetch a list of files in a specific directory
+ * Cache-busted via query param to ensure we see new files immediately
  */
 export const getFilesList = async (path) => {
     const octokit = getOctokit();
     try {
-        const response = await octokit.repos.getContent({
+        console.log(`CMS: Fetching list for ${path}...`);
+        // Octokit's getContent doesn't directly support query params in the object,
+        // so we use a lower-level request to ensure the URL is cache-busted.
+        const response = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
             owner: REPO_OWNER,
             repo: REPO_NAME,
             path: path,
-            ref: BRANCH
+            ref: BRANCH,
+            t: new Date().getTime() // Cache buster
         });
+        console.log(`CMS: Found ${Array.isArray(response.data) ? response.data.length : 0} items in ${path}`);
         return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
-        console.error("Error fetching file list:", error);
+        console.error(`CMS: Error fetching file list for ${path}:`, error);
         return [];
     }
 };
 
 /**
  * Read and parse a single markdown file
+ * Cache-busted via query param to ensure we get the latest SHA
  */
 export const getFileContent = async (path) => {
     const octokit = getOctokit();
-    const response = await octokit.repos.getContent({
+    const response = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
         owner: REPO_OWNER,
         repo: REPO_NAME,
         path: path,
-        ref: BRANCH
+        ref: BRANCH,
+        t: new Date().getTime() // Cache buster
     });
 
     const content = base64ToUtf8(response.data.content);
@@ -71,19 +92,22 @@ export const getFileContent = async (path) => {
 
 /**
  * Internal helper to get the latest SHA for a file
+ * Bypasses cache by adding a timestamp query param
  */
 const getLatestSha = async (path) => {
     const octokit = getOctokit();
     try {
-        const response = await octokit.repos.getContent({
+        const response = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
             owner: REPO_OWNER,
             repo: REPO_NAME,
             path: path,
-            ref: BRANCH
+            ref: BRANCH,
+            t: new Date().getTime() // Cache buster
         });
         return response.data.sha;
     } catch (error) {
-        return null; // File might not exist yet
+        // If file doesn't exist, this is expected for new files
+        return null; 
     }
 };
 
@@ -100,16 +124,24 @@ export const saveFileContent = async (path, frontmatterData, bodyContent, sha, c
     const yamlString = yaml.dump(frontmatterData);
     const newContent = `---\n${yamlString}---\n\n${bodyContent}`;
     
-    const response = await octokit.repos.createOrUpdateFileContents({
-        owner: REPO_OWNER,
-        repo: REPO_NAME,
-        path: path,
-        message: commitMessage || `CMS Update: ${path}`,
-        content: utf8ToBase64(newContent),
-        branch: BRANCH,
-        sha: freshSha || sha // Use fresh one primarily
-    });
-    return response.data.content.sha;
+    try {
+        const response = await octokit.repos.createOrUpdateFileContents({
+            owner: REPO_OWNER,
+            repo: REPO_NAME,
+            path: path,
+            message: commitMessage || `CMS Update: ${path}`,
+            content: utf8ToBase64(newContent),
+            branch: BRANCH,
+            sha: freshSha || sha // Use fresh one primarily
+        });
+        return response.data.content.sha;
+    } catch (error) {
+        console.error("GitHub File Save Error:", error);
+        if (error.status === 409) {
+            throw new Error("Conflict: GitHub reported a newer version. We tried to auto-sync but it failed. Please refresh and try again.");
+        }
+        throw error;
+    }
 };
 
 /**
