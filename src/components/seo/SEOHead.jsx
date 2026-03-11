@@ -82,8 +82,8 @@ const SEOHead = ({
         },
         "sameAs": [
             "https://facebook.com/inspiretranslations",
-            "https://linkedin.com/company/inspiretranslations",
-            "https://instagram.com/inspiretranslations"
+            "https://www.linkedin.com/in/willy-elson-john-6418621a9",
+            "https://www.instagram.com/inspire_translations/"
         ]
     };
 

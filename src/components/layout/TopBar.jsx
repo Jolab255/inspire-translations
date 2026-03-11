@@ -50,10 +50,10 @@ const TopBar = () => {
                             <IconButton size="small" sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://facebook.com/inspiretranslations" target="_blank">
                                 <FacebookIcon fontSize="small" />
                             </IconButton>
-                            <IconButton size="small" sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://linkedin.com/company/inspiretranslations" target="_blank">
+                            <IconButton size="small" sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://www.linkedin.com/in/willy-elson-john-6418621a9" target="_blank">
                                 <LinkedInIcon fontSize="small" />
                             </IconButton>
-                            <IconButton size="small" sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://instagram.com/inspiretranslations" target="_blank">
+                            <IconButton size="small" sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F7A11A' } }} href="https://www.instagram.com/inspire_translations/" target="_blank">
                                 <InstagramIcon fontSize="small" />
                             </IconButton>
                         </Stack>

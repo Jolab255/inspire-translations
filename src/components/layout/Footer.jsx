@@ -82,8 +82,8 @@ const Footer = () => {
 
     const socialLinks = [
         { icon: <FacebookIcon />, href: 'https://facebook.com/inspiretranslations' },
-        { icon: <LinkedInIcon />, href: 'https://linkedin.com/company/inspiretranslations' },
-        { icon: <InstagramIcon />, href: 'https://instagram.com/inspiretranslations' },
+        { icon: <LinkedInIcon />, href: 'https://www.linkedin.com/in/willy-elson-john-6418621a9' },
+        { icon: <InstagramIcon />, href: 'https://www.instagram.com/inspire_translations/' },
         { icon: <YouTubeIcon />, href: '#' },
     ];
 
