@@ -57,11 +57,26 @@ const ServicesManager = () => {
         setLoading(true);
         try {
             const content = await getFileContent(SERVICES_PATH);
-            const data = content.data && content.data.services ? content.data : JSON.parse(content.body);
+            let data;
+            
+            // If content.data exists and has services, use it (from frontmatter)
+            if (content.data && content.data.services) {
+                data = content.data;
+            } else {
+                // Otherwise try to parse the body (raw JSON)
+                try {
+                    data = JSON.parse(content.body);
+                } catch (e) {
+                    console.error("JSON Parse error:", e);
+                    data = { services: [] };
+                }
+            }
+            
             setServicesData(data);
             setFileSha(content.sha);
         } catch (err) {
-            console.error("Error loading services:", err);
+            console.error("Error loading services from GitHub:", err);
+            setServicesData({ services: [] });
         } finally { setLoading(false); }
     };
 

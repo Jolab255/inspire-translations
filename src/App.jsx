@@ -25,6 +25,8 @@ const PrivacyPage = lazy(() => import('./pages/legal/LegalPages').then(m => ({ d
 const TermsPage = lazy(() => import('./pages/legal/LegalPages').then(m => ({ default: m.TermsPage })));
 const NotFoundPage = lazy(() => import('./pages/errors/NotFoundPage'));
 
+const AdminDashboard = lazy(() => import('./cms/AdminDashboard'));
+
 // Route Transition Wrapper
 const RouteTransition = ({ children }) => {
   const location = useLocation();
@@ -41,7 +43,7 @@ const RouteTransition = ({ children }) => {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [location.pathname, displayLocation.pathname, location]);
+  }, [location.pathname, displayLocation.pathname]);
 
   return (
     <>
@@ -53,17 +55,10 @@ const RouteTransition = ({ children }) => {
   );
 };
 
-// Language Redirect Handler
-const LangRedirect = () => {
-  const { language } = useLanguage();
-  return <Navigate to={`/${language}`} replace />;
-};
-
-const AdminDashboard = lazy(() => import('./cms/AdminDashboard'));
-
 // Layout Wrapper to sync lang param with context
-const LangWrapper = ({ children }) => {
-  const { lang } = useParams();
+const LangWrapper = ({ children, lang: forcedLang }) => {
+  const { lang: paramLang } = useParams();
+  const lang = forcedLang || paramLang;
   const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
@@ -71,10 +66,6 @@ const LangWrapper = ({ children }) => {
       setLanguage(lang);
     }
   }, [lang, language, setLanguage]);
-
-  if (lang !== 'en' && lang !== 'sw') {
-    return <Navigate to="/en/404" replace />;
-  }
 
   return (
     <Suspense fallback={<PageSkeleton />}>
@@ -85,6 +76,7 @@ const LangWrapper = ({ children }) => {
 
 const AppContent = () => {
   const location = useLocation();
+  const { language } = useLanguage();
   const isAdmin = location.pathname.startsWith('/admin');
 
   useEffect(() => {
@@ -102,37 +94,37 @@ const AppContent = () => {
   }, []);
 
   return (
-    <LanguageProvider>
+    <>
       {!isAdmin && <Navbar />}
       <RouteTransition>
         <main>
           <Routes>
-            {/* CMS Route - prioritized */}
+            {/* CMS Route */}
             <Route path="/admin/*" element={<Suspense fallback={<PageSkeleton />}><AdminDashboard /></Suspense>} />
             
             {/* Root redirect */}
-            <Route path="/" element={<LangRedirect />} />
+            <Route path="/" element={<Navigate to={`/${language}`} replace />} />
 
-            {/* Language specific routes - using explicit prefixes to avoid conflicts */}
-            {['en', 'sw'].map(l => (
+            {/* Explicit Language Routes to prevent conflicts */}
+            {['en', 'sw'].map((l) => (
               <Route key={l} path={`/${l}`}>
-                <Route index element={<LangWrapper><HomePage /></LangWrapper>} />
-                <Route path="about" element={<LangWrapper><AboutPage /></LangWrapper>} />
-                <Route path="services" element={<LangWrapper><ServicesPage /></LangWrapper>} />
-                <Route path="services/:slug" element={<LangWrapper><ServiceDetail /></LangWrapper>} />
-                <Route path="projects" element={<LangWrapper><ProjectsPage /></LangWrapper>} />
-                <Route path="gallery" element={<LangWrapper><GalleryPage /></LangWrapper>} />
-                <Route path="blog" element={<LangWrapper><BlogPage /></LangWrapper>} />
-                <Route path="blog/:slug" element={<LangWrapper><BlogPostPage /></LangWrapper>} />
-                <Route path="contact" element={<LangWrapper><ContactPage /></LangWrapper>} />
-                <Route path="quote" element={<LangWrapper><QuotePage /></LangWrapper>} />
-                <Route path="privacy-policy" element={<LangWrapper><PrivacyPage /></LangWrapper>} />
-                <Route path="terms" element={<LangWrapper><TermsPage /></LangWrapper>} />
-                <Route path="*" element={<LangWrapper><NotFoundPage /></LangWrapper>} />
+                <Route index element={<LangWrapper lang={l}><HomePage /></LangWrapper>} />
+                <Route path="about" element={<LangWrapper lang={l}><AboutPage /></LangWrapper>} />
+                <Route path="services" element={<LangWrapper lang={l}><ServicesPage /></LangWrapper>} />
+                <Route path="services/:slug" element={<LangWrapper lang={l}><ServiceDetail /></LangWrapper>} />
+                <Route path="projects" element={<LangWrapper lang={l}><ProjectsPage /></LangWrapper>} />
+                <Route path="gallery" element={<LangWrapper lang={l}><GalleryPage /></LangWrapper>} />
+                <Route path="blog" element={<LangWrapper lang={l}><BlogPage /></LangWrapper>} />
+                <Route path="blog/:slug" element={<LangWrapper lang={l}><BlogPostPage /></LangWrapper>} />
+                <Route path="contact" element={<LangWrapper lang={l}><ContactPage /></LangWrapper>} />
+                <Route path="quote" element={<LangWrapper lang={l}><QuotePage /></LangWrapper>} />
+                <Route path="privacy-policy" element={<LangWrapper lang={l}><PrivacyPage /></LangWrapper>} />
+                <Route path="terms" element={<LangWrapper lang={l}><TermsPage /></LangWrapper>} />
+                <Route path="*" element={<LangWrapper lang={l}><NotFoundPage /></LangWrapper>} />
               </Route>
             ))}
 
-            {/* Fallback for everything else */}
+            {/* Catch-all for invalid top-level paths */}
             <Route path="*" element={<Navigate to="/en/404" replace />} />
           </Routes>
         </main>
@@ -144,7 +136,7 @@ const AppContent = () => {
           <CookieConsent />
         </>
       )}
-    </LanguageProvider>
+    </>
   );
 };
 
@@ -153,7 +145,9 @@ const App = () => {
     <ErrorBoundary>
       <BrowserRouter>
         <ScrollToTop />
-        <AppContent />
+        <LanguageProvider>
+          <AppContent />
+        </LanguageProvider>
       </BrowserRouter>
     </ErrorBoundary>
   );
