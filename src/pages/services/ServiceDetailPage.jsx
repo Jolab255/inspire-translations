@@ -93,7 +93,7 @@ const ServiceDetailPage = () => {
         'equipment-rental': serviceEquipment,
     };
 
-    const heroImg = serviceImages[service.id] || fallbackHero;
+    const heroImg = service.img || serviceImages[service.id] || fallbackHero;
 
     const content = {
         en: {
@@ -609,7 +609,7 @@ const ServiceDetailPage = () => {
                                     }}>
                                         <Box 
                                             component="img" 
-                                            src={serviceImages[s.id] || fallbackHero} 
+                                            src={s.img || serviceImages[s.id] || fallbackHero} 
                                             sx={{ width: '100%', height: '240px', objectFit: 'cover', borderBottom: '2.5px solid #0D2B14' }} 
                                         />
                                         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>

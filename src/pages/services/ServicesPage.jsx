@@ -226,7 +226,7 @@ const ServicesPage = () => {
                                     }}>
                                         <Box 
                                             component="img" 
-                                            src={serviceImages[service.id] || heroWoman} 
+                                            src={service.img || serviceImages[service.id] || heroWoman} 
                                             sx={{ 
                                                 width: '100%', 
                                                 height: '100%', 

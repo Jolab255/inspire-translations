@@ -11,6 +11,7 @@ import AdminLogin from './AdminLogin';
 import BlogManager from './collections/BlogManager';
 import ProjectsManager from './collections/ProjectsManager';
 import GalleryManager from './collections/GalleryManager';
+import ServicesManager from './collections/ServicesManager';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -32,6 +33,7 @@ const AdminDashboard = () => {
         const path = location.pathname;
         if (path.includes('/projects')) return 'projects';
         if (path.includes('/gallery')) return 'gallery';
+        if (path.includes('/services')) return 'services';
         return 'blog'; // Default
     };
 
@@ -77,7 +79,8 @@ const AdminDashboard = () => {
                     {[
                         { text: 'Blog Posts', id: 'blog' },
                         { text: 'Projects Hub', id: 'projects' },
-                        { text: 'Media Gallery', id: 'gallery' }
+                        { text: 'Media Gallery', id: 'gallery' },
+                        { text: 'Services', id: 'services' }
                     ].map((item) => (
                         <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
                             <ListItemButton 
@@ -132,6 +135,7 @@ const AdminDashboard = () => {
                     {activeTab === 'blog' && <BlogManager />}
                     {activeTab === 'projects' && <ProjectsManager />}
                     {activeTab === 'gallery' && <GalleryManager />}
+                    {activeTab === 'services' && <ServicesManager />}
                 </Box>
             </Box>
         </Box>
