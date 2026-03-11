@@ -36,9 +36,6 @@ const COLORS = {
 };
 
 const BlogCard = ({ post, language, index }) => {
-    const images = [imgWritten, imgInterpretation, imgLogistics];
-    const postImage = images[index % images.length];
-
     return (
         <FadeInUp delay={index * 0.1}>
             <Box
@@ -63,7 +60,7 @@ const BlogCard = ({ post, language, index }) => {
                     <Box
                         className="card-image"
                         component="img"
-                        src={postImage}
+                        src={post.image || imgWritten}
                         alt={post.title}
                         sx={{
                             width: '100%',
@@ -319,7 +316,7 @@ const BlogPage = () => {
                                 border: '2px solid #0D2B14'
                             }}>
                                 <Box sx={{ flex: 1.2, height: { xs: 300, lg: 'auto' }, overflow: 'hidden', borderRight: { lg: '2px solid #0D2B14' } }}>
-                                    <Box component="img" src={imgLogistics} alt={featuredPost.title} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <Box component="img" src={featuredPost.image || imgLogistics} alt={featuredPost.title} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </Box>
                                 <Box sx={{ flex: 1, p: { xs: 4, md: 8 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                     <Typography sx={{ color: '#F7A11A', bgcolor: '#0D2B14', px: 2, py: 0.5, display: 'inline-block', alignSelf: 'flex-start', fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.15em', mb: 3, fontFamily: 'Outfit' }}>

@@ -176,6 +176,19 @@ export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
 };
 
 /**
+ * Helper to resolve media paths.
+ * If it's a relative path starting with /uploads, it points to the GitHub raw content
+ * to ensure it works in the CMS preview even before a site rebuild.
+ */
+export const getMediaUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('/uploads/')) {
+        return `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/public${path}`;
+    }
+    return path;
+};
+
+/**
  * Upload an image to the repository
  */
 export const uploadMedia = async (file) => {

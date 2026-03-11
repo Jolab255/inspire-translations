@@ -1,4 +1,5 @@
 import yaml from 'js-yaml';
+import { getMediaUrl } from '../cms/githubApi';
 
 // Use Vite's glob import to get all project markdown files
 const modules = import.meta.glob('../content/projects/*.md', { query: '?raw', import: 'default', eager: true });
@@ -31,6 +32,7 @@ export const getAllProjects = (lang = 'en') => {
             projects.push({
                 ...data,
                 id: id,
+                img: getMediaUrl(data.img)
             });
         }
     }

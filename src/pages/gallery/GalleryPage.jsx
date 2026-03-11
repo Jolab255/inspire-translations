@@ -16,12 +16,13 @@ import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/com
 import CTASection from '../../components/common/CTASection';
 
 import galleryData from '../../content/gallery.json';
+import { getMediaUrl } from '../../cms/githubApi';
 
 const galleryItemsData = galleryData.items.map(item => ({
     ...item,
     title: { en: item.title_en, sw: item.title_sw },
     category: { en: item.category_en, sw: item.category_sw },
-    src: item.src // These now point to /assets/images/...
+    src: getMediaUrl(item.src)
 }));
 
 

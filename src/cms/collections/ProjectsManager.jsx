@@ -41,7 +41,7 @@ import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 
 import ReactMarkdown from 'react-markdown';
-import { getFilesList, getFileContent, saveFileContent, uploadMedia, deleteFile } from '../githubApi';
+import { getFilesList, getFileContent, saveFileContent, uploadMedia, deleteFile, getMediaUrl } from '../githubApi';
 import { useNotification } from '../NotificationContext';
 
 const ProjectsManager = ({ onSync }) => {
@@ -49,6 +49,7 @@ const ProjectsManager = ({ onSync }) => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState({ en: '', sw: '' });
     const [editTab, setEditTab] = useState(0); // 0 = EN, 1 = SW
     const [mode, setMode] = useState('write'); // 'write' or 'preview'
     const [formData, setFormData] = useState({ en: {}, sw: {}, common: {} });
@@ -60,24 +61,15 @@ const ProjectsManager = ({ onSync }) => {
     useEffect(() => { loadProjects(); }, []);
 
     const loadProjects = async () => {
-        console.log("ProjectsManager: Starting loadProjects...");
         setLoading(true);
         if (onSync) onSync(true);
         try {
             const list = await getFilesList('src/content/projects');
-            console.log("ProjectsManager: getFilesList returned:", list);
-            
-            if (!list || list.length === 0) {
-                console.warn("ProjectsManager: Received empty list from getFilesList");
-            }
-
             const mdFiles = list.filter(f => f.name.endsWith('.md'));
-            console.log("ProjectsManager: MD files found:", mdFiles.length);
             
             const allFilesData = await Promise.all(mdFiles.map(async (file) => {
                 try {
                     const content = await getFileContent(file.path);
-                    console.log(`ProjectsManager: Loaded content for ${file.name}`);
                     const parts = file.name.split('.');
                     const lang = parts[parts.length - 2];
                     const slug = parts.slice(0, -2).join('.');
@@ -107,7 +99,6 @@ const ProjectsManager = ({ onSync }) => {
             const sortedProjects = Object.values(grouped).sort((a, b) => b.year - a.year);
             setProjects(sortedProjects);
 
-            // Update selected project to refresh SHAs
             if (selectedProject && !selectedProject.isNew) {
                 const updated = sortedProjects.find(p => p.slug === selectedProject.slug);
                 if (updated) setSelectedProject(updated);
@@ -122,18 +113,18 @@ const ProjectsManager = ({ onSync }) => {
     };
 
     const handleSelectProject = (project) => {
+        setPreviewUrl({ en: '', sw: '' });
         const enData = project.en?.content || { data: {}, body: '' };
         const swData = project.sw?.content || { data: {}, body: '' };
 
         setFormData({
-            en: { title: enData.data.title || '', desc: enData.data.desc || '', fullDesc: enData.data.fullDesc || '' },
-            sw: { title: swData.data.title || '', desc: swData.data.desc || '', fullDesc: swData.data.fullDesc || '' },
+            en: { title: enData.data.title || '', desc: enData.data.desc || '', fullDesc: enData.data.fullDesc || '', img: enData.data.img || '' },
+            sw: { title: swData.data.title || '', desc: swData.data.desc || '', fullDesc: swData.data.fullDesc || '', img: swData.data.img || '' },
             common: {
                 type: enData.data.type || swData.data.type || 'translation',
                 client: enData.data.client || swData.data.client || '',
                 place: enData.data.place || swData.data.place || '',
                 year: enData.data.year || swData.data.year || new Date().getFullYear().toString(),
-                img: enData.data.img || swData.data.img || '',
                 slug: project.slug
             }
         });
@@ -143,11 +134,12 @@ const ProjectsManager = ({ onSync }) => {
     };
 
     const handleCreateNew = () => {
+        setPreviewUrl({ en: '', sw: '' });
         setSelectedProject({ isNew: true, slug: '' });
         setFormData({
-            en: { title: '', desc: '', fullDesc: '' },
-            sw: { title: '', desc: '', fullDesc: '' },
-            common: { type: 'translation', client: '', place: '', year: new Date().getFullYear().toString(), img: '', slug: '' }
+            en: { title: '', desc: '', fullDesc: '', img: '' },
+            sw: { title: '', desc: '', fullDesc: '', img: '' },
+            common: { type: 'translation', client: '', place: '', year: new Date().getFullYear().toString(), slug: '' }
         });
         setEditTab(0);
         setMode('write');
@@ -156,14 +148,23 @@ const ProjectsManager = ({ onSync }) => {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        const langKey = editTab === 0 ? 'en' : 'sw';
+        const localUrl = URL.createObjectURL(file);
+        setPreviewUrl(prev => ({ ...prev, [langKey]: localUrl }));
+
         setLoading(true);
         if (onSync) onSync(true);
         try {
             const uploadedPath = await uploadMedia(file);
-            setFormData(prev => ({ ...prev, common: { ...prev.common, img: uploadedPath } }));
-            showNotification('Project image uploaded successfully!', 'success');
+            setFormData(prev => ({ 
+                ...prev, 
+                [langKey]: { ...prev[langKey], img: uploadedPath } 
+            }));
+            showNotification(`${langKey.toUpperCase()} project image uploaded!`, 'success');
         } catch (err) {
             showNotification('Image upload failed.', 'error');
+            setPreviewUrl(prev => ({ ...prev, [langKey]: '' }));
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -184,25 +185,23 @@ const ProjectsManager = ({ onSync }) => {
                 type: formData.common.type,
                 client: formData.common.client,
                 place: formData.common.place,
-                year: formData.common.year,
-                img: formData.common.img
+                year: formData.common.year
             };
 
             const enSha = await saveFileContent(
                 `src/content/projects/${slug}.en.md`,
-                { lang: 'en', ...commonData, title: formData.en.title, desc: formData.en.desc, fullDesc: formData.en.fullDesc },
+                { lang: 'en', ...commonData, title: formData.en.title, desc: formData.en.desc, fullDesc: formData.en.fullDesc, img: formData.en.img },
                 '',
                 selectedProject.en?.sha
             );
 
             const swSha = await saveFileContent(
                 `src/content/projects/${slug}.sw.md`,
-                { lang: 'sw', ...commonData, title: formData.sw.title, desc: formData.sw.desc, fullDesc: formData.sw.fullDesc },
+                { lang: 'sw', ...commonData, title: formData.sw.title, desc: formData.sw.desc, fullDesc: formData.sw.fullDesc, img: formData.sw.img },
                 '',
                 selectedProject.sw?.sha
             );
 
-            // Update local state with new SHAs immediately
             if (!selectedProject.isNew) {
                 setSelectedProject({
                     ...selectedProject,
@@ -291,7 +290,7 @@ const ProjectsManager = ({ onSync }) => {
                                     '&:hover': { borderColor: '#F7A11A', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' } 
                                 }} onClick={() => handleSelectProject(project)}>
                                     <Box sx={{ width: 220, bgcolor: '#f0f0f0', overflow: 'hidden', flexShrink: 0 }}>
-                                        {project.image ? <Box component="img" src={project.image} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><PhotoIcon sx={{ color: '#ccc' }} /></Box>}
+                                        {project.image ? <Box component="img" src={getMediaUrl(project.image)} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><PhotoIcon sx={{ color: '#ccc' }} /></Box>}
                                     </Box>
                                     <Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                         <Typography sx={{ fontWeight: 800, fontFamily: '"Inknut Antiqua", serif', color: '#1A5C2A', mb: 0.5, fontSize: '1.1rem' }}>{project.title}</Typography>
@@ -376,12 +375,14 @@ const ProjectsManager = ({ onSync }) => {
                                 <TextField fullWidth label="Operational Location" value={formData.common.place} onChange={e => setFormData({ ...formData, common: { ...formData.common, place: e.target.value } })} sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
                                 <TextField fullWidth label="Project Year" value={formData.common.year} onChange={e => setFormData({ ...formData, common: { ...formData.common, year: e.target.value } })} sx={{ mb: 4, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
                                 <Divider sx={{ mb: 4 }} />
-                                <Typography variant="caption" sx={{ fontWeight: 900, color: '#666' }}>PROJECT VISUAL</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 900, color: '#666' }}>{editTab === 0 ? 'ENGLISH' : 'SWAHILI'} PROJECT VISUAL</Typography>
                                 <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
-                                    <TextField fullWidth size="small" value={formData.common.img} placeholder="/uploads/..." disabled sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                                    <TextField fullWidth size="small" value={currentContent.img} placeholder="/uploads/..." disabled sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
                                     <Button component="label" sx={{ minWidth: 'auto', p: 1, bgcolor: '#F7A11A', color: '#1A5C2A' }}><CloudUploadIcon /><input type="file" hidden accept="image/*" onChange={handleImageUpload} /></Button>
                                 </Box>
-                                {formData.common.img && <Box component="img" src={formData.common.img} sx={{ mt: 2, width: '100%', border: '1px solid #ddd' }} />}
+                                {(previewUrl[editTab === 0 ? 'en' : 'sw'] || currentContent.img) && (
+                                    <Box component="img" src={previewUrl[editTab === 0 ? 'en' : 'sw'] || getMediaUrl(currentContent.img)} sx={{ mt: 2, width: '100%', border: '1px solid #ddd' }} />
+                                )}
                             </Box>
                         </Grid>
                     </Grid>

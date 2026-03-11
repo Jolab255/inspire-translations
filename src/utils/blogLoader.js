@@ -1,4 +1,5 @@
 import yaml from 'js-yaml';
+import { getMediaUrl } from '../cms/githubApi';
 
 // Use Vite's glob import to get all markdown files
 const modules = import.meta.glob('../content/blog/*.md', { query: '?raw', import: 'default', eager: true });
@@ -32,7 +33,8 @@ export const getAllPosts = (lang = 'en') => {
             posts.push({
                 ...data,
                 id: slug,
-                slug: slug
+                slug: slug,
+                image: getMediaUrl(data.image)
             });
         }
     }
@@ -50,6 +52,7 @@ export const getPostBySlug = (slug, lang = 'en') => {
     const { data, content: body } = parseMarkdown(rawContent);
     return {
         ...data,
+        image: getMediaUrl(data.image),
         body
     };
 };

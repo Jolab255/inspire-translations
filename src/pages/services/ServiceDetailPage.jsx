@@ -31,6 +31,7 @@ import { services } from '../../data/siteData';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { uiTranslations } from '../../data/translations/ui';
 import { FadeInUp, TypewriterText } from '../../components/common/Animations';
+import { getMediaUrl } from '../../cms/githubApi';
 
 // Service Images
 import serviceWritten from '../../assets/images/written_translation.png';
@@ -93,7 +94,7 @@ const ServiceDetailPage = () => {
         'equipment-rental': serviceEquipment,
     };
 
-    const heroImg = service.img || serviceImages[service.id] || fallbackHero;
+    const heroImg = getMediaUrl(service.img) || serviceImages[service.id] || fallbackHero;
 
     const content = {
         en: {
@@ -609,7 +610,7 @@ const ServiceDetailPage = () => {
                                     }}>
                                         <Box 
                                             component="img" 
-                                            src={s.img || serviceImages[s.id] || fallbackHero} 
+                                            src={getMediaUrl(s.img) || serviceImages[s.id] || fallbackHero} 
                                             sx={{ width: '100%', height: '240px', objectFit: 'cover', borderBottom: '2.5px solid #0D2B14' }} 
                                         />
                                         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>

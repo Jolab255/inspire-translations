@@ -40,7 +40,7 @@ import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
 import ReactMarkdown from 'react-markdown';
-import { getFilesList, getFileContent, saveFileContent, uploadMedia, deleteFile } from '../githubApi';
+import { getFilesList, getFileContent, saveFileContent, uploadMedia, deleteFile, getMediaUrl } from '../githubApi';
 import { useNotification } from '../NotificationContext';
 
 const BlogManager = ({ onSync }) => {
@@ -48,6 +48,7 @@ const BlogManager = ({ onSync }) => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedArticle, setSelectedArticle] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState({ en: '', sw: '' });
     const [editTab, setEditTab] = useState(0); // 0 = EN, 1 = SW
     const [mode, setMode] = useState('write'); // 'write' or 'preview'
     const [formData, setFormData] = useState({ en: {}, sw: {}, common: {} });
@@ -90,7 +91,6 @@ const BlogManager = ({ onSync }) => {
             const sortedArticles = Object.values(grouped).sort((a, b) => new Date(b.date) - new Date(a.date));
             setArticles(sortedArticles);
 
-            // Update selected article to refresh SHAs
             if (selectedArticle && !selectedArticle.isNew) {
                 const updated = sortedArticles.find(a => a.slug === selectedArticle.slug);
                 if (updated) setSelectedArticle(updated);
@@ -105,16 +105,16 @@ const BlogManager = ({ onSync }) => {
     };
 
     const handleSelectArticle = (article) => {
+        setPreviewUrl({ en: '', sw: '' });
         const enData = article.en?.content || { data: {}, body: '' };
         const swData = article.sw?.content || { data: {}, body: '' };
 
         setFormData({
-            en: { title: enData.data.title || '', excerpt: enData.data.excerpt || '', body: enData.body || '' },
-            sw: { title: swData.data.title || '', excerpt: swData.data.excerpt || '', body: swData.body || '' },
+            en: { title: enData.data.title || '', excerpt: enData.data.excerpt || '', body: enData.body || '', image: enData.data.image || '' },
+            sw: { title: swData.data.title || '', excerpt: swData.data.excerpt || '', body: swData.body || '', image: swData.data.image || '' },
             common: {
                 category: enData.data.category || swData.data.category || '',
                 date: enData.data.date || swData.data.date || new Date().toISOString(),
-                image: enData.data.image || swData.data.image || '',
                 slug: article.slug
             }
         });
@@ -124,11 +124,12 @@ const BlogManager = ({ onSync }) => {
     };
 
     const handleCreateNew = () => {
+        setPreviewUrl({ en: '', sw: '' });
         setSelectedArticle({ isNew: true, slug: '' });
         setFormData({
-            en: { title: '', excerpt: '', body: '' },
-            sw: { title: '', excerpt: '', body: '' },
-            common: { category: '', date: new Date().toISOString(), image: '', slug: '' }
+            en: { title: '', excerpt: '', body: '', image: '' },
+            sw: { title: '', excerpt: '', body: '', image: '' },
+            common: { category: '', date: new Date().toISOString(), slug: '' }
         });
         setEditTab(0);
         setMode('write');
@@ -137,14 +138,23 @@ const BlogManager = ({ onSync }) => {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        const langKey = editTab === 0 ? 'en' : 'sw';
+        const localUrl = URL.createObjectURL(file);
+        setPreviewUrl(prev => ({ ...prev, [langKey]: localUrl }));
+
         setLoading(true);
         if (onSync) onSync(true);
         try {
             const uploadedPath = await uploadMedia(file);
-            setFormData(prev => ({ ...prev, common: { ...prev.common, image: uploadedPath } }));
-            showNotification('Blog image uploaded successfully!', 'success');
+            setFormData(prev => ({ 
+                ...prev, 
+                [langKey]: { ...prev[langKey], image: uploadedPath } 
+            }));
+            showNotification(`${langKey.toUpperCase()} blog image uploaded!`, 'success');
         } catch (err) {
             showNotification('Image upload failed.', 'error');
+            setPreviewUrl(prev => ({ ...prev, [langKey]: '' }));
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -166,19 +176,18 @@ const BlogManager = ({ onSync }) => {
             
             const enSha = await saveFileContent(
                 `src/content/blog/${slug}.en.md`,
-                { lang: 'en', title: formData.en.title, category: formData.common.category, date: formData.common.date, image: formData.common.image, excerpt: formData.en.excerpt },
+                { lang: 'en', title: formData.en.title, category: formData.common.category, date: formData.common.date, image: formData.en.image, excerpt: formData.en.excerpt },
                 formData.en.body,
                 selectedArticle.en?.sha
             );
 
             const swSha = await saveFileContent(
                 `src/content/blog/${slug}.sw.md`,
-                { lang: 'sw', title: formData.sw.title, category: formData.common.category, date: formData.common.date, image: formData.common.image, excerpt: formData.sw.excerpt },
+                { lang: 'sw', title: formData.sw.title, category: formData.common.category, date: formData.common.date, image: formData.sw.image, excerpt: formData.sw.excerpt },
                 formData.sw.body,
                 selectedArticle.sw?.sha
             );
 
-            // Update local state with new SHAs immediately to prevent conflicts
             if (!selectedArticle.isNew) {
                 setSelectedArticle({
                     ...selectedArticle,
@@ -187,12 +196,11 @@ const BlogManager = ({ onSync }) => {
                 });
             }
 
-            showNotification('Bilingual Article published successfully! Live in a few minutes.', 'success');
+            showNotification('Bilingual Article published successfully!', 'success');
             await loadArticles();
         } catch (err) { 
             console.error("Detailed Save error:", err);
-            const msg = err.message || 'Failed to publish. Check GitHub permissions.';
-            showNotification(msg, 'error'); 
+            showNotification(err.message || 'Failed to publish.', 'error'); 
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -217,36 +225,21 @@ const BlogManager = ({ onSync }) => {
         }
     };
 
-    /**
-     * Helper to insert Markdown syntax at cursor position
-     */
     const insertFormatting = (prefix, suffix = '') => {
         const textarea = textareaRef.current.querySelector('textarea');
         if (!textarea) return;
-
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         const text = textarea.value;
         const selectedText = text.substring(start, end);
-        
         const before = text.substring(0, start);
         const after = text.substring(end);
-        
         const newText = before + prefix + selectedText + suffix + after;
-        
         const langKey = editTab === 0 ? 'en' : 'sw';
-        setFormData({
-            ...formData,
-            [langKey]: { ...formData[langKey], body: newText }
-        });
-
-        // Refocus and set selection after state update
+        setFormData({ ...formData, [langKey]: { ...formData[langKey], body: newText } });
         setTimeout(() => {
             textarea.focus();
-            textarea.setSelectionRange(
-                start + prefix.length,
-                end + prefix.length
-            );
+            textarea.setSelectionRange(start + prefix.length, end + prefix.length);
         }, 0);
     };
 
@@ -278,7 +271,7 @@ const BlogManager = ({ onSync }) => {
                                     '&:hover': { borderColor: '#F7A11A', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' } 
                                 }} onClick={() => handleSelectArticle(article)}>
                                     <Box sx={{ width: 180, bgcolor: '#f0f0f0', overflow: 'hidden', flexShrink: 0 }}>
-                                        {article.image ? <Box component="img" src={article.image} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><PhotoIcon sx={{ color: '#ccc' }} /></Box>}
+                                        {article.image ? <Box component="img" src={getMediaUrl(article.image)} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><PhotoIcon sx={{ color: '#ccc' }} /></Box>}
                                     </Box>
                                     <Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                         <Typography sx={{ fontWeight: 800, fontFamily: '"Inknut Antiqua", serif', color: '#1A5C2A', mb: 0.5 }}>{article.title}</Typography>
@@ -305,7 +298,6 @@ const BlogManager = ({ onSync }) => {
 
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={8}>
-                            {/* Version Selector */}
                             <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
                                 <Tabs value={editTab} onChange={(e, v) => setEditTab(v)} textColor="primary" indicatorColor="primary">
                                     <Tab label="English Version" sx={{ fontWeight: 800, fontFamily: 'Outfit' }} />
@@ -313,7 +305,6 @@ const BlogManager = ({ onSync }) => {
                                 </Tabs>
                             </Box>
 
-                            {/* Editor Toolbar & Mode Selector */}
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, bgcolor: '#f8fafc', p: 1, border: '1px solid #e2e8f0' }}>
                                 <Stack direction="row" spacing={0.5}>
                                     <Tooltip title="Bold"><IconButton size="small" onClick={() => insertFormatting('**', '**')} disabled={mode === 'preview'}><FormatBoldIcon fontSize="small" /></IconButton></Tooltip>
@@ -330,74 +321,21 @@ const BlogManager = ({ onSync }) => {
                                     <Tooltip title="Horizontal Rule"><IconButton size="small" onClick={() => insertFormatting('\n---\n', '')} disabled={mode === 'preview'}><HorizontalRuleIcon fontSize="small" /></IconButton></Tooltip>
                                 </Stack>
 
-                                <ToggleButtonGroup
-                                    value={mode}
-                                    exclusive
-                                    onChange={(e, v) => v && setMode(v)}
-                                    size="small"
-                                    sx={{ bgcolor: '#fff' }}
-                                >
-                                    <ToggleButton value="write" sx={{ px: 2, fontWeight: 700, borderRadius: 0 }}>
-                                        <EditNoteIcon sx={{ mr: 1, fontSize: 18 }} /> Write
-                                    </ToggleButton>
-                                    <ToggleButton value="preview" sx={{ px: 2, fontWeight: 700, borderRadius: 0 }}>
-                                        <VisibilityIcon sx={{ mr: 1, fontSize: 18 }} /> Preview
-                                    </ToggleButton>
+                                <ToggleButtonGroup value={mode} exclusive onChange={(e, v) => v && setMode(v)} size="small" sx={{ bgcolor: '#fff' }}>
+                                    <ToggleButton value="write" sx={{ px: 2, fontWeight: 700, borderRadius: 0 }}><EditNoteIcon sx={{ mr: 1, fontSize: 18 }} /> Write</ToggleButton>
+                                    <ToggleButton value="preview" sx={{ px: 2, fontWeight: 700, borderRadius: 0 }}><VisibilityIcon sx={{ mr: 1, fontSize: 18 }} /> Preview</ToggleButton>
                                 </ToggleButtonGroup>
                             </Box>
 
                             <Box sx={{ p: mode === 'preview' ? 4 : 0, bgcolor: mode === 'preview' ? '#fff' : 'transparent', border: mode === 'preview' ? '1px solid #eee' : 'none', minHeight: '500px' }}>
                                 {mode === 'write' ? (
                                     <>
-                                        <TextField 
-                                            fullWidth 
-                                            label={`${editTab === 0 ? 'English' : 'Swahili'} Title`} 
-                                            value={currentContent.title} 
-                                            onChange={e => {
-                                                const langKey = editTab === 0 ? 'en' : 'sw';
-                                                setFormData({ ...formData, [langKey]: { ...formData[langKey], title: e.target.value } });
-                                            }} 
-                                            helperText={`${currentContent.title.length}/${LIMITS.title}`} 
-                                            error={currentContent.title.length > LIMITS.title} 
-                                            sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} 
-                                        />
-                                        <TextField 
-                                            fullWidth 
-                                            label={`${editTab === 0 ? 'English' : 'Swahili'} Excerpt`} 
-                                            multiline 
-                                            rows={2} 
-                                            value={currentContent.excerpt} 
-                                            onChange={e => {
-                                                const langKey = editTab === 0 ? 'en' : 'sw';
-                                                setFormData({ ...formData, [langKey]: { ...formData[langKey], excerpt: e.target.value } });
-                                            }} 
-                                            helperText={`${currentContent.excerpt.length}/${LIMITS.excerpt}`} 
-                                            sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} 
-                                        />
-                                        <TextField 
-                                            ref={textareaRef}
-                                            fullWidth 
-                                            label={`${editTab === 0 ? 'English' : 'Swahili'} Content (Markdown)`} 
-                                            multiline 
-                                            rows={20} 
-                                            value={currentContent.body} 
-                                            onChange={e => {
-                                                const langKey = editTab === 0 ? 'en' : 'sw';
-                                                setFormData({ ...formData, [langKey]: { ...formData[langKey], body: e.target.value } });
-                                            }} 
-                                            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0, fontFamily: 'monospace', bgcolor: '#fcfdfc' } }} 
-                                        />
+                                        <TextField fullWidth label={`${editTab === 0 ? 'English' : 'Swahili'} Title`} value={currentContent.title} onChange={e => { const langKey = editTab === 0 ? 'en' : 'sw'; setFormData({ ...formData, [langKey]: { ...formData[langKey], title: e.target.value } }); }} helperText={`${currentContent.title.length}/${LIMITS.title}`} sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                                        <TextField fullWidth label={`${editTab === 0 ? 'English' : 'Swahili'} Excerpt`} multiline rows={2} value={currentContent.excerpt} onChange={e => { const langKey = editTab === 0 ? 'en' : 'sw'; setFormData({ ...formData, [langKey]: { ...formData[langKey], excerpt: e.target.value } }); }} helperText={`${currentContent.excerpt.length}/${LIMITS.excerpt}`} sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                                        <TextField ref={textareaRef} fullWidth label={`${editTab === 0 ? 'English' : 'Swahili'} Content (Markdown)`} multiline rows={20} value={currentContent.body} onChange={e => { const langKey = editTab === 0 ? 'en' : 'sw'; setFormData({ ...formData, [langKey]: { ...formData[langKey], body: e.target.value } }); }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0, fontFamily: 'monospace', bgcolor: '#fcfdfc' } }} />
                                     </>
                                 ) : (
-                                    <Box className="markdown-preview" sx={{ 
-                                        fontFamily: 'Outfit', 
-                                        lineHeight: 1.8,
-                                        '& h1, & h2, & h3': { fontFamily: '"Inknut Antiqua", serif', color: '#1A5C2A', mt: 4, mb: 2 },
-                                        '& p': { mb: 2 },
-                                        '& ul, & ol': { mb: 2, pl: 4 },
-                                        '& blockquote': { borderLeft: '4px solid #F7A11A', pl: 2, py: 1, bgcolor: '#f8fafc', fontStyle: 'italic', mb: 2 },
-                                        '& img': { maxWidth: '100%', height: 'auto', border: '1px solid #eee', p: 1, my: 3 }
-                                    }}>
+                                    <Box className="markdown-preview" sx={{ fontFamily: 'Outfit', lineHeight: 1.8, '& h1, & h2, & h3': { fontFamily: '"Inknut Antiqua", serif', color: '#1A5C2A', mt: 4, mb: 2 }, '& img': { maxWidth: '100%', height: 'auto', border: '1px solid #eee', p: 1, my: 3 } }}>
                                         <Typography variant="h3" sx={{ mb: 4, fontWeight: 800 }}>{currentContent.title}</Typography>
                                         <ReactMarkdown>{currentContent.body}</ReactMarkdown>
                                     </Box>
@@ -411,12 +349,14 @@ const BlogManager = ({ onSync }) => {
                                 <TextField fullWidth label="Category" value={formData.common.category} onChange={e => setFormData({ ...formData, common: { ...formData.common, category: e.target.value } })} sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
                                 <TextField fullWidth label="Publish Date" type="datetime-local" value={new Date(formData.common.date).toISOString().slice(0, 16)} onChange={e => setFormData({ ...formData, common: { ...formData.common, date: e.target.value } })} InputLabelProps={{ shrink: true }} sx={{ mb: 4, '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
                                 
-                                <Typography variant="caption" sx={{ fontWeight: 900, color: '#666' }}>ARTICLE THUMBNAIL</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 900, color: '#666' }}>{editTab === 0 ? 'ENGLISH' : 'SWAHILI'} THUMBNAIL</Typography>
                                 <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
-                                    <TextField fullWidth size="small" value={formData.common.image} placeholder="/uploads/..." disabled sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
+                                    <TextField fullWidth size="small" value={currentContent.image} placeholder="/uploads/..." disabled sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
                                     <Button component="label" sx={{ minWidth: 'auto', p: 1, bgcolor: '#F7A11A', color: '#1A5C2A' }}><CloudUploadIcon /><input type="file" hidden accept="image/*" onChange={handleImageUpload} /></Button>
                                 </Box>
-                                {formData.common.image && <Box component="img" src={formData.common.image} sx={{ mt: 2, width: '100%', border: '1px solid #ddd' }} />}
+                                {(previewUrl[editTab === 0 ? 'en' : 'sw'] || currentContent.image) && (
+                                    <Box component="img" src={previewUrl[editTab === 0 ? 'en' : 'sw'] || getMediaUrl(currentContent.image)} sx={{ mt: 2, width: '100%', border: '1px solid #ddd' }} />
+                                )}
                             </Box>
                         </Grid>
                     </Grid>

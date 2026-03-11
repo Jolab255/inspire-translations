@@ -24,7 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-import { getFileContent, saveJsonContent, uploadMedia } from '../githubApi';
+import { getFileContent, saveJsonContent, uploadMedia, getMediaUrl } from '../githubApi';
 import { useNotification } from '../NotificationContext';
 
 const ServicesManager = ({ onSync }) => {
@@ -36,6 +36,7 @@ const ServicesManager = ({ onSync }) => {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [editTab, setEditTab] = useState(0); // 0 = EN, 1 = SW, 2 = Settings
+    const [previewUrl, setPreviewUrl] = useState({ en: '', sw: '' });
 
     const [formData, setFormData] = useState({
         id: '',
@@ -43,7 +44,7 @@ const ServicesManager = ({ onSync }) => {
         shortDesc: { en: '', sw: '' },
         fullDesc: { en: '', sw: '' },
         icon: '',
-        img: '',
+        img: { en: '', sw: '' },
         color: '#F7A11A',
         features: { en: [], sw: [] }
     });
@@ -61,11 +62,9 @@ const ServicesManager = ({ onSync }) => {
             const content = await getFileContent(SERVICES_PATH);
             let data;
             
-            // If content.data exists and has services, use it (from frontmatter)
             if (content.data && content.data.services) {
                 data = content.data;
             } else {
-                // Otherwise try to parse the body (raw JSON)
                 try {
                     data = JSON.parse(content.body);
                 } catch (e) {
@@ -73,11 +72,16 @@ const ServicesManager = ({ onSync }) => {
                     data = { services: [] };
                 }
             }
+
+            // Normalize img if it's a string (legacy)
+            data.services = data.services.map(s => ({
+                ...s,
+                img: typeof s.img === 'string' ? { en: s.img, sw: s.img } : (s.img || { en: '', sw: '' })
+            }));
             
             setServicesData(data);
             setFileSha(content.sha);
 
-            // Update selected item if we're currently editing
             if (selectedItem) {
                 const updated = data.services.find(s => s.id === selectedItem.id);
                 if (updated) setSelectedItem(updated);
@@ -93,6 +97,7 @@ const ServicesManager = ({ onSync }) => {
     };
 
     const handleOpenEdit = (item = null) => {
+        setPreviewUrl({ en: '', sw: '' });
         if (item) {
             setSelectedItem(item);
             setFormData({ ...item });
@@ -104,7 +109,7 @@ const ServicesManager = ({ onSync }) => {
                 shortDesc: { en: '', sw: '' },
                 fullDesc: { en: '', sw: '' },
                 icon: '',
-                img: '',
+                img: { en: '', sw: '' },
                 color: '#F7A11A',
                 features: { en: [], sw: [] }
             });
@@ -116,14 +121,23 @@ const ServicesManager = ({ onSync }) => {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        const langKey = editTab === 0 ? 'en' : 'sw';
+        const localUrl = URL.createObjectURL(file);
+        setPreviewUrl(prev => ({ ...prev, [langKey]: localUrl }));
+
         setLoading(true);
         if (onSync) onSync(true);
         try {
             const uploadedPath = await uploadMedia(file);
-            setFormData({ ...formData, img: uploadedPath });
-            showNotification('Service image uploaded successfully!', 'success');
+            setFormData(prev => ({ 
+                ...prev, 
+                img: { ...prev.img, [langKey]: uploadedPath } 
+            }));
+            showNotification(`${langKey.toUpperCase()} service image uploaded!`, 'success');
         } catch (err) {
-            showNotification('Image upload failed. Please try again.', 'error');
+            showNotification('Image upload failed.', 'error');
+            setPreviewUrl(prev => ({ ...prev, [langKey]: '' }));
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -155,7 +169,6 @@ const ServicesManager = ({ onSync }) => {
     const handleSaveService = async () => {
         let finalFormData = { ...formData };
         
-        // Auto-generate ID if empty (for new services)
         if (!finalFormData.id && finalFormData.title.en) {
             finalFormData.id = finalFormData.title.en.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
         }
@@ -178,16 +191,14 @@ const ServicesManager = ({ onSync }) => {
             const newData = { services: newServices };
             const newSha = await saveJsonContent(SERVICES_PATH, newData, fileSha, `Services Update: ${finalFormData.title.en}`);
             
-            // CRITICAL: Update the SHA immediately for the next possible save
             setFileSha(newSha);
             setServicesData(newData);
             setEditDialogOpen(false);
-            showNotification('Services updated successfully! Changes will be live in a few minutes.', 'success');
-            await loadServices(); // Refresh the full list in the background
+            showNotification('Services updated successfully!', 'success');
+            await loadServices(); 
         } catch (err) {
             console.error("Detailed Save error:", err);
-            const msg = err.message || 'Save failed. Please check your connection or authentication.';
-            showNotification(msg, 'error');
+            showNotification(err.message || 'Save failed.', 'error');
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -207,7 +218,7 @@ const ServicesManager = ({ onSync }) => {
             showNotification('Service removed successfully.', 'success');
             loadServices();
         } catch (err) {
-            showNotification('Delete failed. Please try again.', 'error');
+            showNotification('Delete failed.', 'error');
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -244,13 +255,8 @@ const ServicesManager = ({ onSync }) => {
                                 </Box>
                             </Box>
                             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                                {service.img && <Box component="img" src={service.img} sx={{ width: 80, height: 60, objectFit: 'cover', border: '1px solid #eee' }} />}
+                                {service.img?.en && <Box component="img" src={getMediaUrl(service.img.en)} sx={{ width: 80, height: 60, objectFit: 'cover', border: '1px solid #eee' }} />}
                                 <Typography sx={{ fontSize: '0.85rem', color: '#666', height: '3.6em', overflow: 'hidden', flex: 1 }}>{service.shortDesc.en}</Typography>
-                            </Box>
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {service.features.en.map((f, idx) => (
-                                    <Chip key={idx} label={f} size="small" sx={{ fontSize: '0.65rem', height: 20, borderRadius: 0 }} />
-                                ))}
                             </Box>
                         </Card>
                     </Grid>
@@ -274,6 +280,15 @@ const ServicesManager = ({ onSync }) => {
                             <TextField fullWidth label="Title (EN)" value={formData.title.en} onChange={e => setFormData({ ...formData, title: { ...formData.title, en: e.target.value } })} />
                             <TextField fullWidth label="Short Description (EN)" multiline rows={2} value={formData.shortDesc.en} onChange={e => setFormData({ ...formData, shortDesc: { ...formData.shortDesc, en: e.target.value } })} />
                             <TextField fullWidth label="Full Description (EN)" multiline rows={4} value={formData.fullDesc.en} onChange={e => setFormData({ ...formData, fullDesc: { ...formData.fullDesc, en: e.target.value } })} />
+                            
+                            <Box>
+                                <Typography variant="caption" sx={{ fontWeight: 900, color: '#666', display: 'block', mb: 1 }}>ENGLISH IMAGE</Typography>
+                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                    <TextField fullWidth size="small" value={formData.img.en} placeholder="/uploads/..." disabled />
+                                    <Button component="label" sx={{ minWidth: 'auto', p: 1, bgcolor: '#F7A11A', color: '#1A5C2A' }}><CloudUploadIcon /><input type="file" hidden accept="image/*" onChange={handleImageUpload} /></Button>
+                                </Box>
+                                {(previewUrl.en || formData.img.en) && <Box component="img" src={previewUrl.en || getMediaUrl(formData.img.en)} sx={{ mt: 2, width: '100%', height: 120, objectFit: 'cover', border: '1px solid #eee' }} />}
+                            </Box>
                         </Box>
                     )}
 
@@ -282,36 +297,32 @@ const ServicesManager = ({ onSync }) => {
                             <TextField fullWidth label="Title (SW)" value={formData.title.sw} onChange={e => setFormData({ ...formData, title: { ...formData.title, sw: e.target.value } })} />
                             <TextField fullWidth label="Short Description (SW)" multiline rows={2} value={formData.shortDesc.sw} onChange={e => setFormData({ ...formData, shortDesc: { ...formData.shortDesc, sw: e.target.value } })} />
                             <TextField fullWidth label="Full Description (SW)" multiline rows={4} value={formData.fullDesc.sw} onChange={e => setFormData({ ...formData, fullDesc: { ...formData.fullDesc, sw: e.target.value } })} />
+                            
+                            <Box>
+                                <Typography variant="caption" sx={{ fontWeight: 900, color: '#666', display: 'block', mb: 1 }}>SWAHILI IMAGE</Typography>
+                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                    <TextField fullWidth size="small" value={formData.img.sw} placeholder="/uploads/..." disabled />
+                                    <Button component="label" sx={{ minWidth: 'auto', p: 1, bgcolor: '#F7A11A', color: '#1A5C2A' }}><CloudUploadIcon /><input type="file" hidden accept="image/*" onChange={handleImageUpload} /></Button>
+                                </Box>
+                                {(previewUrl.sw || formData.img.sw) && <Box component="img" src={previewUrl.sw || getMediaUrl(formData.img.sw)} sx={{ mt: 2, width: '100%', height: 120, objectFit: 'cover', border: '1px solid #eee' }} />}
+                            </Box>
                         </Box>
                     )}
 
                     {editTab === 2 && (
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                             <TextField fullWidth label="Service ID (unique slug)" value={formData.id} onChange={e => setFormData({ ...formData, id: e.target.value })} disabled={!!selectedItem} helperText="Example: written-translation" />
-                            
                             <Box sx={{ display: 'flex', gap: 2 }}>
                                 <TextField label="Icon Emoji" value={formData.icon} onChange={e => setFormData({ ...formData, icon: e.target.value })} />
                                 <TextField label="Brand Color" type="color" value={formData.color} onChange={e => setFormData({ ...formData, color: e.target.value })} fullWidth />
                             </Box>
-
-                            <Box>
-                                <Typography variant="caption" sx={{ fontWeight: 900, color: '#666', display: 'block', mb: 1 }}>SERVICE IMAGE</Typography>
-                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <TextField fullWidth size="small" value={formData.img} placeholder="/assets/images/..." disabled />
-                                    <Button component="label" sx={{ minWidth: 'auto', p: 1, bgcolor: '#F7A11A', color: '#1A5C2A' }}><CloudUploadIcon /><input type="file" hidden accept="image/*" onChange={handleImageUpload} /></Button>
-                                </Box>
-                                {formData.img && <Box component="img" src={formData.img} sx={{ mt: 2, width: '100%', height: 120, objectFit: 'cover', border: '1px solid #eee' }} />}
-                            </Box>
-                            
                             <Divider />
                             <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>FEATURES (Synchronized Pairs)</Typography>
-                            
                             <Stack direction="row" spacing={2}>
                                 <TextField label="Feature EN" value={newFeature.en} onChange={e => setNewFeature({ ...newFeature, en: e.target.value })} size="small" fullWidth />
                                 <TextField label="Feature SW" value={newFeature.sw} onChange={e => setNewFeature({ ...newFeature, sw: e.target.value })} size="small" fullWidth />
                                 <Button onClick={handleAddFeature} variant="outlined" sx={{ borderRadius: 0 }}><AddIcon /></Button>
                             </Stack>
-
                             <Box sx={{ mt: 2 }}>
                                 {formData.features.en.map((f, idx) => (
                                     <Box key={idx} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 1, borderBottom: '1px solid #f1f5f9' }}>

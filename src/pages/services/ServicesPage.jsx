@@ -15,6 +15,7 @@ import { uiTranslations } from '../../data/translations/ui';
 import { FadeInUp, TypewriterText, AnimatedPreTitle } from '../../components/common/Animations';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useInView } from 'react-intersection-observer';
+import { getMediaUrl } from '../../cms/githubApi';
 
 // Service & Methodology Images
 import serviceWritten from '../../assets/images/written_translation.png';
@@ -169,7 +170,7 @@ const ServicesPage = () => {
                             width: '100%', 
                             height: '100%', 
                             minHeight: '100%',
-                            background: `url(${serviceImages['written-translation']}) center/cover no-repeat`,
+                            background: `url(${getMediaUrl(services[0]?.img) || serviceImages['written-translation']}) center/cover no-repeat`,
                             filter: 'grayscale(0.2) contrast(1.1)',
                             '&::after': {
                                 content: '""',
@@ -226,7 +227,7 @@ const ServicesPage = () => {
                                     }}>
                                         <Box 
                                             component="img" 
-                                            src={service.img || serviceImages[service.id] || heroWoman} 
+                                            src={getMediaUrl(service.img) || serviceImages[service.id] || heroWoman} 
                                             sx={{ 
                                                 width: '100%', 
                                                 height: '100%', 

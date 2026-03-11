@@ -20,7 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PhotoIcon from '@mui/icons-material/Photo';
 
-import { getFileContent, saveJsonContent, uploadMedia } from '../githubApi';
+import { getFileContent, saveJsonContent, uploadMedia, getMediaUrl } from '../githubApi';
 import { useNotification } from '../NotificationContext';
 
 const GalleryManager = ({ onSync }) => {
@@ -31,6 +31,7 @@ const GalleryManager = ({ onSync }) => {
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState('');
     const [formData, setFormData] = useState({ title_en: '', title_sw: '', category_en: '', category_sw: '', src: '' });
 
     const GALLERY_PATH = 'src/content/gallery.json';
@@ -55,6 +56,7 @@ const GalleryManager = ({ onSync }) => {
     };
 
     const handleOpenEdit = (item = null) => {
+        setPreviewUrl(''); // Reset preview
         if (item) {
             setSelectedItem(item);
             setFormData({ ...item });
@@ -68,6 +70,11 @@ const GalleryManager = ({ onSync }) => {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        // Create local preview immediately
+        const localUrl = URL.createObjectURL(file);
+        setPreviewUrl(localUrl);
+
         setLoading(true);
         if (onSync) onSync(true);
         try {
@@ -76,6 +83,7 @@ const GalleryManager = ({ onSync }) => {
             showNotification('Image uploaded successfully!', 'success');
         } catch (err) {
             showNotification('Image upload failed.', 'error');
+            setPreviewUrl(''); // Clear preview on failure
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
@@ -149,7 +157,7 @@ const GalleryManager = ({ onSync }) => {
                     <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
                         <Card sx={{ borderRadius: 0, border: '1px solid #eee', position: 'relative', overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column', '&:hover .overlay': { opacity: 1, pointerEvents: 'auto' } }}>
                             <Box sx={{ height: 200, bgcolor: '#f0f0f0', overflow: 'hidden' }}>
-                                <Box component="img" src={item.src} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <Box component="img" src={getMediaUrl(item.src)} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             </Box>
                             <Box sx={{ p: 2, flexGrow: 1 }}>
                                 <Typography sx={{ fontWeight: 800, fontSize: '0.85rem', color: '#1A5C2A', mb: 0.5 }}>{item.title_en}</Typography>
@@ -188,7 +196,7 @@ const GalleryManager = ({ onSync }) => {
                                 <TextField fullWidth size="small" value={formData.src} placeholder="/assets/images/..." disabled sx={{ '& .MuiOutlinedInput-root': { borderRadius: 0 } }} />
                                 <Button component="label" sx={{ minWidth: 'auto', p: 1, bgcolor: '#F7A11A', color: '#1A5C2A' }}><CloudUploadIcon /><input type="file" hidden accept="image/*" onChange={handleImageUpload} /></Button>
                             </Box>
-                            {formData.src && <Box component="img" src={formData.src} sx={{ mt: 2, width: '100%', height: 200, objectFit: 'cover', border: '1px solid #ddd' }} />}
+                            {(previewUrl || formData.src) && <Box component="img" src={previewUrl || getMediaUrl(formData.src)} sx={{ mt: 2, width: '100%', height: 200, objectFit: 'cover', border: '1px solid #ddd' }} />}
                         </Box>
                     </Box>
                 </DialogContent>
