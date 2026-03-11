@@ -104,7 +104,7 @@ export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
         message: commitMessage || `CMS Update: ${path}`,
         content: utf8ToBase64(newContent),
         branch: BRANCH,
-        sha: sha
+        sha: sha // CRITICAL: This was missing or not being used correctly
     });
 };
 

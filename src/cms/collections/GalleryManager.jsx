@@ -21,12 +21,13 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PhotoIcon from '@mui/icons-material/Photo';
 
 import { getFileContent, saveJsonContent, uploadMedia } from '../githubApi';
+import { useNotification } from '../NotificationContext';
 
-const GalleryManager = () => {
+const GalleryManager = ({ onSync }) => {
+    const { showNotification } = useNotification();
     const [galleryData, setGalleryData] = useState({ items: [] });
     const [fileSha, setFileSha] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [saveStatus, setSaveStatus] = useState(null);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -38,16 +39,19 @@ const GalleryManager = () => {
 
     const loadGallery = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const content = await getFileContent(GALLERY_PATH);
-            // getFileContent for JSON returns parsed object in .data or string in .body
-            // Our helper handles frontmatter normally, let's parse body if data is empty
             const data = content.data && content.data.items ? content.data : JSON.parse(content.body);
             setGalleryData(data);
             setFileSha(content.sha);
         } catch (err) {
             console.error("Error loading gallery:", err);
-        } finally { setLoading(false); }
+            showNotification('Failed to load gallery items.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleOpenEdit = (item = null) => {
@@ -65,16 +69,22 @@ const GalleryManager = () => {
         const file = e.target.files[0];
         if (!file) return;
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const uploadedPath = await uploadMedia(file);
             setFormData({ ...formData, src: uploadedPath });
+            showNotification('Image uploaded successfully!', 'success');
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Image upload failed.' });
-        } finally { setLoading(false); }
+            showNotification('Image upload failed.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleSaveItem = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             let newItems;
             if (selectedItem) {
@@ -88,15 +98,19 @@ const GalleryManager = () => {
             
             setGalleryData(newData);
             setEditDialogOpen(false);
-            setSaveStatus({ type: 'success', message: 'Gallery updated successfully!' });
-            loadGallery(); // Refresh SHA
+            showNotification('Gallery updated successfully! Live in a few minutes.', 'success');
+            loadGallery(); 
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Save failed.' });
-        } finally { setLoading(false); }
+            showNotification('Save failed. Check permissions.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleDelete = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const newItems = galleryData.items.filter(item => item.id !== selectedItem.id);
             const newData = { items: newItems };
@@ -104,11 +118,14 @@ const GalleryManager = () => {
             
             setGalleryData(newData);
             setDeleteDialogOpen(false);
-            setSaveStatus({ type: 'success', message: 'Item removed successfully!' });
-            loadGallery(); // Refresh SHA
+            showNotification('Media removed successfully.', 'success');
+            loadGallery();
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Delete failed.' });
-        } finally { setLoading(false); }
+            showNotification('Delete failed.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     if (loading && galleryData.items.length === 0) return <Typography sx={{ p: 4 }}>Syncing Gallery Infrastructure...</Typography>;

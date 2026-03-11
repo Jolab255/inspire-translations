@@ -16,8 +16,9 @@ import ServicesManager from './collections/ServicesManager';
 import { getDeploymentStatus } from './githubApi';
 import CircleIcon from '@mui/icons-material/Circle';
 import SyncIcon from '@mui/icons-material/Sync';
+import { NotificationProvider } from './NotificationContext';
 
-const AdminDashboard = () => {
+const DashboardContent = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [user, setUser] = useState(null);
@@ -71,7 +72,7 @@ const AdminDashboard = () => {
 
     const getStatusUI = () => {
         if (!deployStatus) return null;
-        
+
         const isBuilding = deployStatus.status === 'in_progress' || deployStatus.status === 'queued';
         const isSuccess = deployStatus.conclusion === 'success';
         const isFailure = deployStatus.conclusion === 'failure' || deployStatus.conclusion === 'cancelled';
@@ -83,7 +84,7 @@ const AdminDashboard = () => {
         if (isBuilding) {
             label = "Building...";
             color = "#f59e0b"; // Warning orange
-            icon = <SyncIcon sx={{ fontSize: 14, animation: 'spin 2s linear infinite', '@keyframes spin': { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } } }} />;
+            icon = <SyncIcon sx={{ fontSize: 14, animation: 'spin 2s linear infinite', '@keyframes spin': { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } } } } />;
         } else if (isFailure) {
             label = "Build Failed";
             color = "#ef4444"; // Error red
@@ -140,7 +141,7 @@ const AdminDashboard = () => {
                     </Typography>
                     {getStatusUI()}
                 </Box>
-                
+
                 <List sx={{ mt: 2, px: 1 }}>
                     {[
                         { text: 'Blog Posts', id: 'blog' },
@@ -208,4 +209,11 @@ const AdminDashboard = () => {
     );
 };
 
+const AdminDashboard = () => (
+    <NotificationProvider>
+        <DashboardContent />
+    </NotificationProvider>
+);
+
 export default AdminDashboard;
+

@@ -42,15 +42,16 @@ import InsertLinkIcon from '@mui/icons-material/InsertLink';
 
 import ReactMarkdown from 'react-markdown';
 import { getFilesList, getFileContent, saveFileContent, uploadMedia, deleteFile } from '../githubApi';
+import { useNotification } from '../NotificationContext';
 
-const ProjectsManager = () => {
+const ProjectsManager = ({ onSync }) => {
+    const { showNotification } = useNotification();
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedProject, setSelectedProject] = useState(null);
     const [editTab, setEditTab] = useState(0); // 0 = EN, 1 = SW
     const [mode, setMode] = useState('write'); // 'write' or 'preview'
     const [formData, setFormData] = useState({ en: {}, sw: {}, common: {} });
-    const [saveStatus, setSaveStatus] = useState(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     
     const textareaRef = useRef(null);
@@ -60,9 +61,9 @@ const ProjectsManager = () => {
 
     const loadProjects = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const list = await getFilesList('src/content/projects');
-            console.log("Projects found on GitHub:", list.length);
             const mdFiles = list.filter(f => f.name.endsWith('.md'));
             
             const allFilesData = await Promise.all(mdFiles.map(async (file) => {
@@ -94,10 +95,21 @@ const ProjectsManager = () => {
                 }
             });
 
-            setProjects(Object.values(grouped).sort((a, b) => b.year - a.year));
+            const sortedProjects = Object.values(grouped).sort((a, b) => b.year - a.year);
+            setProjects(sortedProjects);
+
+            // Update selected project to refresh SHAs
+            if (selectedProject && !selectedProject.isNew) {
+                const updated = sortedProjects.find(p => p.slug === selectedProject.slug);
+                if (updated) setSelectedProject(updated);
+            }
         } catch (err) { 
             console.error("Critical Error loading projects:", err);
-        } finally { setLoading(false); }
+            showNotification('Failed to load projects portfolio.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleSelectProject = (project) => {
@@ -119,7 +131,6 @@ const ProjectsManager = () => {
         setSelectedProject(project);
         setEditTab(0);
         setMode('write');
-        setSaveStatus(null);
     };
 
     const handleCreateNew = () => {
@@ -137,22 +148,26 @@ const ProjectsManager = () => {
         const file = e.target.files[0];
         if (!file) return;
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const uploadedPath = await uploadMedia(file);
             setFormData(prev => ({ ...prev, common: { ...prev.common, img: uploadedPath } }));
-            setSaveStatus({ type: 'success', message: 'Project image uploaded successfully!' });
+            showNotification('Project image uploaded successfully!', 'success');
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Image upload failed.' });
-        } finally { setLoading(false); }
+            showNotification('Image upload failed.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleSave = async () => {
         if (!formData.en.title || !formData.sw.title) {
-            return setSaveStatus({ type: 'error', message: 'Both English and Swahili titles are required.' });
+            return showNotification('Both English and Swahili titles are required.', 'warning');
         }
 
         setLoading(true);
-        setSaveStatus(null);
+        if (onSync) onSync(true);
         try {
             const slug = formData.common.slug || formData.en.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
             
@@ -178,23 +193,33 @@ const ProjectsManager = () => {
                 selectedProject.sw?.sha
             );
 
-            setSaveStatus({ type: 'success', message: 'Bilingual Project published successfully!' });
+            showNotification('Bilingual Project published successfully! Live in a few minutes.', 'success');
             loadProjects();
         } catch (err) { 
             console.error(err);
-            setSaveStatus({ type: 'error', message: 'Failed to publish. Check GitHub permissions.' }); 
-        } finally { setLoading(false); }
+            showNotification('Failed to publish. Check GitHub permissions.', 'error'); 
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleDelete = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             if (selectedProject.en) await deleteFile(selectedProject.en.path, selectedProject.en.sha);
             if (selectedProject.sw) await deleteFile(selectedProject.sw.path, selectedProject.sw.sha);
             setDeleteDialogOpen(false);
             setSelectedProject(null);
+            showNotification('Project pair removed successfully.', 'success');
             loadProjects();
-        } catch (err) { setSaveStatus({ type: 'error', message: 'Deletion failed.' }); } finally { setLoading(false); }
+        } catch (err) { 
+            showNotification('Deletion failed.', 'error'); 
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const insertFormatting = (prefix, suffix = '') => {

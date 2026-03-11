@@ -25,12 +25,13 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import { getFileContent, saveJsonContent, uploadMedia } from '../githubApi';
+import { useNotification } from '../NotificationContext';
 
-const ServicesManager = () => {
+const ServicesManager = ({ onSync }) => {
+    const { showNotification } = useNotification();
     const [servicesData, setServicesData] = useState({ services: [] });
     const [fileSha, setFileSha] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [saveStatus, setSaveStatus] = useState(null);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -55,6 +56,7 @@ const ServicesManager = () => {
 
     const loadServices = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const content = await getFileContent(SERVICES_PATH);
             let data;
@@ -74,10 +76,20 @@ const ServicesManager = () => {
             
             setServicesData(data);
             setFileSha(content.sha);
+
+            // Update selected item if we're currently editing
+            if (selectedItem) {
+                const updated = data.services.find(s => s.id === selectedItem.id);
+                if (updated) setSelectedItem(updated);
+            }
         } catch (err) {
             console.error("Error loading services from GitHub:", err);
+            showNotification('Failed to load services infrastructure.', 'error');
             setServicesData({ services: [] });
-        } finally { setLoading(false); }
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleOpenEdit = (item = null) => {
@@ -105,13 +117,17 @@ const ServicesManager = () => {
         const file = e.target.files[0];
         if (!file) return;
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const uploadedPath = await uploadMedia(file);
             setFormData({ ...formData, img: uploadedPath });
-            setSaveStatus({ type: 'success', message: 'Service image uploaded!' });
+            showNotification('Service image uploaded successfully!', 'success');
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Image upload failed.' });
-        } finally { setLoading(false); }
+            showNotification('Image upload failed. Please try again.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleAddFeature = () => {
@@ -145,11 +161,12 @@ const ServicesManager = () => {
         }
 
         if (!finalFormData.id) {
-            setSaveStatus({ type: 'error', message: 'Service ID or English Title is required.' });
+            showNotification('Service ID or English Title is required.', 'warning');
             return;
         }
 
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             let newServices;
             if (selectedItem) {
@@ -163,15 +180,20 @@ const ServicesManager = () => {
             
             setServicesData(newData);
             setEditDialogOpen(false);
-            setSaveStatus({ type: 'success', message: 'Services updated successfully!' });
+            showNotification('Services updated successfully! Changes will be live in a few minutes.', 'success');
             loadServices();
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Save failed.' });
-        } finally { setLoading(false); }
+            console.error("Save error:", err);
+            showNotification('Save failed. Please check your connection or authentication.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleDelete = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const newServices = servicesData.services.filter(s => s.id !== selectedItem.id);
             const newData = { services: newServices };
@@ -179,11 +201,14 @@ const ServicesManager = () => {
             
             setServicesData(newData);
             setDeleteDialogOpen(false);
-            setSaveStatus({ type: 'success', message: 'Service removed successfully!' });
+            showNotification('Service removed successfully.', 'success');
             loadServices();
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Delete failed.' });
-        } finally { setLoading(false); }
+            showNotification('Delete failed. Please try again.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     if (loading && servicesData.services.length === 0) return <Typography sx={{ p: 4 }}>Syncing Services Infrastructure...</Typography>;
@@ -197,8 +222,6 @@ const ServicesManager = () => {
                 </Box>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpenEdit()} sx={{ bgcolor: '#1A5C2A', borderRadius: 0, fontWeight: 800 }}>Add Service</Button>
             </Box>
-
-            {saveStatus && <Alert severity={saveStatus.type} sx={{ mb: 4, borderRadius: 0 }}>{saveStatus.message}</Alert>}
 
             <Grid container spacing={3}>
                 {servicesData.services.map(service => (

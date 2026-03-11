@@ -41,15 +41,16 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
 import ReactMarkdown from 'react-markdown';
 import { getFilesList, getFileContent, saveFileContent, uploadMedia, deleteFile } from '../githubApi';
+import { useNotification } from '../NotificationContext';
 
-const BlogManager = () => {
+const BlogManager = ({ onSync }) => {
+    const { showNotification } = useNotification();
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [editTab, setEditTab] = useState(0); // 0 = EN, 1 = SW
     const [mode, setMode] = useState('write'); // 'write' or 'preview'
     const [formData, setFormData] = useState({ en: {}, sw: {}, common: {} });
-    const [saveStatus, setSaveStatus] = useState(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     
     const textareaRef = useRef(null);
@@ -59,6 +60,7 @@ const BlogManager = () => {
 
     const loadArticles = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const list = await getFilesList('src/content/blog');
             const mdFiles = list.filter(f => f.name.endsWith('.md'));
@@ -85,8 +87,21 @@ const BlogManager = () => {
                 }
             });
 
-            setArticles(Object.values(grouped).sort((a, b) => new Date(b.date) - new Date(a.date)));
-        } catch (err) { console.error(err); } finally { setLoading(false); }
+            const sortedArticles = Object.values(grouped).sort((a, b) => new Date(b.date) - new Date(a.date));
+            setArticles(sortedArticles);
+
+            // Update selected article to refresh SHAs
+            if (selectedArticle && !selectedArticle.isNew) {
+                const updated = sortedArticles.find(a => a.slug === selectedArticle.slug);
+                if (updated) setSelectedArticle(updated);
+            }
+        } catch (err) { 
+            console.error(err);
+            showNotification('Failed to load blog posts.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleSelectArticle = (article) => {
@@ -106,7 +121,6 @@ const BlogManager = () => {
         setSelectedArticle(article);
         setEditTab(0);
         setMode('write');
-        setSaveStatus(null);
     };
 
     const handleCreateNew = () => {
@@ -124,25 +138,29 @@ const BlogManager = () => {
         const file = e.target.files[0];
         if (!file) return;
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             const uploadedPath = await uploadMedia(file);
             setFormData(prev => ({ ...prev, common: { ...prev.common, image: uploadedPath } }));
-            setSaveStatus({ type: 'success', message: 'Image uploaded successfully!' });
+            showNotification('Blog image uploaded successfully!', 'success');
         } catch (err) {
-            setSaveStatus({ type: 'error', message: 'Image upload failed.' });
-        } finally { setLoading(false); }
+            showNotification('Image upload failed.', 'error');
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleSave = async () => {
         if (!formData.en.title || !formData.sw.title) {
-            return setSaveStatus({ type: 'error', message: 'Both English and Swahili titles are required.' });
+            return showNotification('Both English and Swahili titles are required.', 'warning');
         }
         if (!formData.en.body || !formData.sw.body) {
-            return setSaveStatus({ type: 'error', message: 'Both English and Swahili content bodies are required.' });
+            return showNotification('Both English and Swahili content bodies are required.', 'warning');
         }
 
         setLoading(true);
-        setSaveStatus(null);
+        if (onSync) onSync(true);
         try {
             const slug = formData.common.slug || formData.en.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
             
@@ -160,23 +178,33 @@ const BlogManager = () => {
                 selectedArticle.sw?.sha
             );
 
-            setSaveStatus({ type: 'success', message: 'Synchronized Bilingual Article published successfully!' });
+            showNotification('Bilingual Article published successfully! Live in a few minutes.', 'success');
             loadArticles();
         } catch (err) { 
             console.error(err);
-            setSaveStatus({ type: 'error', message: 'Failed to publish. Check GitHub permissions.' }); 
-        } finally { setLoading(false); }
+            showNotification('Failed to publish. Check GitHub permissions.', 'error'); 
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     const handleDelete = async () => {
         setLoading(true);
+        if (onSync) onSync(true);
         try {
             if (selectedArticle.en) await deleteFile(selectedArticle.en.path, selectedArticle.en.sha);
             if (selectedArticle.sw) await deleteFile(selectedArticle.sw.path, selectedArticle.sw.sha);
             setDeleteDialogOpen(false);
             setSelectedArticle(null);
+            showNotification('Article pair deleted successfully.', 'success');
             loadArticles();
-        } catch (err) { setSaveStatus({ type: 'error', message: 'Deletion failed.' }); } finally { setLoading(false); }
+        } catch (err) { 
+            showNotification('Deletion failed.', 'error'); 
+        } finally { 
+            setLoading(false); 
+            if (onSync) onSync(false);
+        }
     };
 
     /**
