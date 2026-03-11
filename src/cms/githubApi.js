@@ -3,7 +3,7 @@ import yaml from 'js-yaml';
 
 const REPO_OWNER = 'Jolab255';
 const REPO_NAME = 'inspire-translations';
-const BRANCH = 'boutique-minimalist';
+const BRANCH = 'main';
 
 // Helper to get authenticated Octokit instance
 const getOctokit = () => {
