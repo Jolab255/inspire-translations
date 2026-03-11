@@ -97,15 +97,23 @@ export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
     const octokit = getOctokit();
     const newContent = JSON.stringify(jsonData, null, 2);
     
-    await octokit.repos.createOrUpdateFileContents({
-        owner: REPO_OWNER,
-        repo: REPO_NAME,
-        path: path,
-        message: commitMessage || `CMS Update: ${path}`,
-        content: utf8ToBase64(newContent),
-        branch: BRANCH,
-        sha: sha // CRITICAL: This was missing or not being used correctly
-    });
+    try {
+        await octokit.repos.createOrUpdateFileContents({
+            owner: REPO_OWNER,
+            repo: REPO_NAME,
+            path: path,
+            message: commitMessage || `CMS Update: ${path}`,
+            content: utf8ToBase64(newContent),
+            branch: BRANCH,
+            sha: sha
+        });
+    } catch (error) {
+        console.error("GitHub JSON Save Error:", error);
+        if (error.status === 409) {
+            throw new Error("Conflict: The file has been modified on GitHub. Please refresh.");
+        }
+        throw error;
+    }
 };
 
 /**

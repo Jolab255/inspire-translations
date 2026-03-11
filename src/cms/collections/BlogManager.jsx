@@ -179,10 +179,11 @@ const BlogManager = ({ onSync }) => {
             );
 
             showNotification('Bilingual Article published successfully! Live in a few minutes.', 'success');
-            loadArticles();
+            await loadArticles();
         } catch (err) { 
-            console.error(err);
-            showNotification('Failed to publish. Check GitHub permissions.', 'error'); 
+            console.error("Detailed Save error:", err);
+            const msg = err.message || 'Failed to publish. Check GitHub permissions.';
+            showNotification(msg, 'error'); 
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);

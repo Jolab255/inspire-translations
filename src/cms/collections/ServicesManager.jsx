@@ -181,10 +181,11 @@ const ServicesManager = ({ onSync }) => {
             setServicesData(newData);
             setEditDialogOpen(false);
             showNotification('Services updated successfully! Changes will be live in a few minutes.', 'success');
-            loadServices();
+            await loadServices(); // Wait for re-sync
         } catch (err) {
-            console.error("Save error:", err);
-            showNotification('Save failed. Please check your connection or authentication.', 'error');
+            console.error("Detailed Save error:", err);
+            const msg = err.message || 'Save failed. Please check your connection or authentication.';
+            showNotification(msg, 'error');
         } finally { 
             setLoading(false); 
             if (onSync) onSync(false);
