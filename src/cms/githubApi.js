@@ -71,6 +71,7 @@ export const getFileContent = async (path) => {
 
 /**
  * Save (create or update) a markdown file
+ * Returns the new SHA
  */
 export const saveFileContent = async (path, frontmatterData, bodyContent, sha, commitMessage) => {
     const octokit = getOctokit();
@@ -79,26 +80,28 @@ export const saveFileContent = async (path, frontmatterData, bodyContent, sha, c
     const yamlString = yaml.dump(frontmatterData);
     const newContent = `---\n${yamlString}---\n\n${bodyContent}`;
     
-    await octokit.repos.createOrUpdateFileContents({
+    const response = await octokit.repos.createOrUpdateFileContents({
         owner: REPO_OWNER,
         repo: REPO_NAME,
         path: path,
         message: commitMessage || `CMS Update: ${path}`,
         content: utf8ToBase64(newContent),
         branch: BRANCH,
-        sha: sha // Required if updating an existing file
+        sha: sha
     });
+    return response.data.content.sha;
 };
 
 /**
  * Save a JSON file
+ * Returns the new SHA
  */
 export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
     const octokit = getOctokit();
     const newContent = JSON.stringify(jsonData, null, 2);
     
     try {
-        await octokit.repos.createOrUpdateFileContents({
+        const response = await octokit.repos.createOrUpdateFileContents({
             owner: REPO_OWNER,
             repo: REPO_NAME,
             path: path,
@@ -107,10 +110,11 @@ export const saveJsonContent = async (path, jsonData, sha, commitMessage) => {
             branch: BRANCH,
             sha: sha
         });
+        return response.data.content.sha;
     } catch (error) {
         console.error("GitHub JSON Save Error:", error);
         if (error.status === 409) {
-            throw new Error("Conflict: The file has been modified on GitHub. Please refresh.");
+            throw new Error("Conflict: The file has been modified on GitHub. Please refresh the page to sync.");
         }
         throw error;
     }

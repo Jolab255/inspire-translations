@@ -176,12 +176,14 @@ const ServicesManager = ({ onSync }) => {
             }
 
             const newData = { services: newServices };
-            await saveJsonContent(SERVICES_PATH, newData, fileSha, `Services Update: ${finalFormData.title.en}`);
+            const newSha = await saveJsonContent(SERVICES_PATH, newData, fileSha, `Services Update: ${finalFormData.title.en}`);
             
+            // CRITICAL: Update the SHA immediately for the next possible save
+            setFileSha(newSha);
             setServicesData(newData);
             setEditDialogOpen(false);
             showNotification('Services updated successfully! Changes will be live in a few minutes.', 'success');
-            await loadServices(); // Wait for re-sync
+            await loadServices(); // Refresh the full list in the background
         } catch (err) {
             console.error("Detailed Save error:", err);
             const msg = err.message || 'Save failed. Please check your connection or authentication.';
