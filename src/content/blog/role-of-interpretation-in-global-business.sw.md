@@ -9,8 +9,6 @@ excerpt: >-
   kimataifa na kwa nini ni muhimu kwa ukuaji wako.
 ---
 
-
-
 Katika ulimwengu wa leo uliounganishwa, biashara hazidhibitiwi tena na mipaka ya kijiografia. Hata hivyo, lugha inasalia kuwa moja ya vikwazo muhimu zaidi kwa upanuzi wa kimataifa. Hapa ndipo ukalimani wa kitaalamu unapoingia.
 
 ## Kwa nini Ukalimani ni Muhimu
