@@ -71,29 +71,47 @@ const DashboardContent = () => {
     };
 
     const getStatusUI = () => {
-        if (!deployStatus) return null;
+        const isBuilding = deployStatus?.status === 'in_progress' || deployStatus?.status === 'queued';
+        const isSuccess = deployStatus?.conclusion === 'success' && !isBuilding;
+        const isFailure = deployStatus?.conclusion === 'failure' || deployStatus?.conclusion === 'cancelled';
 
-        const isBuilding = deployStatus.status === 'in_progress' || deployStatus.status === 'queued';
-        const isSuccess = deployStatus.conclusion === 'success';
-        const isFailure = deployStatus.conclusion === 'failure' || deployStatus.conclusion === 'cancelled';
-
-        let label = "Live";
-        let color = "#22c55e"; // Success green
-        let icon = <CircleIcon sx={{ fontSize: 10 }} />;
+        let label = "Checking Status...";
+        let color = "#64748b"; // Neutral slate
+        let icon = <SyncIcon sx={{ fontSize: 14, animation: 'spin 2s linear infinite' }} />;
 
         if (isBuilding) {
-            label = "Building...";
-            color = "#f59e0b"; // Warning orange
-            icon = <SyncIcon sx={{ fontSize: 14, animation: 'spin 2s linear infinite', '@keyframes spin': { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } } } } />;
+            label = "Publishing Changes...";
+            color = "#F7A11A"; // Yellow
+            icon = <SyncIcon sx={{ fontSize: 16, animation: 'spin 1.5s linear infinite', '@keyframes spin': { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } } } } />;
+        } else if (isSuccess) {
+            label = "Live & Up to Date";
+            color = "#22c55e"; // Success green
+            icon = <CircleIcon sx={{ fontSize: 10 }} />;
         } else if (isFailure) {
-            label = "Build Failed";
+            label = "Last Build Failed";
             color = "#ef4444"; // Error red
+            icon = <CircleIcon sx={{ fontSize: 10 }} />;
+        } else if (deployStatus) {
+            // If we have data but none of the above, it's idle or completed
+            label = "Site Online";
+            color = "#22c55e";
+            icon = <CircleIcon sx={{ fontSize: 10 }} />;
         }
 
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, py: 1, bgcolor: `${color}10`, borderRadius: '50px', border: `1px solid ${color}30` }}>
-                <Box sx={{ color: color, display: 'flex' }}>{icon}</Box>
-                <Typography sx={{ fontSize: '0.7rem', fontWeight: 800, color: color, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <Box sx={{ 
+                mt: 1, 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1.5, 
+                px: 2, 
+                py: 1, 
+                bgcolor: 'rgba(255,255,255,0.1)', 
+                borderRadius: '4px',
+                border: `1px solid rgba(255,255,255,0.2)`
+            }}>
+                <Box sx={{ color: color, display: 'flex', alignItems: 'center' }}>{icon}</Box>
+                <Typography sx={{ fontSize: '0.75rem', fontWeight: 900, color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     {label}
                 </Typography>
             </Box>
@@ -134,9 +152,9 @@ const DashboardContent = () => {
             )}
 
             {/* Sidebar */}
-            <Box sx={{ width: 260, bgcolor: '#FFFFFF', borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
-                <Box sx={{ p: 3, borderBottom: '3px solid #F7A11A', bgcolor: '#1A5C2A' }}>
-                    <Typography sx={{ color: '#FFF', fontFamily: '"Inknut Antiqua", serif', fontWeight: 800, fontSize: '1.1rem', mb: 2 }}>
+            <Box sx={{ width: 280, bgcolor: '#FFFFFF', borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
+                <Box sx={{ p: 2, bgcolor: '#1A5C2A' }}>
+                    <Typography sx={{ color: '#F7A11A', fontFamily: '"Inknut Antiqua", serif', fontWeight: 900, fontSize: '1.2rem', px: 1 }}>
                         INSPIRE CMS
                     </Typography>
                     {getStatusUI()}
